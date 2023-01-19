@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Legal{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    
+  }
+  
+  h1, h2, h3 {
+    font-family: 'Nunito', sans-serif;
+    color: #222;
+  }
+  
+  a:hover {
+    color: #00f;
+    text-decoration: underline;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 25px;
+    overflow: hidden;
+    padding:50px;
+  }
+
+  .mt-5 {
+    margin-top: 5%;
+  }
+  .img{
+    filter: brightness(50%) grayscale(100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width:50%;
+    border-radius:20px;
+  }
+</style>
+
+<div class="container mt-5">
+  <center><img class="img"src="https://i2.wp.com/www.creativindie.com/wp-content/uploads/2022/08/grid_0-11.png?ssl=1"></center>
+  <h1>Legal Page</h1>
+  <p>Welcome to the legal page for our website, which sells smart walking sticks. This page contains important information about the legal terms and conditions that apply to the use of our website and the products we sell.</p>
+  <h2>Copyright and Trademark Information</h2>
+  <p>The content of this website, including text, images, and branding elements, is protected by copyright and trademark laws. All rights are reserved. You may not use any of the content of this website without the express written permission of the copyright and trademark holders.</p>
+  <h2>Disclaimer of Liability</h2>
+  <p>We strive to ensure that the information on this website is accurate and up-to-date. However, we cannot guarantee that all of the information on this website is free from errors or omissions. We will not be held liable for any losses or damages that may result from the use of this website or the products we sell, including any errors or inaccuracies in the information provided on this website.</p>
+  <h2>warranty and Returns Policy</h2>
+  <p>All of our products come with a limited warranty that covers defects in materials and workmanship. If you receive a defective product, you may return it for a replacement or a full refund within the specified warranty period. Please see our <a href="#">returns policy</a> for full details.</p>
+  <h2>Privacy Policy</h2>
+  <p>We respect the privacy of our users and are committed to protecting their personal information. Please see our <a href="#">privacy policy</a> for full details on how we collect, use, and protect personal information.</p>
+  <h2>Terms of Use</h2>
+  <p>By accessing and using this website, you agree to be bound by the following terms of use:</p>
+  <ul>
+    <li>You may not use this website for any illegal or unauthorized purpose.</li>
+    <li>You may not use this website to distribute spam or other unsolicited messages.</li>
+    <li>You may not use this website to engage in any activity that could damage or disable the website or its servers.</li>
+    <li>You may not use this website to publish or transmit any content that is illegal, defamatory, or infringes upon the rights of others.</li>
+  </ul>
+  <p>We reserve the right to modify these terms of use at any time, and you are responsible for regularly reviewing them. Your continued use of this website constitutes your acceptance of any changes to these terms of use.</p></div>
+{% endblock %}

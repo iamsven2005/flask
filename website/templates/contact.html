@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}We welcome you{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f5f5f5;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        border-radius:50px;
+      }
+      
+      h1, h2 {
+        color: #333;
+        text-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      }
+      
+      p, ul {
+        color: #666;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      }
+      
+      .form {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        border-radius:50px;
+        padding:50px;
+      }
+      
+      input, textarea {
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      button {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-radius:50px;
+    }
+  </style>
+
+    <div class="container mt-5">
+     <center><a target="blank" href="https://web.whatsapp.com/send?phone=6592962690&text=Hi Mr Tan, I am customer from agegracefully, can you help me with"><img src="https://www.pcworld.com/wp-content/uploads/2022/09/mhachman_a_castle_on_an_asteroid_floating_through_space_2315526d-252b-40df-9a6d-eeb00aed612f.png?w=200" style=
+        "border-radius:50px;"></a>
+      <h1 class="text-center mb-5">Contact Us</h1>
+      <p class="mb-5">We would love to hear from you! Please use the form below to send us a message. To find out more, feel free to WhatsApp us at +65 8876 8501, drop us an email us at hello@agegracefully.shop or message us in below form and we'll get in touch with you shortly.
+
+        Our office is located at Innovation Home, 71 Ayer Rajah Cresent #03-04, Singapore 139951. By appointment only, no direct sales.</p>
+      <form class="form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea class="form-control" id="message" rows="3" placeholder="Enter your message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+</center>
+{% endblock %}

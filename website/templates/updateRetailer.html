@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Update Retailer {% endblock %}
+
+{% block content %}
+<style>
+  .smalling{width:50%}
+</style>
+<div class="container-fluid smalling">
+  <h1>Update {{ retailer.get_location() }}</h1>
+  <form class="user" method="POST">
+      {{ form.hidden_tag() }}
+      <!--This flask built in tag protects our site
+      from Cross Site Request Forgery (CSRF) Attack -->
+      <!--this attack basically may attack or steal
+      your database -->
+
+      <div class="form-group row">
+          <!--userName-->
+          {{ form.shop.label() }}
+          {{ form.shop(class='form-control form-control-user', placeholder='Company') }}
+          <!-- Flask Forms Feature -->
+      </div>
+      <div class="form-group row">
+        {{ form.company_id.label() }}
+        {{ form.company_id(class='form-control form-control-user', placeholder='Company ID') }}
+      </div>
+      <div class="form-group row">
+          <!--Email-->
+          {{ form.postal_code.label() }}
+          {{ form.postal_code(class='form-control form-control-user', placeholder='Remarks') }}
+      </div>
+      <div class="form-group row">
+          <!--Password1-->
+          <div class="col-sm-6 mb-3 mb-sm-0">
+              {{ form.unit_number.label() }}
+              {{ form.unit_number(class='form-control form-control-user', placeholder='Phone') }}
+          </div>
+          <div class="col-sm-6">
+              <!--Password2-->
+              {{ form.address.label() }}
+              {{ form.address(class='form-control form-control-user', placeholder='Email Address') }}
+          </div>
+      </div>
+      <div class="form-group row">
+        {{ form.office_no.label() }}
+        {{ form.office_no(class='form-control form-control-user', placeholder='Office number') }}
+      </div>
+      <div class="form-group row">
+        {{ form.email_address.label() }}
+        {{ form.email_address(class='form-control form-control-user', placeholder='Email address') }}
+      </div>
+      {{ form.submit(class='btn btn-primary btn-user btn-block') }}
+      <a href="javascript:history.back()" class="btn btn-primary btn-user btn-block">Back</a>
+  </form>
+</div>
+
+{% endblock %}

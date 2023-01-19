@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Service center{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f5f5f5;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        border-radius:50px;
+      }
+      
+      h1, h2 {
+        color: #333;
+        text-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      }
+      
+      p, ul {
+        color: #666;
+        text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      }
+      
+      .form {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        border-radius:50px;
+        padding:50px;
+      }
+      
+      input, textarea {
+        box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      }
+      
+      button {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-radius:50px;
+    }
+  </style>
+
+    <div class="container mt-5">
+      <h1 class="text-center mb-5">Service center</h1>
+      <center><a href="https://goo.gl/maps/2KHaAbxU3sR3eHEd7"><img src="https://cdn.shopify.com/s/files/1/1861/4635/files/ANTS_Svc_Centre_June_2022_480x480.jpg?v=1656989018" alt="service center" style="border-radius:50px;"></a><br><br><br><br>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4991.142991361238!2d103.88504271531285!3d1.320064262036784!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1823a4b264d3%3A0xb30bef6fa724c32a!2s118%20Aljunied%20Ave%202%2C%20%2301%20114%20s%2C%20Singapore!5e1!3m2!1sen!2suk!4v1672152676033!5m2!1sen!2suk" width="600" height="450" style="border:0; border-radius:25px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe><br><br><br><br>
+      <p class="mb-5">118 Aljunied Avenue 2 #01-114 S380118
+
+        <br>Open Daily:  9.30am - 6.30pm
+        <br>Please call us before coming down
+        <br>Whatsapp: 87829952
+        <br>Telephone: 69175707
+        
+        <br>Behind Geylang Polyclinic
+        <br>Nearest MRT Station: Aljunied
+        <br>Bus #80, Alight at Geylang Polyclinic
+        
+        <br>Pricing for replacement for:<br>
+        
+        <br>WS70: Lens cap: $7
+        <br>WS77c: Carbon Finishing Ergonomic handle: $26
+        <br>WS76c: Carbon Finishing Essential handle: $34
+        <br>WS75c: Carbon Finishing MP3 handle: $42
+
+        <br><br>Submit a form before coming so we can get ready for you.
+    </p></center>
+      <form class="form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="name" placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea class="form-control" id="message" rows="3" placeholder="Enter your message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+{% endblock %}

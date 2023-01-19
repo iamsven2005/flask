@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Retail information{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid col-md-5 text-left neomorphic">
+    <div class="col-md-6 " style="display:flex; flex-flow:row wrap">
+        <h1>Retailer Info</h1>
+        <br>
+        <p>
+            &nbsp; Retailer ID:
+            <br>
+            <strong>{{ current_retail.get_retailer_id() }}</strong> &nbsp;
+        </p>
+        <p>
+            &nbsp; Email address:
+             <br>
+            <strong>{{ current_retail.get_email_address() }}</strong> &nbsp;
+        </p>
+        <p>
+            &nbsp; Shop name:
+            <br>
+            <strong>{{ current_retail.get_location() }}</strong> &nbsp;
+        </p>
+
+        <p>
+            &nbsp; Postal code:
+             <br>
+            <strong>{{ current_retail.get_postal_code() }}</strong> &nbsp;
+        </p>
+        <p>
+            &nbsp; Unit number:
+             <br>
+            <strong>{{ current_retail.get_unit_number() }}</strong> &nbsp;
+        </p>
+        <p>
+            &nbsp; Shop address:
+             <br>
+            <strong>{{ current_retail.get_address() }}</strong> &nbsp;
+        </p>
+        
+        <p>
+            &nbsp; Email address:
+            <br>
+           <strong>{{ current_retail.get_email_address() }}</strong> &nbsp;
+        </p>
+        <p>
+            &nbsp; Office hotline:
+             <br>
+            <strong>{{ current_retail.get_office_no() }}</strong> &nbsp;
+        </p>
+        </div>
+        <form action="{{ url_for('update_retailer', id=current_retail.get_retailer_id() )}}" method="POST">
+            <input type="submit" value="Update" class="btn btn-warning" style="float:right;" >
+        </form>
+        <a class="btn btn-secondary" href="{{ url_for('retail_profile') }}" data-toggle="modal">Back</a>
+
+        
+</div>
+
+{% endblock %}

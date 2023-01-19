@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Retail{% endblock %}
+    <!-- Custom styles for this page -->
+    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h1 mb-2 text-gray-800">Retail account Management</h1>
+    <p class="mb-4">Welcome Admin! Please search for a user in the table to start transferring funds </p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Registered Retailer Accounts Database</h6>
+        </div>
+        <div class="card-body neomorphic custom-cursor">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Email Address</th>
+                            <th>Account Status</th>
+                            <th>Update</th>
+                            <th>Disabled</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                    {% for user in users %}
+                    {% if user.usertype == "retailers" %}
+                        <tr>
+                            <td>{{user.id}}</td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email_address}}</td>
+                            <td>{{user.status}}</td>
+                            <td>
+                                <form action="{{url_for('retail_management_update', id=user.id, user=user)}}" method="GET">
+                                    <input type="submit" value="Update User" class="btn btn-outline btn-info">
+                                </form>
+                            </td>
+                            <td>
+<!--                            <button class="btn btn-outline btn-info" data-toggle="modal" data-target="#Modal-MoreInfo&#45;&#45;{{user.id}}">Update User</button>-->
+                            <!--data-target go check the id tag in 'items_modals.html'
+                            near the more Info comment section it targets that to give
+                            each specific item its specific name in title and description -->
+                            {% if user.status == 'Enabled' %}
+                                <form action="{{url_for('retail_management_disable', id=user.id)}}" method="POST">
+                                    <input type="submit" value="Disable Account" class="btn btn-outline btn-danger">
+                                </form>
+                            {% elif user.status == 'Disabled' %}
+                                <form action="{{url_for('retail_management_enable', id=user.id)}}" method="POST">
+                                    <input type="submit" value="Enable Account" class="btn btn-outline btn-success">
+                                </form>
+                            {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Walking Sticks</title>
+</head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--forced loading-->
+<div id="loading-screen" style="display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 999;">
+  <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>
+<script>function delayLoading() {
+  const loadingScreen = document.getElementById('loading-screen');
+
+  setTimeout(() => {
+    loadingScreen.style.display = 'none';
+  }, 1000);
+}</script>
+<script>
+  delayLoading();
+</script>
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: black;
+        color:white;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Oswald', sans-serif;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      
+      .btn {
+        background-color: #931d11;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 4px;
+        border: none;
+        transition: all 0.2s;
+      }
+      
+      .btn:hover {
+        background-color: #df2c19;
+        transform: scale(1.1);
+      }
+      
+      .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+      }
+      .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        transform: scale(1.1);
+      }
+      
+      .card-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      
+      .card-text {
+        font-size: 16px;
+        color: #777;
+        margin-bottom: 20px;
+      }
+      section{
+        padding:50px;
+      }
+      .section2, .section4 {
+        background-color:#3575a1;
+        width:50%;
+        border-radius:50px;
+        margin:auto;
+      }
+      @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Roboto:wght@400;700&display=swap');
+      
+      
+  </style>
+
+<div id="parallax-world-of-ugg">
+  
+    <section class="section1">   
+        <div class="container mt-5">
+          <div class="row">
+            <div class="col-12 text-center ">
+              
+              <h2 class="display-4 title text-dark">Welcome to Agegracefully</h2>
+              <p class="display-4 title lead text-dark">Our wide selection of walking sticks is perfect for hikers, seniors, and <br>people with mobility issues. Find the perfect fit and style for you today!</p>
+            </div>
+          </div>
+        </div>
+        <br><br>
+        <center><a href="/landing" class="btn bg-secondary-gradient btn-lg o">Login</a></center>
+      </section>
+     
+    
+    <section>
+      <div class="parallax-one">
+          <section class="section2">
+              <div class="container mt-5">
+                  <div class="row">
+                    <div class="col-12 text-center">
+                      <h2 class="display-4">Join us as a retail!</h2>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-12">
+                      <p>Keep moving!<br>
+                          Well, life for none of us has been a crystal stair, but we must keep moving, we must keep going.  If we can’t fly, we run. If we can't run, we walk.  If we can’t walk, we crawl.  But by all means, keep moving…<br>
+                          
+                          At agegracefullyshop, we are sincere in curating functional solutions by providing products at an affordable price to enable elderly to age in dignity and grace.</p>
+                    </div>
+                  </div>
+                  <div class="row mt-5">
+                    <div class="col-12 text-center">
+                      <a href="{{ url_for('create_retailer') }}" class="btn btn-primary btn-lg">Register</a>
+                    </div>
+                  </div>
+                </div>
+          </section>
+      </div>
+  </section>
+
+    <section class="section3">  <div class="container mt-5">
+    
+        <div class="row mt-5">
+          <div class="col-12 text-dark">
+            <h3>What Our Customers Are Saying</h3>
+            <br>
+            <div class="card-deck mt-4">
+              <div class="card">
+                <div class="card-body neomorphic custom-cursor">
+                  <h5 class="card-title custom-cursor">"I love my new walking stick! It's so much more comfortable and stylish than my old one."</h5>
+                  <p class="card-text">- Sarah, Senior Citizen</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body neomorphic custom-cursor">
+                  <h5 class="card-title custom-cursor">"I'm a senior and my walking stick has given me so much more confidence and stability when I'm out and about."</h5>
+                  <p class="card-text">- Bob, Senior Citizen</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body neomorphic custom-cursor">
+                  <h5 class="card-title custom-cursor">"I have mobility issues and my walking stick has made a huge difference in my daily life. I'm so grateful I found this website!"</h5>
+                  <p class="card-text">- Mary, Mobility Issue</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section4">
+        <div class="container mt-5">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h1 class="display-4">Discover</h1>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-12">
+                <p>Our walking sticks are the perfect solution for hikers, seniors, and people with mobility issues. Whether you need extra support on the trails or just want to add some style to your daily walks, we have a wide selection of walking sticks to meet your needs. Our sticks are made from high-quality materials and are designed to be comfortable, durable, and easy to use. Browse our selection today and find the perfect fit and style for you.</p>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-12">
+                <h2>Features and Benefits</h2>
+                <ul>
+                  <li>Made from high-quality materials for durability and comfort</li>
+                  <li>Ergonomic handles for a secure and comfortable grip</li>
+                  <li>Lightweight and easy to carry</li>
+                  <li>Adjustable height to fit your needs</li>
+                  <li>Variety of styles to choose from</li>
+                </ul>
+              </div>
+            </div>
+           
+    </section>
+
+    <section>
+      <div class="parallax-two">
+        <h2>BE ALIVE</h2>
+      </div>
+    </section>
+    
+    <section>
+      <div class="">
+        <p>About Agegracefully<br>
+
+            Agegracefully was founded in 2017 as a social enterprise to develop and market innovative eldercare lifestyle products that enable the elderly to live safely and age gracefully.<br>
+            
+            We offer a range of award-winning Smart Walking Sticks that look great and have many innovative safety features. They come with LED lights, auto fall alarms, radio and MP3 player, Carbon Fiber, Built-in chair, built-in umbrella and interchangeable quad base. Our wide collection provides a range of features and price points for our customers to choose from.<br>
+            
+            We have won prestigious local and international awards such as Eldercare Innovation Award 2018, Singapore Good Design Award 2019, German Design Award 2020 and Spirit of Enterprise Award 2021.<br>
+            
+            Agegracefully products are available in most of the hospital and rehab stores in Singapore, as well as on major online platforms such as Lazada, Shopee and Amazon. To-date, more than 9,000 elderly have benefited from our Smart Walking Sticks. We have also exported overseas with distribution in Malaysia, Indonesia, Hong Kong and Japan.<br>
+            
+            As the population continues to age, there is a growing demand for innovative design in eldercare lifestyle products. This puts us in a good position to achieve our goal of being financially successful while helping the elderly age gracefully.</p>
+        <p class="line-break margin-top-10"></p>
+        <p class="margin-top-10">Agegracefully products comes with a host of benefits. These are well-thought and finely designed to suit the needs of the user. We hope that you can understand our products better after reading about it's benefits.</p>
+      </div>
+    </section>
+    
+    <section>
+      <div class="parallax-three">
+        <h2>Reach Out</h2>
+      </div>
+    </section>
+    
+    <section class="section5">
+        <div class="container mt-5">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h3 class="display-4">Only the best</h3>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-12">
+                <p>Our walking sticks are the perfect solution for hikers, seniors, and people with mobility issues. Whether you need extra support on the trails or just want to add some style to your daily walks, we have a wide selection of walking sticks to meet your needs. Our sticks are made from high-quality materials and are designed to be comfortable, durable, and easy to use. Browse our selection today and find the perfect fit and style for you.</p>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-12 text-center">
+                <a href="/landing" class="btn btn-primary btn-lg">Learn More</a>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-12">
+                <h2>Contact Us</h2>
+                <p>If you have any questions or would like to get in touch with us, please fill out the form below and we will get back to you as soon as possible.</p>
+                <form>
+                  <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                  </div>
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea class="form-control" id="message" rows="3" placeholder="Enter your message"></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+    </section>
+      
+    </div>
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Oswald:300,400,700);
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic);
+
+/* Override UGG site */
+#main {width: 100%; padding:0;}
+.content-asset p {margin:0 auto;}
+.breadcrumb {display:none;}
+
+/* Helpers */
+/**************************/
+.margin-top-10 {padding-top:10px;}
+.margin-bot-10 {padding-bottom:10px;}
+
+/* Typography */
+/**************************/
+#parallax-world-of-ugg h1 {font-family:'Oswald', sans-serif; font-size:2rem; font-weight:400; text-transform: uppercase; color:black; padding:0; margin:0;}
+#parallax-world-of-ugg h2 {font-family:'Oswald', sans-serif; font-size:3rem; letter-spacing:10px; text-align:center; color:white; font-weight:400; text-transform:uppercase; z-index:10; opacity:.9;}
+#parallax-world-of-ugg h3 {font-family:'Oswald', sans-serif; font-size:2rem; line-height:0; font-weight:400; letter-spacing:8px; text-transform: uppercase; color:white;}
+#parallax-world-of-ugg p {font-family:'Source Sans Pro', sans-serif; font-weight:400; font-size:1.5rem; line-height:24px; width:70%; align-self:center; margin:auto}
+.first-character {font-weight:400; float: left; font-size: 84px; line-height: 64px; padding-top: 4px; padding-right: 8px; padding-left: 3px; font-family: 'Source Sans Pro', sans-serif;}
+
+.sc {color: #3b8595;}
+.ny {color: #3d3c3a;}
+.atw {color: #c48660;}
+
+/* Section - Title */
+/**************************/
+#parallax-world-of-ugg .title {background: white; padding: 60px; margin:0 auto; text-align:center;}
+#parallax-world-of-ugg .title h1 {font-size:35px; letter-spacing:8px;}
+
+/* Section - Block */
+/**************************/
+#parallax-world-of-ugg .block {background: white; padding: 60px; width:820px; margin:0 auto; text-align:justify;}
+#parallax-world-of-ugg .block-gray {background: #f2f2f2;padding: 60px;}
+#parallax-world-of-ugg .section-overlay-mask {position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 0.70;}
+
+/* Section - Parallax */
+/**************************/
+#parallax-world-of-ugg .parallax-one {padding-top: 200px; padding-bottom: 200px; overflow: hidden; position: relative; width: 100%; background-image: url(https://images.unsplash.com/photo-1415018255745-0ec3f7aee47b?dpr=1&auto=format&fit=crop&w=1500&h=938&q=80&cs=tinysrgb&crop=); background-attachment: fixed; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; background-repeat: no-repeat; background-position: top center;}
+#parallax-world-of-ugg .parallax-two {padding-top: 200px; padding-bottom: 200px; overflow: hidden; position: relative; width: 100%; background-image: url(https://images.unsplash.com/photo-1432163230927-a32e4fd5a326?dpr=1&auto=format&fit=crop&w=1500&h=1000&q=80&cs=tinysrgb&crop=); background-attachment: fixed; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; background-repeat: no-repeat; background-position: center center;}
+#parallax-world-of-ugg .parallax-three {padding-top: 200px; padding-bottom: 200px; overflow: hidden; position: relative; width: 100%; background-image: url(https://images.unsplash.com/photo-1440688807730-73e4e2169fb8?dpr=1&auto=format&fit=crop&w=1500&h=1001&q=80&cs=tinysrgb&crop=); background-attachment: fixed; background-size: cover; -moz-background-size: cover; -webkit-background-size: cover; background-repeat: no-repeat; background-position: center center;}
+
+/* Extras */
+/**************************/
+#parallax-world-of-ugg .line-break {border-bottom:1px solid white; width: 150px; margin:0 auto;}
+
+/* Media Queries */
+/**************************/
+@media screen and (max-width: 959px) and (min-width: 768px) {
+  #parallax-world-of-ugg .block {padding: 40px; width:620px;}
+}
+@media screen and (max-width: 767px) {
+  #parallax-world-of-ugg .block {padding: 30px; width:420px;}
+  #parallax-world-of-ugg h2 {font-size:30px;}
+  #parallax-world-of-ugg .block {padding: 30px;}
+  #parallax-world-of-ugg .parallax-one, #parallax-world-of-ugg .parallax-two, #parallax-world-of-ugg .parallax-three {padding-top:100px; padding-bottom:100px;}
+}
+@media screen and (max-width: 479px) {
+  #parallax-world-of-ugg .block {padding: 30px 15px; width:290px;}
+}
+
+  @keyframes waveAnimation{
+    from {
+      background-position-x: 0%;
+    }
+    to {
+      background-position-x: 200%;
+    }
+  }
+    </style>
+
+    

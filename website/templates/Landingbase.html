@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Agegracefully{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/Landingbase.css">
+    <link rel = "icon" type = "image/png" href = "../static/images/letter-s.png">
+</head>
+<header>
+    {% block navbar %}
+    {% include 'includes/_navbar.html' %}
+{% endblock %}
+
+</header>
+<body>
+
+    
+
+
+
+
+<div class="PageContent">
+    <img src="https://cdn.midjourney.com/0e0bdf38-eda5-4a95-b5b2-a3a414ba8c7f/grid_0.png" alt="Error!" width="100%" height="100%" style="overflow: hidden; position: absolute;">
+
+    <div class="Loginform">
+        {% block form %}
+            {% include 'includes/_form.html' %}
+        {% endblock %}
+    </div>
+
+    <div class="Content">
+        {% block content %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+                    <!--    with_categories = true means it grabs the categories as well for messages-->
+                    {% if messages %}
+                        {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">
+                                    <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    {% autoescape false %}
+                                    {{ message }}
+                                    {% endautoescape %}
+                                </div>
+
+                        {% endfor %}
+                    {% endif %}
+
+                    {% endwith %}
+        {% endblock %}
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="../static/vendor/jquery/jquery.slim.min.js"></script>
+<script src="../static/vendor/jquery/jquery.min.js"></script>
+<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+
+<!-- Custom scripts for all pages-->
+<script src="../static/js/sb-admin-2.js"></script>
+
+    <!-- Page level plugins -->
+<script src="../static/vendor/chart.js/Chart.min.js"></script>
+
+
+<!-- Charts Page level custom scripts -->
+<script src="../static/js/demo/chart-area-demo.js"></script>
+<script src="../static/js/demo/chart-pie-demo.js"></script>
+<script src="../static/js/demo/chart-bar-demo.js"></script>
+
+<!--Tables Page level plugins -->
+<script src="../static/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+<!-- Tables Page level custom scripts -->
+<script src="../static/js/demo/datatables-demo.js"></script>
+
+<!-- Loader Script -->
+<!--    <script src="{{ url_for('static', filename='../static/js/loader.js') }}"></script>-->
+
+<!-- Add Item Script -->
+<script src="../static/js/Additem.js"></script>
+
+</body>
+</html>

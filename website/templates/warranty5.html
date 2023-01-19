@@ -1,0 +1,63 @@
+ 
+{% extends "base.html" %}
+{% block title %}Warranty{% endblock %}
+    <!-- Custom styles for this page -->
+    <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h1 mb-2 text-gray-800">Warranty View</h1>
+    <p class="mb-4">Welcome Admin! Please search for a user in the table to view </p>
+  
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Registered Warranty</h6>
+      </div>
+      <div class="card-body neomorphic custom-cursor">
+          <div class="table-responsive">
+              <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Customer Name</th>
+                      <th>Remarks</th>
+                      <th>Phone Number</th>
+                      <th> Email </th>
+                      <th> UUID </th>
+                      <!-- If not lazy, can use supplied products instead of remarks -->
+                      <th></th>
+                    </tr>
+                  </thead>
+
+
+                    <tbody>
+                      <tbody>
+                        {% for warranty in warranty_list %}
+                        <tr>
+                          <td>{{ warranty.get_warranty_id() }}</td>
+                          <td>{{ warranty.get_warranty_name() }}</td>
+                          <td>{{ warranty.get_warranty_remarks() }}</td>
+                          <td>{{ warranty.get_phone_number() }}</td>
+                          <td>{{ warranty.get_email() }}</td>
+                          <td>{{ warranty.get_warranty_UUID() }}</td>
+                          
+              
+              
+                        </tr>
+                    {% else %}
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

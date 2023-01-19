@@ -1,0 +1,114 @@
+
+<html>
+  <head>
+    <title>Chatbot</title>
+    <!-- Include Bootstrap for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Include jQuery for JavaScript functions -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+        /* Style the chat history */
+.chat-history {
+    /* Use a scrollbar if the chat history is too long */
+    max-height: 500px;
+    overflow-y: auto;
+  }
+  
+  /* Style the chat form */
+  #chat-form {
+    /* Center the form on the page */
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Style the input field */
+  #input {
+    /* Make the input field wider */
+    width: 60%;
+  }
+  
+  /* Style the send button */
+  button[type="submit"] {
+    /* Make the button wider */
+    width: 20%;
+  }
+  
+    </style>
+  </head>
+  <body>
+    <!-- Create a container for the chat interface -->
+    <div class="container mt-5">
+      <!-- Create a row for the chat history -->
+      <div class="row chat-history" id="chat-history">
+        <!-- Use a placeholder for the chat history -->
+        <div class="col-12">Loading conversation history...</div>
+      </div>
+      <!-- Create a form for the user's input -->
+      <form id="chat-form" class="form-inline mt-3">
+        <!-- Create an input field for the user's message -->
+        <input type="text" class="form-control mr-3" id="input" placeholder="Type your message here">
+        <!-- Create a button to send the message -->
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+    </div>
+    <!-- Include your custom JavaScript file -->
+    <script>
+        $(document).ready(function() {
+            // Get the conversation history
+            getConversation();
+            // When the form is submitted
+            $('#chat-form').submit(function(event) {
+              // Prevent the form from being submitted
+              event.preventDefault();
+              // Get the user's input
+              var input = $('#input').val();
+              // Clear the input field
+              $('#input').val('');
+              // Send the input to the chatbot and get the response
+              chat(input);
+            });
+          });
+          
+          function chat(input) {
+            // Send a POST request to the chat route
+            $.post('/chat', {input: input}, function(data) {
+              // Append the conversation and response to the chat history
+              appendToHistory(data.conversation, data.response);
+            });
+          }
+          
+          function getConversation() {
+            // Send a GET request to the chat route
+            $.get('/chat', function(data) {
+              // Append the conversation history to the chat history
+              appendToHistory(data.conversation);
+            });
+          }
+          
+          function appendToHistory(conversation, response) {
+            // Clear the chat history
+            $('#chat-history').empty();
+            // Iterate through the conversation history
+            conversation.forEach(function(message) {
+              // Append each message to the chat history
+              $('#chat-history').append('<div class="col-12">' + message[0] + '</div>');
+              $('#chat-history').append('<div class="col-12 text-right">' + message[1] + '</div>');
+            });
+            // Scroll to the bottom of the chat history
+            $('#chat-history').scrollTop($('#chat-history')[0].scrollHeight);
+            // If a response was provided, append it to the chat history
+            if (response) {
+              $('#chat-history').append('<div class="col-12 text-right">' + response + '</div>');
+            }
+          }
+          $.ajax({
+            url: '/get_shelve_data',
+            type: 'GET',
+            success: function(data) {
+                $('#shelve-data').html(data);
+            }
+        });
+        
+    </script>
+  </body>
+</html>
