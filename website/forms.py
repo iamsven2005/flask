@@ -309,7 +309,7 @@ class RegisterRetailerForm(FlaskForm):
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):
@@ -319,6 +319,6 @@ class UpdateRetailerForm(FlaskForm):
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=100000, max=999999),DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label="Update")
 
