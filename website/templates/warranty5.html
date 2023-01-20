@@ -37,17 +37,17 @@
                       <tbody>
                         {% for warranty in warranty_list %}
                         <tr>
+                          {% if warranty.get_email() ==  current_user.email_address %}
                           <td>{{ warranty.get_warranty_id() }}</td>
                           <td>{{ warranty.get_warranty_name() }}</td>
                           <td>{{ warranty.get_warranty_remarks() }}</td>
                           <td>{{ warranty.get_phone_number() }}</td>
                           <td>{{ warranty.get_email() }}</td>
                           <td>{{ warranty.get_warranty_UUID() }}</td>
-                          
-              
-              
+                        
                         </tr>
-                    {% else %}
+                    {% endif %}
+                        
                     {% endfor %}
                     </tbody>
 
