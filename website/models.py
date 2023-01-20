@@ -161,6 +161,8 @@ class Retail:
 
     def set_date_registered(self, date):
         self.__date_registered = date
+        
+   
 
 
 class Img(db.Model):

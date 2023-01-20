@@ -2651,6 +2651,14 @@ def update_warranty(id):
         form.remarks.data = warranty.get_warranty_remarks()
         form.email.data = warranty.get_email()
         form.phone.data = warranty.get_phone_number()
+        
+    if form.errors != {}:  # If there are not errors from the validations
+        errors = []
+        for err_msg in form.errors.values():
+            errors.append(err_msg)
+        err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+        flash(f'{err_message}', category='danger')
+
 
     return render_template('updatewarranty.html', form=form)
 
@@ -2660,7 +2668,7 @@ def update_warranty(id):
 def warranty_delete(id):
     try:
         warranty_dict = {}
-        warranty_db = shelve.open('website/databases/warranty/warranty.db', 'c')
+        warranty_db = shelve.open('website/databases/warranty/warranty.db', 'w')
         warranty_dict = warranty_db['warranty']
 
         current_id = warranty_dict.get(id)
@@ -3665,7 +3673,7 @@ def update_retailer(id):
     if request.method == "POST" and form.validate_on_submit():
 
         retailer_dict = {}
-        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db["Retailers"]
 
         for key in retailer_dict:
@@ -3686,7 +3694,7 @@ def update_retailer(id):
         return redirect(url_for('retrieve_retailers'))
     else:
         retailer_dict = {}
-        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db['Retailers']
         retailer_db.close()
         retailer = retailer_dict.get(id)
@@ -3697,8 +3705,16 @@ def update_retailer(id):
         form.address.data = retailer.get_address()
         form.email_address.data = retailer.get_email_address()
         form.office_no.data = retailer.get_office_no()
+        
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
-        return render_template('updateRetailer.html', form=form, retailer=retailer)
+
+        return render_template('updateRetailer.html', form=form)
 
 
 @app.route('/retailers/delete/<int:id>', methods=['POST'])
