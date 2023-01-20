@@ -40,7 +40,7 @@ class User(db.Model, UserMixin):
     shoppingCartCount = db.Column(db.Integer(), nullable=False, default=0)
     profits = db.Column(db.Integer(), nullable=False, default=0)
     spending = db.Column(db.Integer(), nullable=False, default=0)
-    profile_pic = db.Column(db.String(),nullable=True)
+    #profile_pic = db.Column(db.String(),nullable=True)
 
     # Account status (Adds 'Disabled' or 'Enabled' status column to User Database)
     status = db.Column(db.Integer(), nullable=False, default='Enabled')

@@ -108,7 +108,7 @@ class Update_User(FlaskForm):
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
-    profile_pic = FileField("Profile Pic")
+   # profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Create Account')
 
 
