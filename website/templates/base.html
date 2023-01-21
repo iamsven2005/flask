@@ -263,16 +263,7 @@
             <div class="text-center d-none d-md-inline">
                 <a target="blank" href="https://web.whatsapp.com/6588768501&text=Hi Mr Tan, I am a customer from your online shop, can you help me with"><i class="fa fa-whatsapp" aria-hidden="true" style="color:white;"></i><p style="color:white">Whatsapp Us!<p></a>
             </div>
-            <div class="container mt-5">
-              <form action="/markets" onsubmit="alert('You searched for: ' + document.getElementById('search').value);">
-                <div class="input-group mb-3">
-                  <input type="text" id="search" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="button-addon2">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit" id="button-addon2">Go</button>
-                  </div>
-                </div>
-              </form>
-            </div>
+            
 
         </ul>
         <!-- End of Sidebar -->
@@ -311,6 +302,7 @@
                     </form>
 
                     <!-- Topbar Navbar -->
+                    <iframe  height="75px" src="{{ url_for('location_test') }}"></iframe>
                     <ul class="navbar-nav ml-auto">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
@@ -920,5 +912,6 @@
       }
 
     </style>
+
 
 
