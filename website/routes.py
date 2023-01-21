@@ -2657,7 +2657,6 @@ def update_warranty(id):
         for err_msg in form.errors.values():
             errors.append(err_msg)
         err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
 
 
     return render_template('updatewarranty.html', form=form)
