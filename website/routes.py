@@ -13,7 +13,7 @@ from uuid import uuid4  # Unique key generator
 import pandas as pd
 from flask_mail import Mail, Message
 import qrcode
-import io, base64
+import io, base64, PIL
 from werkzeug.utils import secure_filename
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
