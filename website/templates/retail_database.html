@@ -41,42 +41,43 @@
             <td>{{ retailer.get_office_no() }}</td>
             <td>{{ retailer.get_date_registered() }}</td>
           <td>
-            {% for user in users %}
-                {% if retailer.get_retailer_id()+7 == user.id %}
+                {% if retailer.get_retailer_id() in retailersid_list %}
                 <form action="{{ url_for('register_retail_account', id=retailer.get_retailer_id() ) }}" method="POST">
-                    <input type="submit" value="Added as retailer" class="btn btn-primary" disabled>
+                    <input type="submit" value="Added retailer account" class="btn btn-primary button-1" disabled>
+                </form>
+                {% else %}
+                <form action="{{ url_for('register_retail_account', id=retailer.get_retailer_id() ) }}" method="POST">
+                  <input type="submit" value="Create retailer account" class="btn btn-primary button-2">
                 </form>
                 {% endif %}
-            {% endfor %}
-
-            {% if retailer.get_retailer_id()+7 > result %}
-                <form action="{{ url_for('register_retail_account', id=retailer.get_retailer_id() ) }}" method="POST">
-                    <input type="submit" value="Create account" class="btn btn-primary">
-                </form>
-            {% endif %}
           </td>
             <td>
-              <form action="{{url_for('update_retailer', id=retailer.get_retailer_id() )}}" method="POST">
-              <input type="submit" value="Update" class="btn btn-warning">
-              </form>
-            </td>
-
-            <td>
-              {% for user in users %}
-                  {% if retailer.get_retailer_id()+7 == user.id %}
-                  <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" method="POST">
-                    <input type="submit" value="Delete" class="btn btn-danger" style="display:none;">
-                  </form>
-                  {% endif %}
-              {% endfor %}
-
-              {% if retailer.get_retailer_id()+7 > result %}
-                <form action="{{ url_for('retailer_delete', id=retailer.get_retailer_id() ) }}" method="POST">
-                    <input type="submit" value="Delete" class="btn btn-danger">
+              {% if retailer.get_retailer_id() in retailersid_list %}
+                <form action="{{url_for('retail_management_update', id=retailer.get_retailer_id(), user=user )}}" method="POST">
+                <input type="submit" value="Update retailer account" class="btn btn-warning">
                 </form>
+              {% else %}
+              <td>
+                <form action="{{url_for('update_retailer', id=retailer.get_retailer_id())}}" method="POST">
+                <input type="submit" value="Update retailer details" class="btn btn-warning">
+                </form>
+              </td>
               {% endif %}
             </td>
 
+            <td>              
+                  {% if retailer.get_retailer_id() in retailersid_list %}
+                  <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" style="display:none;" method="POST">
+                    <input type="submit" value="Reject retailer" class="btn btn-danger button-1" disabled>
+                  </form>
+                  
+                  {% else %}
+                
+                  <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" method="POST">
+                    <input type="submit" value="Reject retailer" class="btn btn-danger button-2">
+                  </form>
+                  {% endif %}
+               
 
           </tr>
         {% endfor %}

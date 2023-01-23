@@ -18,9 +18,12 @@ from werkzeug.utils import secure_filename
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from sqlalchemy import func
+from sqlalchemy.ext.declarative import declarative_base
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
+
+Base = declarative_base()
 
 load_dotenv()
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -222,8 +225,20 @@ def delete_profile():
     db.session.delete(userID)
     db.session.commit()
     logout_user()
-    # flash("Account Deleted Successfully", category="success")
+    flash("Account Deleted Successfully", category="success")
     return redirect(url_for("home_page"))
+
+@app.route('/sudo_deleteProfile/<int:id>')
+@login_required
+def sudo_delete_profile(id):
+    db.create_all()
+    userID = User.query.filter_by(id=id).first()
+    db.session.delete(userID)
+    db.session.commit()
+    logout_user()
+    flash("Account Deleted Successfully", category="success")
+    return redirect(url_for("home_page"))
+
 
 
 @app.route("/updateUser", methods=['GET', 'POST'])
@@ -1567,9 +1582,10 @@ def Purchase_Item():
         print(Cart_Dict)
         total = 0
         for i in Cart_Dict:
+            print(Cart_Dict[i])
             total += Cart_Dict[i].get_total_cost()
 
-        # UserID_Owner = User.query.filter_by(id=Items_Dict[str(request.form.get('uuid'))].get_owner_id()).first()
+        #UserID_Owner = User.query.filter_by(id=Items_Dict[str(request.form.get('uuid'))].get_owner_id()).first()
         if request.method == 'POST':
             if total <= current_user.budget:
                 # Minus Balance of User
@@ -3591,21 +3607,26 @@ def retrieve_retailers():
     for key in retailer_dict:
         print(retailer_dict[key])
 
+    
     print(retailer_dict)
 
     retailer_db.close()
 
     retailers_list = []
+    retailersid_list = []
     users = User.query.all()
-    result = db.session.query(func.max(User.id)).first()
-    max_id = result[0]
-    print(max_id)
+    
+    for user in users:
+        retailersid_list.append(user.retailer_id)
+    print("retailersid_list: ", retailersid_list)
+    
+   
 
     for key in retailer_dict:
         retail = retailer_dict.get(key)
         retailers_list.append(retail)
 
-    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, result=max_id, users=users)
+    return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users)
 
 @app.route('/retailers/create', methods=['GET', 'POST'])
 def create_retailer():
@@ -3751,16 +3772,26 @@ def register_retail_account(id):
     retailer = retailer_dict.get(id)
    
 
-    form = RegisterForm()
+    form = RegisterRetailAccountForm()
     if form.validate_on_submit():
         user_to_create = User(username=form.username.data,
-                              email_address=form.email_address.data,
+                              retailer_id = retailer.get_retailer_id(),
+                              email_address=retailer.get_email_address(),
                               password=form.password1.data,
                               usertype="retailers")
         db.session.add(user_to_create)
         db.session.commit()
+       
         user_email = {}
-        user_email = form.email_address.data
+        user_email = retailer.get_email_address()
+        print(user_email)
+
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
         db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
         try:
@@ -3772,7 +3803,7 @@ def register_retail_account(id):
             return redirect(url_for('register_retail_account', id=id))
 
         msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
-                          recipients=[form.email_address.data])
+                          recipients=[retailer.get_email_address()])
         msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
         mail.send(msg)
     
@@ -3793,21 +3824,24 @@ def register_retail_account(id):
 @app.route('/retail/retail_management/update/<int:id>', methods=['POST', 'GET'])
 @login_required
 def retail_management_update(id):
-    userID = User.query.filter_by(id=id).first()
     form = Update_User_Admin()
+    userID = User.query.filter_by(id=id).first()
 
-    if request.method == 'POST' and form.validate_on_submit:
+    if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
         # Also note that below does not work
         userID.username = form.username.data
         userID.email_address = form.email_address.data
         db.session.commit()
-        print("User's Particulars updated to database successfully!")
+        flash("User's Particulars updated to database successfully!", category="success")
     else:
-        print("Some error occurred!")
+        flash("Some error occurred!", category="danger")
 
     if request.method == 'GET':
-        return render_template('Update_User_Management.html', form=form, user=userID)
+        return render_template('update_retail_management.html', form=form, user=userID)
+
+    flash(form.errors, category="danger")
+    return redirect(url_for("retail_management"))
 
     return redirect(url_for('retail_management'))
 
@@ -3826,7 +3860,6 @@ def retail_management_enable(id):
 @login_required
 # Inheritance
 def retail_management_disable(id):
-    # The problem is this, where I cannot find the ID.
     userID = User.query.filter_by(id=id).first()
     userID.status = 'Disabled'
     flash(f'{userID.username} account has been disabled', category='danger')

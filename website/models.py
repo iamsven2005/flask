@@ -21,6 +21,7 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
+    retailer_id = db.Column(db.Integer(), unique=True)
     admin = db.Column(db.Integer())
     usertype = db.Column(db.String(120))
     # the id unique to each user so that flask can identify each individual user

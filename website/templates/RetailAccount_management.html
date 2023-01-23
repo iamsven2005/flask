@@ -20,6 +20,7 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Retailer ID</th>
                             <th>User ID</th>
                             <th>Username</th>
                             <th>Email Address</th>
@@ -34,12 +35,13 @@
                     {% for user in users %}
                     {% if user.usertype == "retailers" %}
                         <tr>
+                            <td>{{user.retailer_id}}</td>
                             <td>{{user.id}}</td>
                             <td>{{user.username}}</td>
                             <td>{{user.email_address}}</td>
                             <td>{{user.status}}</td>
                             <td>
-                                <form action="{{url_for('retail_management_update', id=user.id, user=user)}}" method="GET">
+                                <form action="{{url_for('user_management_update', id=user.id, user=user)}}" method="GET">
                                     <input type="submit" value="Update User" class="btn btn-outline btn-info">
                                 </form>
                             </td>
@@ -58,10 +60,18 @@
                                 </form>
                             {% endif %}
                             </td>
-
+                        
+                            
                         </tr>
+                        
                     {% endif %}
+                    
                     {% endfor %}
+                    <!--Delete Account Modal-->
+
+</div>
+                   
+
                     </tbody>
 
                 </table>
