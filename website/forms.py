@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateF
 from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange
 from website.models import User
 from flask_wtf.file import FileField
+from datetime import datetime, timedelta
 
 # from datetime import datetime
 
@@ -188,6 +189,9 @@ class Ticket_Form(FlaskForm):
 
 class Booking_form(FlaskForm):
     date = DateField(label='Choose a Date*', validators=[DataRequired()])
+    def validate_date(form, field):
+        if field.data < datetime.date.today():
+            raise ValidationError("The date cannot be in the past!")
     time = SelectField(label='Choose a Timeslot*',
                        choices=['9am Morning', '10am Morning', '11am Morning', '12pm Afternoon', '1pm Afternoon',
                                 '2pm Afternoon',
