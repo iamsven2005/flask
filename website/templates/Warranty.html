@@ -45,7 +45,6 @@
                       <tbody>
                         {% for warranty in warranty_list %}
                         <tr>
-                          {% if warranty.get_email() ==  current_user.email_address %}
                           <td>{{ warranty.get_warranty_id() }}</td>
                           <td>{{ warranty.get_warranty_name() }}</td>
                           <td>{{ warranty.get_warranty_remarks() }}</td>
@@ -69,7 +68,6 @@
               
               
                         </tr>
-                    {% endif %}
                     {% endfor %}
                     </tbody>
 
