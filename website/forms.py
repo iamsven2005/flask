@@ -36,8 +36,8 @@ class RegisterForm(FlaskForm):
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired()])
+    password2 = PasswordField(label='Confirm Password:', validators=[Length(min=8), EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
@@ -107,9 +107,9 @@ class Update_User(FlaskForm):
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
-    gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
-   # profile_pic = FileField("Profile Pic")
-    submit = SubmitField(label='Create Account')
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    #profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')
 
 
 
@@ -246,8 +246,7 @@ class Update_User_Admin(Update_User):
         if email_address:
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
-
-
+        
 class password_reset(FlaskForm):
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
     otp = StringField(label='One time password:', validators=[Length(min=8, max=8), DataRequired()])
@@ -304,20 +303,28 @@ class RegisterRetailAccountForm(FlaskForm):
 class RegisterRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = StringField(label='Postal code: ', validators=[Length(max=6), DataRequired()])
+    postal_code = StringField(label='Postal code: ', validators=[Length(min=6, max=6), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = StringField(label="Office number: ", validators=[DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = StringField(label='Postal code: ', validators=[Length(max=6), DataRequired()])
+    postal_code = StringField(label='Postal code: ', validators=[Length(min=6, max=6), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = StringField(label="Office number: ", validators=[DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
     submit = SubmitField(label="Update")
 
+class Update_Retailer_Account(FlaskForm):
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    #password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    #profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')

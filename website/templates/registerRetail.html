@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Create Supplier{% endblock %}
+{% block title %}Register Retailer{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -12,7 +12,10 @@
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Create a Retail Account!</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Register your business as retailer!</h1>
+                            </div>
+                            <div class="text-center">
+                                <h6 class="text-gray-900 mb-4">First, enter your business information before registering with us for an official retail account.</h6>
                             </div>
                             <form class="user" method="POST">
                                 {{ form.hidden_tag() }}

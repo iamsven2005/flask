@@ -5,6 +5,7 @@
 {% block content %}
 <div class="container-fluid" style="overflow-x: scroll;">
 <h1 class="display-4">Retailers</h1>
+
 {% if count == 0 %}
   <br>
   <br>
@@ -14,6 +15,7 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
+          <th>Key ID</th>
           <th>ID</th>
           <th>Company ID</th>
           <th>Shop</th>
@@ -24,13 +26,16 @@
           <th>Office number</th>
           <th>Year Registered</th>
           <th>
+            <a href="{{ url_for('retail_management') }}" class="btn btn-primary float-right">
+              &nbsp;Go to Retailer list<span class="material-symbols-outlined">
+                arrow_forward
+                </span></a>
           </th>
         </tr>
       </thead>
       <tbody>
           {% for retailer in retailers_list %}
           <tr>
-
             <td>{{ retailer.get_retailer_id() }}</td>
             <td>{{ retailer.get_company_id() }}</td>
             <td>{{ retailer.get_location() }}</td>
@@ -53,37 +58,39 @@
           </td>
             <td>
               {% if retailer.get_retailer_id() in retailersid_list %}
-                <form action="{{url_for('retail_management_update', id=retailer.get_retailer_id(), user=user )}}" method="POST">
-                <input type="submit" value="Update retailer account" class="btn btn-warning">
-                </form>
+                
+                  <form action="{{url_for('retail_management_update', id=retailer.get_retailer_id(), user=user)}}" method="GET">
+                  <input type="submit" value="Update retailer account" class="btn btn-warning">
+                  </form>
+                
               {% else %}
-              <td>
                 <form action="{{url_for('update_retailer', id=retailer.get_retailer_id())}}" method="POST">
                 <input type="submit" value="Update retailer details" class="btn btn-warning">
                 </form>
-              </td>
               {% endif %}
             </td>
-
             <td>              
                   {% if retailer.get_retailer_id() in retailersid_list %}
-                  <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" style="display:none;" method="POST">
+                  <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" method="POST">
                     <input type="submit" value="Reject retailer" class="btn btn-danger button-1" disabled>
                   </form>
                   
+            
                   {% else %}
+          
                 
                   <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" method="POST">
                     <input type="submit" value="Reject retailer" class="btn btn-danger button-2">
                   </form>
                   {% endif %}
-               
-
+            </td>
+            
           </tr>
-        {% endfor %}
+        
 
-
+          
     </tbody>
+    {% endfor %}
   </table>
 </div>
 {% endif %}

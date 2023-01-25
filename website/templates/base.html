@@ -11,6 +11,7 @@
     <meta name="author" content="">
 
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
     <!-- Own Css -->
     <link rel="stylesheet" href="../static/css/home.css">
@@ -156,8 +157,11 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
                         <a class="collapse-item" href="{{ url_for('warranty_page') }}">Warranty</a>
-                        
-                        <a class="collapse-item" href="{{ url_for('user_management') }}">User Management</a>
+                        <a class="dropdown-item" href="{{ url_for('wish_list') }}">
+                          <i class="fas fa-solid fa-star fa-sm fa-fw mr-2 text-gray-400"></i>
+                          My wishlist
+                        </a> 
+                        <a class="collapse-item" href="{{ url_for('user_management') }}">Customer Management</a>
                         <a class="collapse-item" href="{{ url_for('ticket_requests_page') }}">Ticket Requests</a>
                         <a class="collapse-item" href="{{ url_for('Add_Item') }}">Add Item</a>
                         <a class="collapse-item" href="{{ url_for('retrieve_items') }}">Items Dashboard</a>
@@ -186,6 +190,10 @@
                         <a class="collapse-item" href="{{ url_for('Events_Page') }}">Events</a>
                         <a class="collapse-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a>
                         <a class="collapse-item" href="{{ url_for('Inventory_Management') }}">Inventory Management</a>
+                        <a class="dropdown-item" href="{{ url_for('wish_list') }}">
+                          <i class="fas fa-solid fa-star fa-sm fa-fw mr-2 text-gray-400"></i>
+                          My wishlist
+                        </a>
                         <!--added this for retailer-->
                         <a class="collapse-item" href="{{ url_for('location_edit') }}">Edit your location</a>
                         <a class="collapse-item" href="{{ url_for('location') }}">View your location</a>

@@ -1418,7 +1418,7 @@ def Add_Item():
                     print('Item added')
                     Item_Database.close()
                     Your_Products_Database.close()
-                    break
+                    return redirect(url_for('retrieve_items'))
                 else:
                     continue
 
@@ -3678,7 +3678,7 @@ def create_retailer():
         return redirect(url_for('landing_page'))
     return render_template("registerRetail.html", form=form)
 
-@app.route('/retailersedit/<int:id>', methods=['GET', 'POST'])
+@app.route('/retailersedit/<int:id>', methods=['POST'])
 @login_required
 def update_retailer(id):
     form = UpdateRetailerForm()
@@ -3688,11 +3688,8 @@ def update_retailer(id):
         retailer_dict = {}
         retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
         retailer_dict = retailer_db["Retailers"]
-
-        for key in retailer_dict:
-            print(retailer_dict[key])
-
         retailer = retailer_dict.get(id)
+        print("retailer: ", retailer)
         retailer.set_company_id(form.company_id.data)
         retailer.set_location(form.shop.data)
         retailer.set_email_address(form.email_address.data)
@@ -3711,6 +3708,7 @@ def update_retailer(id):
         retailer_dict = retailer_db['Retailers']
         retailer_db.close()
         retailer = retailer_dict.get(id)
+        print("retailer: ", retailer)
         form.company_id.data = retailer.get_company_id()
         form.shop.data = retailer.get_location()
         form.postal_code.data = retailer.get_postal_code()
@@ -3760,7 +3758,7 @@ def retail_management():
     return render_template('RetailAccount_Management.html', users=users)
 
 
-@app.route('/retail/registerRetailAccount/<int:id>', methods=['GET', 'POST'])
+@app.route('/registerRetailAccount/<int:id>', methods=['GET', 'POST'])
 @login_required
 def register_retail_account(id):
     db.create_all()
@@ -3824,8 +3822,8 @@ def register_retail_account(id):
 @app.route('/retail/retail_management/update/<int:id>', methods=['POST', 'GET'])
 @login_required
 def retail_management_update(id):
-    form = Update_User_Admin()
-    userID = User.query.filter_by(id=id).first()
+    form = Update_Retailer_Account()
+    userID = User.query.filter_by(retailer_id=id).first()
 
     if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
@@ -3842,8 +3840,6 @@ def retail_management_update(id):
 
     flash(form.errors, category="danger")
     return redirect(url_for("retail_management"))
-
-    return redirect(url_for('retail_management'))
 
 @app.route('/retail/retail_management/enable/<int:id>', methods=['POST'])
 @login_required

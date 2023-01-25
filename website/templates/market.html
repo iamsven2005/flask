@@ -107,6 +107,8 @@
             <button type="submit" class="btn btn-primary btn-lg btn-block">Retrieve Items</button>
             
         </form>
+        <br>
+        <a href="/AddItemForm" class="btn btn-primary btn-lg btn-block">Add Items</a>
 <br>
         <div class="filter">
             <a href="http://127.0.0.1:5000/markets?search=Umbrella" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Umbrella</a>
@@ -159,6 +161,9 @@
                                 <button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} Out of stock {% else %} Add to cart {% endif %}</button>
                                 <!-- Wishlist -->
                                 {% if items[i].get_owner() != current_user.username %}
+                                <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
+                                    <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
+                                </form>
                                 {% if items[i].get_id() not in wish_items %}
                                     <form action="{{ url_for('wish') }}" method="POST" style="margin-top: 15px;">
                                         <input id="uuid" name="uuid" type="hidden" value="{{items[i].get_id()}}">
@@ -218,11 +223,15 @@
                                 <button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} <p style="background-color:red;">Out of stock🚫 </p>{% elif items[i].get_quantity() <= 10 %} <p style="background-color:#b26a00; border-radius:5px; padding:2px">Low on stock⚠️</p> {% else %} Add to cart {% endif %}</button>
                                 <!-- Wishlist -->
                                 {% if items[i].get_owner() != current_user.username %}
+                                <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
+                                    <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
+                                </form>
                                 {% if items[i].get_id() not in wish_items %}
                                     <form action="{{ url_for('wish') }}" method="POST" style="margin-top: 15px;">
                                         <input id="uuid" name="uuid" type="hidden" value="{{items[i].get_id()}}">
                                         <button class="btn btn-outline btn-danger" type="submit" ><i class="far fa-heart"></i></button>
                                     </form>
+                                    
                                 {% else %}
                                     <form action="{{ url_for('delete_wish') }}" method="POST" style="margin-top: 15px;">
                                         <input id="uuid" name="uuid" type="hidden" value="{{items[i].get_id()}}">
