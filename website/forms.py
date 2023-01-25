@@ -7,7 +7,7 @@ from flask_wtf.file import FileField
 
 # from datetime import datetime
 
-# Sven
+# Mervyn
 class RegisterForm(FlaskForm):
     # The Validator library allows you to create certain functions
     # with specific usernames which lets the flaskform class
@@ -34,9 +34,9 @@ class RegisterForm(FlaskForm):
     # User.query.filter_by(username = username_to_check) will return an object
     # .first() is used to access the first object
 
-    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    username = StringField(label='User Name:', validators=[Length(min=2, max=10), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6, max=10), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
@@ -86,7 +86,7 @@ class Update_Notes(FlaskForm):
     submit = SubmitField(label='Update Notes')
 
 
-class Update_User(FlaskForm):
+class Update_User(FlaskForm):#customer
     def validate_username(self, username_to_check):
         user = User.query.filter_by(username=username_to_check.data).first()
         # if this returns an object
