@@ -104,11 +104,10 @@
     </style>
 <!-- ========================= WEBSITE MAIN // ========================= -->
         <form action="{{ url_for('retrieve_items') }}" method="GET">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Retrieve Items</button>
-            
+            <button type="submit" class="btn btn-primary btn-md">Retrieve Items</button>
+            <a href="/AddItemForm" class="btn btn-primary btn-md">Add Items</a>
         </form>
         <br>
-        <a href="/AddItemForm" class="btn btn-primary btn-lg btn-block">Add Items</a>
 <br>
         <div class="filter">
             <a href="http://127.0.0.1:5000/markets?search=Umbrella" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Umbrella</a>
