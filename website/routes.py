@@ -3885,3 +3885,8 @@ def location():
 @login_required
 def location_edit():
     return render_template('retailereditor.html')
+
+@app.route('/test')
+@login_required
+def testing():
+    return render_template('thank2.html')

@@ -1,4 +1,8 @@
-  {% extends "base.html" %}
+  {% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
 {% block title %}Events{% endblock %}
 
 {% block content %}
