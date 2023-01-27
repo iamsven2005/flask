@@ -1,4 +1,8 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
 {% block title %}Retrieve Users{% endblock %}
 
 {% block content %}
@@ -30,7 +34,7 @@
           <th><a href="{{ url_for('market_page') }}" class="btn btn-primary"><span class="material-symbols-outlined">
             arrow_back
             </span>
-            &nbsp;Back to Market Page</a></th>
+            &nbsp;Market</a></th>
         </tr>
       </thead>
       <tbody>
