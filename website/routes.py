@@ -231,18 +231,16 @@ def update_user():
     update_user_form = Update_User()
     if request.method == 'POST' and update_user_form.validate_on_submit():
         attempted_user = User.query.filter_by(username=current_user.username).first()
-        if attempted_user and attempted_user.check_password_correction(
-                attempted_password=update_user_form.password1.data):
-            userID = User.query.filter_by(id=current_user.id).first()
-            # userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
-            userID.username = update_user_form.username.data
-            userID.email_address = update_user_form.email_address.data
-            userID.gender = update_user_form.gender.data
-            db.session.commit()
-            flash("User Particulars changed successfully", category="success")
-            return redirect(url_for("profile_page"))
-        else:  # If there are not errors from the validations
-            flash("Password is Incorrect Try again.", category='danger')
+       
+        userID = User.query.filter_by(id=current_user.id).first()
+        # userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
+        userID.username = update_user_form.username.data
+        userID.email_address = update_user_form.email_address.data
+        userID.gender = update_user_form.gender.data
+        db.session.commit()
+        flash("User Particulars changed successfully", category="success")
+        return redirect(url_for("profile_page"))
+       
     if update_user_form.errors != {}:  # If there are not errors from the validations
         errors = []
         for err_msg in update_user_form.errors.values():
@@ -2330,7 +2328,7 @@ def landing_page():
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
         else:
-            flash("Username and Password are not matched! Please try again.", category='danger')
+            flash("Username or Password are not matched! Please try again.", category='danger')
 
     return render_template('Landingbase.html', form=form)
 

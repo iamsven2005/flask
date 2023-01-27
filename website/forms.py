@@ -30,7 +30,6 @@ class RegisterForm(FlaskForm):
         if email_address:
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
-
     # User.query.filter_by(username = username_to_check) will return an object
     # .first() is used to access the first object
 
@@ -104,8 +103,8 @@ class Update_User(FlaskForm):#customer
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #password1 = PasswordField(label='Old Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='New Password:', validators=[EqualTo('password1'), DataRequired()])
     gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
    # profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Create Account')
@@ -146,7 +145,6 @@ class Update_Password(FlaskForm):
     current_password = PasswordField(label='Current Password:', validators=[Length(min=6), DataRequired()])
     new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
     confirm_password = PasswordField(label='Confirm New Password:',  validators=[EqualTo('new_password'), DataRequired()])
-    
     submit = SubmitField(label='Done')
 
 
