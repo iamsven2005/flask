@@ -19,6 +19,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from sqlalchemy import func
 from sqlalchemy.ext.declarative import declarative_base
+from password_strength import PasswordPolicy, PasswordStats
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
@@ -44,6 +45,14 @@ db_tempemail.close()
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('error404.html'), 404
+
+#password strength checker
+policy = PasswordPolicy.from_names(
+    length=8,  # min length: 8
+    uppercase=1,  # need min. 2 uppercase letters
+    numbers=1,  # need min. 2 digits
+    strength=0.1 # need a password that scores at least 0.5 with its entropy bits
+)
 
 
 @app.context_processor
@@ -2198,26 +2207,37 @@ def deposit():
 def register_page():
     db.create_all()
     form = RegisterForm()
-    if form.validate_on_submit():
-        user_to_create = User(username=form.username.data,
-                              email_address=form.email_address.data,
-                              password=form.password1.data,
-                              usertype="customers")
-        # 'password' = form.password1.data this is entering the hashed
-        # version of the password. Check models.py,
-        # @password.setter hashes the passwords
-        db.session.add(user_to_create)
-        db.session.commit()
-        login_user(user_to_create)
-        flash(f"Success! You are logged in as: {user_to_create.username}", category='success')
+    if request.method == 'POST':
+        password = request.form.get('password1')
+        stats = PasswordStats(password)
+        checkpolicy = policy.test(password)
+        if stats.strength() < 0.1:
+            print(stats.strength())
+            flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
+            return redirect(url_for('register_page'))
+        else:
+            print(stats.strength())
+            
+            if form.validate_on_submit():    
+                    user_to_create = User(username=form.username.data,
+                                            email_address=form.email_address.data,
+                                            password=form.password1.data,
+                                            usertype="customers")
+                    # 'password' = form.password1.data this is entering the hashed
+                    # version of the password. Check models.py,
+                    # @password.setter hashes the passwords
+                    db.session.add(user_to_create)
+                    db.session.commit()
+                    login_user(user_to_create)
+                    flash(f"Success! You are logged in as: {user_to_create.username}", category='success')
 
-        return redirect(url_for('home_page'))
-    if form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
+                    return redirect(url_for('home_page'))
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
 
     return render_template('register.html', form=form)
 

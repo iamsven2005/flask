@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField, EmailField, TextAreaField, \
     SelectField, FloatField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange, Regexp
+from wtforms_components import DateRange
 from website.models import User
 from flask_wtf.file import FileField
 from datetime import datetime, timedelta
@@ -37,8 +38,8 @@ class RegisterForm(FlaskForm):
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[Length(min=8), EqualTo('password1'), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired(), Regexp(r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')])
+    password2 = PasswordField(label='Confirm Password:', validators=[Length(min=8), EqualTo('password1', message='Password must be at least 8 characters long'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
@@ -189,9 +190,12 @@ class Ticket_Form(FlaskForm):
 
 class Booking_form(FlaskForm):
     date = DateField(label='Choose a Date*', validators=[DataRequired()])
-    def validate_date(form, field):
-        if field.data < datetime.date.today():
-            raise ValidationError("The date cannot be in the past!")
+
+    def validate_date_field(form, field):
+        if field.data < datetime.now():
+            raise ValidationError("Date cannot be in the past.")
+    
+        
     time = SelectField(label='Choose a Timeslot*',
                        choices=['9am Morning', '10am Morning', '11am Morning', '12pm Afternoon', '1pm Afternoon',
                                 '2pm Afternoon',
@@ -300,15 +304,16 @@ class RegisterRetailAccountForm(FlaskForm):
     # .first() is used to access the first object
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired(), Regexp(r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')
+    ])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 class RegisterRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = StringField(label='Postal code: ', validators=[Length(min=6, max=6), DataRequired()])
-    unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(0,999999), DataRequired()])
+    unit_number = StringField(label='Unit-number: ', validators=[DataRequired(), Length(max=7)])
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
@@ -317,7 +322,7 @@ class RegisterRetailerForm(FlaskForm):
 class UpdateRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = StringField(label='Postal code: ', validators=[Length(min=6, max=6), DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(0,999999), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
