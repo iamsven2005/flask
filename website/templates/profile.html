@@ -1,5 +1,10 @@
 
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Shopping Cart{% endblock %}
 {% block title %}Profile Page{% endblock %}
 
 {% block content %}
