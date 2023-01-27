@@ -31,6 +31,9 @@
                       <th>Phone Number</th>
                       <th> Email </th>
                       <th> UUID </th>
+                      <th>Warranty End</th>
+                      <th>Start Date </th>
+                      <th>Start Time</th>
                       <!-- If not lazy, can use supplied products instead of remarks -->
                       <th></th>
                     </tr>
@@ -48,6 +51,9 @@
                           <td>{{ warranty.get_phone_number() }}</td>
                           <td>{{ warranty.get_email() }}</td>
                           <td>{{ warranty.get_warranty_UUID() }}</td>
+                          <td>{{ warranty.get_date_recorded() }}</td>
+                          <td>{{ warranty.get_warranty_recorded() }}</td>
+                          <td>{{ warranty.get_time_recorded() }}</td>
                         
                         </tr>
                     {% endif %}
