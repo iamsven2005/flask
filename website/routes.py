@@ -51,7 +51,7 @@ policy = PasswordPolicy.from_names(
     length=8,  # min length: 8
     uppercase=1,  # need min. 2 uppercase letters
     numbers=1,  # need min. 2 digits
-    strength=0.1 # need a password that scores at least 0.5 with its entropy bits
+    strength=0.4 # need a password that scores at least 0.5 with its entropy bits
 )
 
 
@@ -2211,7 +2211,7 @@ def register_page():
         password = request.form.get('password1')
         stats = PasswordStats(password)
         checkpolicy = policy.test(password)
-        if stats.strength() < 0.1:
+        if stats.strength() < 0.4:
             print(stats.strength())
             flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
             return redirect(url_for('register_page'))
@@ -3791,52 +3791,62 @@ def register_retail_account(id):
    
 
     form = RegisterRetailAccountForm()
-    if form.validate_on_submit():
-        user_to_create = User(username=form.username.data,
-                              retailer_id = retailer.get_retailer_id(),
-                              email_address=retailer.get_email_address(),
-                              password=form.password1.data,
-                              usertype="retailers")
-        db.session.add(user_to_create)
-        db.session.commit()
-       
-        user_email = {}
-        user_email = retailer.get_email_address()
-        print(user_email)
+    if request.method == 'POST':
+        password = request.form.get('password1')
+        stats = PasswordStats(password)
+        checkpolicy = policy.test(password)
+        if stats.strength() < 0.4:
+            print(stats.strength())
+            flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
+            return redirect(url_for('register_page'))
+        else:
+            print(stats.strength())
+            if form.validate_on_submit():
+                user_to_create = User(username=form.username.data,
+                                    retailer_id = retailer.get_retailer_id(),
+                                    email_address=retailer.get_email_address(),
+                                    password=form.password1.data,
+                                    usertype="retailers")
+                db.session.add(user_to_create)
+                db.session.commit()
+            
+                user_email = {}
+                user_email = retailer.get_email_address()
+                print(user_email)
 
-        if form.errors != {}:  # If there are not errors from the validations
-            errors = []
-            for err_msg in form.errors.values():
-                errors.append(err_msg)
-            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-            flash(f'{err_message}', category='danger')
+                if form.errors != {}:  # If there are not errors from the validations
+                    errors = []
+                    for err_msg in form.errors.values():
+                        errors.append(err_msg)
+                    err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                    flash(f'{err_message}', category='danger')
 
-        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-        try:
-            db_tempemail['email'] = user_email
-            db_tempemail.close()
-        except Exception as e:
-            print(f'{e} error has occurred! Database will close!')
-            db_tempemail.close()
-            return redirect(url_for('register_retail_account', id=id))
+                db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+                try:
+                    db_tempemail['email'] = user_email
+                    db_tempemail.close()
+                except Exception as e:
+                    print(f'{e} error has occurred! Database will close!')
+                    db_tempemail.close()
+                    return redirect(url_for('register_retail_account', id=id))
 
-        msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
-                          recipients=[retailer.get_email_address()])
-        msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
-        mail.send(msg)
-    
-        flash(f"Success! Account {user_to_create.username} created!", category='success')
+                msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
+                                recipients=[retailer.get_email_address()])
+                msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
+                mail.send(msg)
+            
+                flash(f"Success! Account {user_to_create.username} created!", category='success')
 
-        return redirect(url_for('home_page'))
+                return redirect(url_for('login_page'))
 
-    if form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
 
-    return render_template('registerRetailAccount.html', form=form, retailer=retailer)
+            return render_template('registerRetailAccount.html', form=form, retailer=retailer)
 
 
 @app.route('/retail/retail_management/update/<int:id>', methods=['POST', 'GET'])

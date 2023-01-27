@@ -1736,9 +1736,31 @@ aria-labelledby="alertsDropdown">
 
 
   <br><br>
-{% block content %}
+  <div class="container-fluid" id="ContainerFluid" style=" padding-top: 90px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!--    with_categories = true means it grabs the categories as well for messages-->
+    {% if messages %}
+        {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <button type="button" class="m1-2 mb-1 close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {% autoescape false %}
+                    {{ message }}
+                    {% endautoescape %}
+                </div>
 
-                    {% endblock %}
+        {% endfor %}
+    {% endif %}
+
+    {% endwith %}
+    <!-- Page Heading -->
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
 <br><br>
 
 
