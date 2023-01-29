@@ -63,14 +63,14 @@ class TransferFunds(FlaskForm):
     submit = SubmitField(label="Confirm Transaction")
 
 
-class CreatePartnerForm(FlaskForm):
+class CreateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
-    submit = SubmitField(label='Add Partner')
+    submit = SubmitField(label='Add Staff')
 
 
-class UpdatePartnerForm(FlaskForm):
+class UpdateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
@@ -259,7 +259,8 @@ class password_reset(FlaskForm):
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
     otp = StringField(label='One time password:', validators=[Length(min=8, max=8), DataRequired()])
     submit = SubmitField(label='Submit password reset')
-    new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
+    new_password = PasswordField(label='New Password:', validators=[Length(min=8), DataRequired()])
+    confirm_new_password = PasswordField(label='New Password:', validators=[Length(min=8), EqualTo('new_password', message='Password must be at least 8 characters long'), DataRequired()])
 
 
 # Sven
@@ -337,3 +338,40 @@ class Update_Retailer_Account(FlaskForm):
     #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
     #profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Update Account')
+
+
+class Register_Staff_Account(FlaskForm):
+    def validate_username(self, username_to_check):
+        user = User.query.filter_by(username=username_to_check.data).first()
+        # if this returns an object
+        if user:
+            # checks if user is not 'None'
+            # so ya if it returns an object it means this is
+            # an existing user created before which raises this error
+            raise ValidationError('Username already exist! Please try a different username.')
+    def validate_email_address(self, email_address_to_check):
+        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
+        if email_address:
+            # check if email_address is not 'None'.
+            raise ValidationError("Email Address already exist. Please try a different email address.")
+
+
+    # User.query.filter_by(username = username_to_check) will return an object
+    # .first() is used to access the first object
+
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    submit = SubmitField(label='Create Account')
+
+
+class Update_Staff_Account(FlaskForm):
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    #password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    #profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')
+
+

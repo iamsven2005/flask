@@ -1312,8 +1312,13 @@
   <header class="header header-absolute"> 
 
     <!-- Top Bar End-->
-    <nav class="navbar navbar-expand-lg border-0 shadow-0 px-lg-5 was-navbar-light navbar-light was-transparent bg-white"><a class="navbar-brand" href="{{ url_for('home_page') }}"><img src="../static/img/Swiss_Logo.png" alt="" height="30px"></a>
-      <!--<ul class="list-inline mb-0 d-block d-lg-none">
+    {% if current_user.usertype == "retailers" %}
+        <nav class="navbar navbar-expand-lg border-0 shadow-0 px-lg-5 was-navbar-light navbar-light was-transparent bg-white"><a class="navbar-brand" href="{{ url_for('retail_homepage') }}"><img src="../static/img/Swiss_Logo.png" alt="" height="30px"></a>
+    {% elif current_user.usertype == "customers" %}
+        <nav class="navbar navbar-expand-lg border-0 shadow-0 px-lg-5 was-navbar-light navbar-light was-transparent bg-white"><a class="navbar-brand" href="{{ url_for('home_page') }}"><img src="../static/img/Swiss_Logo.png" alt="" height="30px"></a>
+    {% endif %}
+          
+          <!--<ul class="list-inline mb-0 d-block d-lg-none">
         <li class="list-inline-item me-3"><a class="text-dark text-primary-hover" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
             <svg class="svg-icon navbar-icon">
               <use xlink:href="#avatar-1"> </use>
@@ -1509,7 +1514,7 @@
           </li>
           <!-- Megamenu end-->
           {% if current_user.usertype == "retailers" %}
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="docsDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retial Panel</a>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="docsDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Retail Panel</a>
             <div class="dropdown-menu dropdown-menu-animated" aria-labelledby="homeDropdown">
               <a class="dropdown-item" href="{{ url_for('ticket_requests_page') }}">Ticket Request </a>
               <a class="dropdown-item" href="{{ url_for('Add_Item') }}">Add Item</a>
@@ -1518,6 +1523,8 @@
               <a class="dropdown-item" href="{{ url_for('Feedbacks') }}">User Feedbacks </a>
               <a class="dropdown-item" href="{{ url_for('Inventory_Management') }}">Inventory</a>
               <div class="dropdown-divider"></div><a class="dropdown-item" href="{{ url_for('wish_list') }}">My wishlist </a><a class="dropdown-item" href="{{ url_for('location_edit') }}">Edit Location </a>
+              <a class="collapse-item" href="{{ url_for('location_edit') }}">Edit your location</a>
+              <a class="collapse-item" href="{{ url_for('location') }}">View your location</a>
             </div>
           </li>
         </ul>

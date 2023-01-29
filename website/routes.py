@@ -1,4 +1,5 @@
 import os
+import re
 from dotenv import load_dotenv
 from website import app, bcrypt
 from flask import render_template, request, flash, redirect, url_for, jsonify, Response
@@ -47,12 +48,24 @@ def page_not_found(e):
     return render_template('error404.html'), 404
 
 #password strength checker
-policy = PasswordPolicy.from_names(
-    length=8,  # min length: 8
-    uppercase=1,  # need min. 2 uppercase letters
-    numbers=1,  # need min. 2 digits
-    strength=0.4 # need a password that scores at least 0.5 with its entropy bits
-)
+def check_password_strength(password):
+    if len(password) < 8:
+        flash("Password is too short, try again", category='danger')
+        return False
+    elif re.search("[a-z]", password) is None:
+        flash("Password is missing a lowercase letter, try again", category='danger')
+        return False
+    elif re.search("[A-Z]", password) is None:
+        flash("Password is missing a uppercase letter, try again", category='danger')
+        return False
+    elif re.search("[0-9]", password) is None:
+        flash("Password is missing a digit, try again", category='danger')
+        return False
+    elif re.search("[!@#\$%^&*()_\-+=\{\}\[\]:;\"'<>,.?/|\\~`]", password) is None:
+        flash("Password is missing a special character, try again.", category='danger')
+        return False
+    else:
+        return "True"
 
 
 @app.context_processor
@@ -335,12 +348,16 @@ def update_password():
     update_password_form = Update_Password()
     userID = User.query.filter_by(id=current_user.id).first()
     if request.method == 'POST' and update_password_form.validate_on_submit():
+        password = request.form.get('new_password')
         attempted_user = User.query.filter_by(username=current_user.username).first()
         if attempted_user and attempted_user.check_password_correction(
                 attempted_password=update_password_form.current_password.data):
             userID.password_hash = bcrypt.generate_password_hash(update_password_form.new_password.data).decode('utf-8')
             db.session.commit()
-            flash("Password Changed Successfully", category="success")
+            if check_password_strength(password) == False:
+                return redirect(url_for('update_password'))
+            else:
+                flash("Password Changed Successfully", category="success")
         else:
             flash("Current Password is Incorrect.", category='danger')
 
@@ -1878,13 +1895,14 @@ def Add_To_Cart():
     return redirect(url_for('market_page'))
 
 
-@app.route('/partners')
+@app.route('/staff')
 @login_required
-def partners_page():
-    partners_dict = {}
+def staff_page():
+    staff_dict = {}
     try:
-        db_shelve = shelve.open('website/databases/partners/partner.db', 'r')
-        partners_dict = db_shelve['PartnerInfo']
+        #db_shelve = shelve.open('website/databases/partners/partner.db', 'r')
+        db_shelve = shelve.open('website/databases/staff/staff.db', 'r')
+        staff_dict = db_shelve['Staff']
         db_shelve.close()
     except IOError:
         print("Error trying to read file")
@@ -1892,51 +1910,51 @@ def partners_page():
     except Exception as e:
         print(f"An unknown error has occurred,{e}")
 
-    partners_list = []
-    for key in partners_dict:
-        partner = partners_dict.get(key)
-        partners_list.append(partner)
+    staff_list = []
+    for key in staff_dict:
+        staff = staff_dict.get(key)
+        staff_list.append(staff)
 
-    return render_template('Partner.html', count=len(partners_list), partners=partners_list)
+    return render_template('staff.html', count=len(staff_list), staff_list=staff_list)
 
 
-@app.route('/add_partners', methods=['GET', 'POST'])
+@app.route('/add_staff', methods=['GET', 'POST'])
 @login_required
-def add_partners_page():
-    form = CreatePartnerForm()
-    db_shelve = shelve.open('website/databases/partners/partner.db', 'c')
-    db_shelve_uniqueID = shelve.open('website/databases/partners/partner_uniqueID.db', 'c')
-    partners_dict = {}
+def add_staff_page():
+    form = CreateStaffForm()
+    db_shelve = shelve.open('website/databases/staff/staff.db', 'c')
+    db_shelve_uniqueID = shelve.open('website/databases/staff/staff_uniqueID.db', 'c')
+    staff_dict = {}
     ids = 0
     try:
-        if 'PartnerInfo' in db_shelve:
-            partners_dict = db_shelve['PartnerInfo']
+        if 'Staff' in db_shelve:
+            staff_dict = db_shelve['Staff']
         else:
-            db_shelve['PartnerInfo'] = partners_dict
+            db_shelve['Staff'] = staff_dict
         if 'ID' in db_shelve_uniqueID:
             ids = db_shelve_uniqueID['ID']
         else:
             db_shelve_uniqueID['ID'] = ids
     except:
-        print("Error in retrieving Partner from database")
+        print("Error in retrieving Staff from database")
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            partner = Partners(name=form.name.data,
+            staff = Staff(name=form.name.data,
                                location=form.location.data,
                                email=form.email.data)
             ids += 1
-            partner.set_id(ids)
-            partners_dict[ids] = partner
-            db_shelve['PartnerInfo'] = partners_dict
+            staff.set_id(ids)
+            staff_dict[ids] = staff
+            db_shelve['Staff'] = staff_dict
             db_shelve_uniqueID['ID'] = ids
-            flash("Partner Added Successfully", category='success')
+            flash("Staff Added Successfully", category='success')
             db_shelve.close()
             db_shelve_uniqueID.close()
-            return redirect(url_for('partners_page'))
+            return redirect(url_for('staff_page'))
         else:
             flash("An Error Occurred trying to submit Form", category='danger')
-            return redirect(url_for('add_partners_page'))
+            return redirect(url_for('add_staff_page'))
     if form.errors != {}:  # If there are not errors from the validations
         errors = []
         for err_msg in form.errors.values():
@@ -1945,47 +1963,175 @@ def add_partners_page():
         flash(f'{err_message}', category='danger')
 
     if request.method == 'GET':
-        return render_template('AddPartner.html', form=form)
+        return render_template('RegisterStaff.html', form=form)
 
 
-@app.route('/deletePartner/<int:id>', methods=['POST'])
-def delete_partner(id):
-    partner_dict = {}
-    db_shelve = shelve.open('website/databases/partners/partner.db', 'w')
-    partner_dict = db_shelve['PartnerInfo']
-    partner_dict.pop(id)
-    db_shelve['PartnerInfo'] = partner_dict
+@app.route('/deleteStaff/<int:id>', methods=['POST'])
+def delete_staff(id):
+    staff_dict = {}
+    db_shelve = shelve.open('website/databases/staff/staff.db', 'w')
+    staff_dict = db_shelve['Staff']
+    staff_dict.pop(id)
+    db_shelve['Staff'] = staff_dict
     db_shelve.close()
 
-    return redirect(url_for('partners_page'))
+    return redirect(url_for('staff_page'))
 
 
-@app.route('/updatePartner/<int:id>', methods=['POST'])
-def update_partner(id):
-    form = UpdatePartnerForm()
+@app.route('/updateStaff/<int:id>', methods=['POST'])
+def update_staff(id):
+    form = UpdateStaffForm()
     if request.method == 'POST' and form.validate_on_submit():
-        partner_dict = {}
-        db_shelve = shelve.open('website/databases/partners/partner.db', 'w')
-        partner_dict = db_shelve['PartnerInfo']
-        partner = partner_dict.get(id)
-        partner.set_name(form.name.data)
-        partner.set_location(form.location.data)
-        partner.set_email(form.email.data)
-        partner.set_date(datetime.now().strftime("%d/%m/%Y"))
-        db_shelve['PartnerInfo'] = partner_dict
+        staff_dict = {}
+        db_shelve = shelve.open('website/databases/staff/staff.db', 'w')
+        staff_dict = db_shelve['Staff']
+        staff = staff_dict.get(id)
+        staff.set_name(form.name.data)
+        staff.set_location(form.location.data)
+        staff.set_email(form.email.data)
+        staff.set_date(datetime.now().strftime("%d/%m/%Y"))
+        db_shelve['Staff'] = staff_dict
         db_shelve.close()
-        return redirect(url_for('partners_page'))
+        return redirect(url_for('staff_page'))
     else:
-        partners_dict = {}
-        db_shelve = shelve.open('website/databases/partners/partner.db', 'r')
-        partners_dict = db_shelve['PartnerInfo']
+        staff_dict = {}
+        db_shelve = shelve.open('website/databases/staff/staff.db', 'r')
+        staff_dict = db_shelve['Staff']
         db_shelve.close()
-        partner = partners_dict.get(id)
-        form.name.data = partner.get_name()
-        form.location.data = partner.get_location()
-        form.email.data = partner.get_email()
+        staff = staff_dict.get(id)
+        form.name.data = staff.get_name()
+        form.location.data = staff.get_location()
+        form.email.data = staff.get_email()
 
-        return render_template('updatePartner.html', form=form)
+        return render_template('updateStaff.html', form=form)
+
+@app.route('/staff/staff_management')
+@login_required
+def staff_management():
+    users = User.query.all()
+    print("Staff: ", users)
+    return render_template('StaffAccount_Management.html', users=users)
+
+
+
+@app.route('/registerStaffAccount/<int:id>', methods=['GET', 'POST'])
+@login_required
+def register_staff_account(id):
+    db.create_all()
+    form = Register_Staff_Account()
+    staff = ''
+    staff_dict = {}
+    staff_db = shelve.open('website/databases/staff/staff.db', 'w')
+    staff_dict = staff_db["Staff"]
+   
+    staff = staff_dict.get(id)
+    current_id = staff.get_id()
+    print(current_id)
+   
+    if request.method == 'POST':
+        password = request.form.get('password1')
+        if check_password_strength(password) == False:
+            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
+            return redirect(url_for('register_staff_account', id=current_id))
+        else:
+            if form.validate_on_submit():
+                user_to_create = User(username=form.username.data,
+                                    retailer_id = staff.get_id(),
+                                    email_address=staff.get_email(),
+                                    password=form.password1.data,
+                                    usertype="staff")
+                db.session.add(user_to_create)
+                db.session.commit()
+            
+                user_email = {}
+                user_email = staff.get_email_address()
+                print(user_email)
+
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
+
+            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+            try:
+                db_tempemail['email'] = user_email
+                db_tempemail.close()
+            except Exception as e:
+                print(f'{e} error has occurred! Database will close!')
+                db_tempemail.close()
+                return redirect(url_for('register_staff_account', id=current_id))
+
+            msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
+                            recipients=[staff.get_email()])
+            msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
+            mail.send(msg)
+            
+            flash(f"Success! Account {user_to_create.username} created!", category='success')
+
+            return redirect(url_for('landing_page'))
+
+    return render_template('registerStaffAccount.html', form=form, staff=staff)
+
+@app.route('/staff/staff_management/update/<int:id>', methods=['POST', 'GET'])
+@login_required
+def staff_management_update(id):
+    form = Update_Staff_Account()
+    userID = User.query.filter_by(retailer_id=id).first()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
+        # Also note that below does not work
+        userID.username = form.username.data
+        userID.email_address = form.email_address.data
+        db.session.commit()
+        flash("User's Particulars updated to database successfully!", category="success")
+    else:
+        flash("Some error occurred!", category="danger")
+
+    if request.method == 'GET':
+        return render_template('update_staff_management.html', form=form, user=userID)
+
+    flash(form.errors, category="danger")
+    return redirect(url_for("staff_management"))
+
+@app.route('/retail/retail_management/enable/<int:id>', methods=['POST'])
+@login_required
+# Inheritance
+def staff_management_enable(id):
+    userID = User.query.filter_by(id=id).first()
+    userID.status = 'Enabled'
+    flash(f"{userID.username} account has been enabled", category='success')
+    db.session.commit()
+    return redirect(url_for('staff_management'))
+
+
+@app.route('/retail/retail_management/disable/<int:id>', methods=['POST'])
+@login_required
+# Inheritance
+def staff_management_disable(id):
+    userID = User.query.filter_by(id=id).first()
+    userID.status = 'Disabled'
+    flash(f'{userID.username} account has been disabled', category='danger')
+    db.session.commit()
+    return redirect(url_for('staff_management'))
+
+
+@app.route('/retail/staff_management/staff_info/<int:id>', methods=['GET'])
+@login_required
+def staff_information(id):
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/staff/staff.db', 'w')
+    retailer_dict = retailer_db["Retailers"]
+
+    current_retail = retailer_dict.get(id-7)
+    print(current_retail)
+    retailer_db.close()
+
+    return render_template("staff_information.html", current_retail=current_retail, retail_id=id)
+
+  
 
 
 @app.route('/transfer_funds')
@@ -2209,15 +2355,10 @@ def register_page():
     form = RegisterForm()
     if request.method == 'POST':
         password = request.form.get('password1')
-        stats = PasswordStats(password)
-        checkpolicy = policy.test(password)
-        if stats.strength() < 0.4:
-            print(stats.strength())
-            flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
+        if check_password_strength(password) == False:
+            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
             return redirect(url_for('register_page'))
         else:
-            print(stats.strength())
-            
             if form.validate_on_submit():    
                     user_to_create = User(username=form.username.data,
                                             email_address=form.email_address.data,
@@ -2517,7 +2658,7 @@ def forgot_password_page():
                 return redirect(url_for('forgot_password_page'))
 
             msg = Message('agegracefully Password Reset', sender='agegracefullybothelper@gmail.com',
-                          recipients=[form.email_address.data])
+                        recipients=[form.email_address.data])
             msg.body = f"Dear valued customer, \n\n We have received a request to reset the password for your account. In order to reset your password, please enter the following one-time password (OTP) when prompted: \n\n OTP:  {otp} \n\n Please note that this OTP will only be valid for the next 15 minutes. If you did not request a password reset, you can safely ignore this email. \n\n Thank you for choosing our service. \n\n Sincerely, \n\n Agegracefully"
             mail.send(msg)
             flash('Successfully sent! Please check your inbox for a one time password.', category='success')
@@ -2571,29 +2712,34 @@ def password_reset_page():
     form = password_reset()
 
     if request.method == "POST":
-        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-        if db_tempemail['email'] is not None:
-            try:
-                email_variable = db_tempemail['email']
+        password = request.form.get('new_password')
+        if check_password_strength(password) == False:
+            return redirect(url_for('password_reset_page'))
 
-                user_to_reset = User.query.filter_by(email_address=email_variable).first()
-                user_to_reset.password_hash = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
-                db.session.commit()
-                flash("Password Changed Successfully!", category="success")
+        else:
+            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+            if db_tempemail['email'] is not None:
+                try:
+                    email_variable = db_tempemail['email']
 
-                db_tempemail['email'] = None
-                db_tempemail.close()
+                    user_to_reset = User.query.filter_by(email_address=email_variable).first()
+                    user_to_reset.password_hash = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+                    db.session.commit()
+                    flash("Password Changed Successfully!", category="success")
 
-                return redirect(url_for('landing_page'))
+                    db_tempemail['email'] = None
+                    db_tempemail.close()
 
-            except Exception as e:
-                print(f'{e} error has occurred! Database will now close.')
+                    return redirect(url_for('landing_page'))
+
+                except Exception as e:
+                    print(f'{e} error has occurred! Database will now close.')
+                    db_tempemail.close()
+                    return redirect(url_for('forgot_password_page'))
+            else:
+                flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
                 db_tempemail.close()
                 return redirect(url_for('forgot_password_page'))
-        else:
-            flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
-            db_tempemail.close()
-            return redirect(url_for('forgot_password_page'))
     else:
         return render_template('reset_password.html', form=form)
 
@@ -3782,25 +3928,22 @@ def retail_management():
 @login_required
 def register_retail_account(id):
     db.create_all()
+    form = RegisterRetailAccountForm()
     retailer = ''
     retailer_dict = {}
     retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
     retailer_dict = retailer_db["Retailers"]
    
     retailer = retailer_dict.get(id)
+    current_id = retailer.get_retailer_id()
+    print(current_id)
    
-
-    form = RegisterRetailAccountForm()
     if request.method == 'POST':
         password = request.form.get('password1')
-        stats = PasswordStats(password)
-        checkpolicy = policy.test(password)
-        if stats.strength() < 0.4:
-            print(stats.strength())
-            flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
-            return redirect(url_for('register_page'))
+        if check_password_strength(password) == False:
+            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
+            return redirect(url_for('register_retail_account', id=current_id))
         else:
-            print(stats.strength())
             if form.validate_on_submit():
                 user_to_create = User(username=form.username.data,
                                     retailer_id = retailer.get_retailer_id(),
@@ -3814,31 +3957,6 @@ def register_retail_account(id):
                 user_email = retailer.get_email_address()
                 print(user_email)
 
-                if form.errors != {}:  # If there are not errors from the validations
-                    errors = []
-                    for err_msg in form.errors.values():
-                        errors.append(err_msg)
-                    err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-                    flash(f'{err_message}', category='danger')
-
-                db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-                try:
-                    db_tempemail['email'] = user_email
-                    db_tempemail.close()
-                except Exception as e:
-                    print(f'{e} error has occurred! Database will close!')
-                    db_tempemail.close()
-                    return redirect(url_for('register_retail_account', id=id))
-
-                msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
-                                recipients=[retailer.get_email_address()])
-                msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
-                mail.send(msg)
-            
-                flash(f"Success! Account {user_to_create.username} created!", category='success')
-
-                return redirect(url_for('login_page'))
-
             if form.errors != {}:  # If there are not errors from the validations
                 errors = []
                 for err_msg in form.errors.values():
@@ -3846,7 +3964,25 @@ def register_retail_account(id):
                 err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
                 flash(f'{err_message}', category='danger')
 
-            return render_template('registerRetailAccount.html', form=form, retailer=retailer)
+            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+            try:
+                db_tempemail['email'] = user_email
+                db_tempemail.close()
+            except Exception as e:
+                print(f'{e} error has occurred! Database will close!')
+                db_tempemail.close()
+                return redirect(url_for('register_retail_account', id=current_id))
+
+            msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
+                            recipients=[retailer.get_email_address()])
+            msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
+            mail.send(msg)
+            
+            flash(f"Success! Account {user_to_create.username} created!", category='success')
+
+            return redirect(url_for('landing_page'))
+
+    return render_template('registerRetailAccount.html', form=form, retailer=retailer)
 
 
 @app.route('/retail/retail_management/update/<int:id>', methods=['POST', 'GET'])
