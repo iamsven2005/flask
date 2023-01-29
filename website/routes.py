@@ -3874,3 +3874,8 @@ def location_edit():
 @login_required
 def location_test():
     return render_template('test.html')
+
+@app.route('/delivery')
+@login_required
+def delivery():
+    return render_template('delivery.html')
