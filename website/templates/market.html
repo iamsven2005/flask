@@ -57,7 +57,7 @@
 <div class="container">
     
 <article class="card card-body">
-
+    
 
 <div class="row">
 	<div class="col-md-4">
@@ -215,9 +215,10 @@
 
                                 <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
                             </form>
-                            <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="get" style="margin-top: 15px">
-                                <td><button class="btn btn-outline btn-warning">Discount</button></td>
-                            </form>
+                            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#discount">
+                                <i class="fas fa fa-money fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Discount
+                            </a>
                             <br>
 
                             <td><button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} <p style="background-color:red;">Out of stock🚫 </p>{% elif items[i].get_quantity() <= 10 %} <p style="background-color:#b26a00; border-radius:5px; padding:2px">Low on stock⚠️</p> {% else %} Add to cart {% endif %}</button></td>
@@ -364,5 +365,25 @@
           <p>Our adjustable walking stick is perfect for individuals who need a stick that can be easily customized to their height and comfort level. It features a sturdy aluminum construction and a non-slip rubber tip, as well as an adjustable handle and shaft that can be easily locked into place. </p>
           <a href="http:///markets?search=b" class="btn btn-primary">Learn more</a>
         </div>
-    </div></div></div>      
+    </div></div></div>    
+    
+    
+    <div class="modal fade" style="margin-top:100px;" id="discount" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="{{ url_for('logout_page') }}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

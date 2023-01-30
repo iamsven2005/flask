@@ -1462,7 +1462,7 @@ def update_item(id):
             update_item_form.name.data = item.get_name()
             update_item_form.quantity.data = item.get_quantity()
             update_item_form.description.data = item.get_description()
-            update_item_form.price.data = item.get_price()
+            update_item_form.price.data = item.get_price()*0.8
 
         return render_template('UpdateItem.html', update_item_form=update_item_form), 200
 
