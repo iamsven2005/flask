@@ -1177,31 +1177,41 @@
       </button>
       <div class="navbar-collapse collapse show" id="navbarContent">
         <ul class="navbar-nav mt-3 mt-lg-0">
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="homeDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
-            <div class="dropdown-menu dropdown-menu-animated" aria-labelledby="homeDropdown"><a class="dropdown-item" href="index.html">Home 1 - Fashion </a><a class="dropdown-item" href="index-2.html">Home 2 - Fashion </a><a class="dropdown-item" href="index-3.html">Home 3 - Design  </a><a class="dropdown-item" href="index-4.html">Home 4 - Design  </a>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="homeDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Account</a>
+            <div class="dropdown-menu dropdown-menu-animated" aria-labelledby="homeDropdown">
+              <a class="dropdown-item" href="{{ url_for('past_orders') }}">Orders</a>
+              <a class="dropdown-item" href="{{ url_for('wish_list') }}">My wishlist </a>
+              <a class="dropdown-item" href="{{ url_for('appointment') }}">Bookings  </a>
+              <a class="dropdown-item" href="{{ url_for('ticket_history') }}">Ticket History  </a>
             </div>
           </li>
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="shopDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
             <div class="dropdown-menu dropdown-menu-md dropdown-menu-animated py-0" aria-labelledby="shopDropdown">
               <div class="row">
                 <div class="col-lg-4 col-sm-6 p-lg-5">
-                  <h6 class="dropdown-header h6 ps-lg-0">Shop pages</h6><a class="dropdown-item ps-lg-0" href="category-full.html">Full width </a><a class="dropdown-item ps-lg-0" href="category-full-sidebar.html">Full width with category menu </a><a class="dropdown-item ps-lg-0" href="category-big-products.html">Full width with big products </a><a class="dropdown-item ps-lg-0" href="category-boxed.html">Fixed width </a><a class="dropdown-item ps-lg-0" href="category-sidebar.html">Fixed width &amp; sidebar </a><a class="dropdown-item ps-lg-0" href="category-masonry.html">Fixed width &amp; masonry layout </a><a class="dropdown-item ps-lg-0" href="category-categories.html">Subcategories </a>
+                  At Agegracefully we wish that you can support and grow with us. We hope you have a good time using our products.
                 </div>
                 <div class="col-lg-4 col-sm-6 p-lg-5">
-                  <h6 class="dropdown-header h6 ps-lg-0">Product pages</h6><a class="dropdown-item ps-lg-0" href="detail-1.html">Product with sticky info </a><a class="dropdown-item ps-lg-0" href="detail-2.html">Product with background </a><a class="dropdown-item ps-lg-0" href="detail-3.html">Product standard  </a>
+                  <h6 class="dropdown-header h6 ps-lg-0">Others</h6>
+                  <a class="dropdown-item ps-lg-0" href="{{ url_for('messages_page') }}">Messages </a>
+                  <a class="dropdown-item ps-lg-0" href="{{ url_for('about_project') }}">About Project </a>
+                  <a class="dropdown-item ps-lg-0" href="https://agegracefully.shop/?_ab=0&_fd=0&_sc=1">Actual Website</a>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block position-relative"><img class="bg-image" src="https://d19m59y37dris4.cloudfront.net/varkala/2-1/img/product/kyle-loftus-596319-unsplash-cropped.jpg" alt=""></div>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="productCardsDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Product Cards</a>
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-animated py-0" aria-labelledby="productCardsDropdown">
               <div class="row">
                 <div class="col-lg-4 col-sm-6 p-lg-5">
-                  <h6 class="dropdown-header h6 ps-lg-0">Shop Cards</h6><a class="dropdown-item ps-lg-0" href="listing-0.html">Default </a><a class="dropdown-item ps-lg-0" href="listing-1.html">Product Card 1 </a><a class="dropdown-item ps-lg-0" href="listing-2.html">Product Card 2 </a><a class="dropdown-item ps-lg-0" href="listing-3.html">Product Card 3 </a>
+                  <h6 class="dropdown-header h6 ps-lg-0">Shop Cards</h6>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=MP3">Mp3  </a>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=Ergo">Ergo   </a>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=Essential" >Essential   </a>
                 </div>
                 <div class="col-lg-4 col-sm-6 p-lg-5">
-                  <h6 class="dropdown-header h6 ps-lg-0">&nbsp;</h6><a class="dropdown-item ps-lg-0" href="listing-4.html">Product Card 4 </a><a class="dropdown-item ps-lg-0" href="listing-5.html">Product Card 5 </a><a class="dropdown-item ps-lg-0" href="listing-6.html">Product Card 6 </a><a class="dropdown-item ps-lg-0" href="listing-7.html">Product Card 7 </a>
+                  <h6 class="dropdown-header h6 ps-lg-0">&nbsp;</h6>
+                  <a class="dropdown-item ps-lg-0"href="/markets?search=Umbrella">Umbrella   </a>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=Chair">Chair  </a>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=Quad">Quad    </a>
+                  <a class="dropdown-item ps-lg-0" href="/markets?search=Standard">Standard   </a>
                 </div>
                 <div class="col-lg-4 d-none d-lg-block position-relative"><img class="bg-image" src="https://d19m59y37dris4.cloudfront.net/varkala/2-1/img/product/0950354513_1_1_1.jpg" alt=""></div>
               </div>
@@ -1213,14 +1223,7 @@
             <div class="dropdown-menu dropdown-menu-animated megamenu px-4 px-lg-5 py-lg-5">
               <div class="row">
                 <div class="col-lg-3 col-sm-6"><img class="img-fluid mb-3 d-none d-lg-block" src="https://d19m59y37dris4.cloudfront.net/varkala/2-1/img/blog/christopher-campbell-28571-unsplash.jpg" alt="">
-                  <!-- Megamenu list-->
-                  <h6>Body</h6>
-                  <ul class="megamenu-list list-unstyled">
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Umbrella">Umbrella   </a></li>
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Chair">Chair  </a></li>
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Quad">Quad    </a></li>
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Standard">Standard   </a></li>
-                  </ul>
+                 
                   <!-- Megamenu list-->
                   <h6>Warranty</h6>
                   <ul class="megamenu-list list-unstyled mb-lg-0">
@@ -1238,12 +1241,7 @@
                     <li class="megamenu-list-item"><a class="megamenu-list-link" href="{{ url_for('wish_list') }}">Wishlist   </a></li>
                   </ul>
                   <!-- Megamenu list-->
-                  <h6>Handle</h6>
-                  <ul class="megamenu-list list-unstyled mb-lg-0">
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=MP3">Mp3  </a></li>
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Ergo">Ergo   </a></li>
-                    <li class="megamenu-list-item"><a class="megamenu-list-link" href="/markets?search=Essential" >Essential   </a></li>
-                  </ul>
+                  
                 </div>
                 <div class="col-lg-3 col-sm-6"><img class="img-fluid mb-3 d-none d-lg-block" src="https://d19m59y37dris4.cloudfront.net/varkala/2-1/img/blog/ian-dooley-347942-unsplash.jpg" alt="">
                   <!-- Megamenu list-->
