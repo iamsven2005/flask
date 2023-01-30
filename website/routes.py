@@ -3879,3 +3879,7 @@ def location_test():
 @login_required
 def delivery():
     return render_template('delivery.html')
+@app.route('/gallery')
+@login_required
+def about_project():
+    return render_template('gallery.html')
