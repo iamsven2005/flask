@@ -214,6 +214,9 @@
                             <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
                                 <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
                             </form>
+                            <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="get" style="margin-top: 15px">
+                                <td><button class="btn btn-outline btn-warning">Discount</button></td>
+                            </form>
                             <br>
                             <td><button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} <p style="background-color:red;">Out of stock🚫 </p>{% elif items[i].get_quantity() <= 10 %} <p style="background-color:#b26a00; border-radius:5px; padding:2px">Low on stock⚠️</p> {% else %} Add to cart {% endif %}</button></td>
                             {% elif items[i].get_id() in DisabledProducts%}
@@ -279,7 +282,7 @@
                 <div class="modal-footer">
                     <a href="{{ url_for('Place_Page') }}" class="btn">More Info</a>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-
+                    
                     </div>
                 
             </div>
