@@ -316,7 +316,7 @@ class UpdateRetailerForm(FlaskForm):
     postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(min=100000, max=999999), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=100000, max=999999),DataRequired()])
+    office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=10000000, max=99999999),DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label="Update")
 
