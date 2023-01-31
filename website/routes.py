@@ -3398,64 +3398,7 @@ def delete_feedback():
     return redirect(url_for('Feedbacks'))
 
 
-#new stuff from sven
 
-@app.route('/Place')
-@login_required
-def Place_Page():
-    return render_template('benefits.html')
-@app.route('/')
-@app.route('/index')
-def index_page():
-    return render_template('index_page.html')
-
-@app.route('/404')
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error404.html'), 404
-@app.route('/legal')
-def legal():
-    return render_template('legal.html')
-@app.route('/contact')
-def contact_us():
-    return render_template('contact.html')
-@app.route('/service')
-def service_help():
-    return render_template('service.html')
-@app.route('/articles')
-def articles():
-    return render_template('articles.html')
-@app.route('/payment')
-@login_required
-def payment_page():
-    return render_template('payment.html')
-@app.route('/thankyou')
-@login_required
-def thankyou_page():
-    return render_template('thank.html')
-
-@app.route('/deals')
-@login_required
-def deals_page():
-    return render_template('deals.html')
-@app.route('/chat')
-@login_required
-def chat_page():
-    return render_template('chat.html')
-
-@app.route('/updatingwarranty')
-@login_required
-def updats():
-    return render_template('warranty2.html')
-
-@app.route('/adminwarranty')
-@login_required
-def updatewarranty():
-    return render_template('warranty3.html')
-@app.route('/deletewarranty')
-@login_required
-def deletewarranty():
-    return render_template('warranty4.html')
 @app.route('/warrantyview')
 @login_required
 def warranty_view():
@@ -3859,6 +3802,44 @@ def retail_information(id):
 
     return render_template("retail_information.html", current_retail=current_retail, retail_id=id)
 
+
+status_db = shelve.open("website/databases/retailer/status.db", writeback=True)
+if not "status" in status_db:
+    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": ""}
+
+@app.route("/get_status", methods=["GET"])
+def get_status():
+    return status_db["status"]
+
+@app.route("/update_status", methods=["POST"])
+def update_status():
+    status = status_db["status"]
+    id = request.json["id"]
+    if id == "btn1":
+        status["btn1"] = False
+        status["btn2"] = True
+        status["result"] = "Button 1 clicked"
+    elif id == "btn2":
+        status["btn2"] = False
+        status["btn3"] = True
+        status["result"] = "Button 2 clicked"
+    elif id == "btn3":
+        status["btn1"] = False
+        status["btn2"] = False
+        status["btn3"] = False
+        status["result"] = "Button 3 clicked"
+    status_db.sync()
+    return "OK"
+
+@app.route("/reset_status", methods=["POST"])
+def reset_status():
+    status = status_db["status"]
+    status["btn1"] = True
+    status["btn2"] = False
+    status["btn3"] = False
+    status["result"] = ""
+    status_db.sync()
+    return "OK"
   
 @app.route('/location')
 @login_required
@@ -3888,17 +3869,61 @@ def about_project():
 def progress():
     return render_template('progress.html')
 
+#new stuff from sven
 
-@app.route("/update_status", methods=["POST"])
-def update_status():
-    data = request.get_json()
-    btn1_status = data.get("btn1_status")
-    btn2_status = data.get("btn2_status")
-    btn3_status = data.get("btn3_status")
+@app.route('/Place')
+@login_required
+def Place_Page():
+    return render_template('benefits.html')
+@app.route('/')
+@app.route('/index')
+def index_page():
+    return render_template('index_page.html')
 
-    with shelve.open("button_status") as db:
-        db["btn1_status"] = btn1_status
-        db["btn2_status"] = btn2_status
-        db["btn3_status"] = btn3_status
+@app.route('/404')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+@app.route('/contact')
+def contact_us():
+    return render_template('contact.html')
+@app.route('/service')
+def service_help():
+    return render_template('service.html')
+@app.route('/articles')
+def articles():
+    return render_template('articles.html')
+@app.route('/payment')
+@login_required
+def payment_page():
+    return render_template('payment.html')
+@app.route('/thankyou')
+@login_required
+def thankyou_page():
+    return render_template('thank.html')
 
-    return jsonify({"message": "Status updated successfully"}), 200
+@app.route('/deals')
+@login_required
+def deals_page():
+    return render_template('deals.html')
+@app.route('/chat')
+@login_required
+def chat_page():
+    return render_template('chat.html')
+
+@app.route('/updatingwarranty')
+@login_required
+def updats():
+    return render_template('warranty2.html')
+
+@app.route('/adminwarranty')
+@login_required
+def updatewarranty():
+    return render_template('warranty3.html')
+@app.route('/deletewarranty')
+@login_required
+def deletewarranty():
+    return render_template('warranty4.html')
