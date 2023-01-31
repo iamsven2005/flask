@@ -2659,7 +2659,50 @@ def update_warranty(id):
 
     return render_template('updatewarranty.html', form=form)
 
+@app.route('/delivery')
+@login_required
+def delivery():
+    return render_template('delivery.html')
+#stuff for progress in warranty
+status_db = shelve.open("website/databases/warranty/status.db", writeback=True)
+if not "status" in status_db:
+    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": ""}
 
+@app.route("/get_status", methods=["GET"])
+def get_status():
+    return status_db["status"]
+
+@app.route("/update_status", methods=["POST"])
+def update_status():
+    status = status_db["status"]
+    id = request.json["id"]
+    if id == "btn1":
+        status["btn1"] = False
+        status["btn2"] = True
+        status["result"] = "Your Item has been packed"
+    elif id == "btn2":
+        status["btn2"] = False
+        status["btn3"] = True
+        status["result"] = "Your Item is on the way"
+    elif id == "btn3":
+        status["btn1"] = False
+        status["btn2"] = False
+        status["btn3"] = False
+        status["result"] = "You have accepted the delivery"
+    status_db.sync()
+    return "OK"
+
+
+@app.route("/reset_status", methods=["POST"])
+def reset_status():
+    status = status_db["status"]
+    status["btn1"] = True
+    status["btn2"] = False
+    status["btn3"] = False
+    status["result"] = ""
+    status_db.sync()
+    return "OK"
+#end stuff for progress in warranty
 @app.route('/warranty/delete/<int:id>', methods=['POST'])
 @login_required
 def warranty_delete(id):
@@ -3803,43 +3846,7 @@ def retail_information(id):
     return render_template("retail_information.html", current_retail=current_retail, retail_id=id)
 
 
-status_db = shelve.open("website/databases/retailer/status.db", writeback=True)
-if not "status" in status_db:
-    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": ""}
 
-@app.route("/get_status", methods=["GET"])
-def get_status():
-    return status_db["status"]
-
-@app.route("/update_status", methods=["POST"])
-def update_status():
-    status = status_db["status"]
-    id = request.json["id"]
-    if id == "btn1":
-        status["btn1"] = False
-        status["btn2"] = True
-        status["result"] = "Button 1 clicked"
-    elif id == "btn2":
-        status["btn2"] = False
-        status["btn3"] = True
-        status["result"] = "Button 2 clicked"
-    elif id == "btn3":
-        status["btn1"] = False
-        status["btn2"] = False
-        status["btn3"] = False
-        status["result"] = "Button 3 clicked"
-    status_db.sync()
-    return "OK"
-
-@app.route("/reset_status", methods=["POST"])
-def reset_status():
-    status = status_db["status"]
-    status["btn1"] = True
-    status["btn2"] = False
-    status["btn3"] = False
-    status["result"] = ""
-    status_db.sync()
-    return "OK"
   
 @app.route('/location')
 @login_required
@@ -3856,18 +3863,12 @@ def location_edit():
 def location_test():
     return render_template('test.html')
 
-@app.route('/delivery')
-@login_required
-def delivery():
-    return render_template('delivery.html')
+
 @app.route('/gallery')
 @login_required
 def about_project():
     return render_template('gallery.html')
-@app.route('/progress')
-@login_required
-def progress():
-    return render_template('progress.html')
+
 
 #new stuff from sven
 
