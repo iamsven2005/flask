@@ -37,6 +37,7 @@ class RegisterForm(FlaskForm):
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6, max=10), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    location = StringField(label='Postal Code', validators=[DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
@@ -86,20 +87,7 @@ class Update_Notes(FlaskForm):
 
 
 class Update_User(FlaskForm):#customer
-    def validate_username(self, username_to_check):
-        user = User.query.filter_by(username=username_to_check.data).first()
-        # if this returns an object
-        if user:
-            # checks if user is not 'None'
-            # so ya if it returns an object it means this is
-            # an existing user created before which raises this error
-            raise ValidationError('Username already exist! Please try a different username.')
-
-    def validate_email_address(self, email_address_to_check):
-        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
-        if email_address:
-            # check if email_address is not 'None'.
-            raise ValidationError("Email Address already exist. Please try a different email address.")
+   
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
@@ -107,6 +95,7 @@ class Update_User(FlaskForm):#customer
     #password2 = PasswordField(label='New Password:', validators=[EqualTo('password1'), DataRequired()])
     gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
    # profile_pic = FileField("Profile Pic")
+    #location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
