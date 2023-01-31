@@ -3883,3 +3883,22 @@ def delivery():
 @login_required
 def about_project():
     return render_template('gallery.html')
+@app.route('/progress')
+@login_required
+def progress():
+    return render_template('progress.html')
+
+
+@app.route("/update_status", methods=["POST"])
+def update_status():
+    data = request.get_json()
+    btn1_status = data.get("btn1_status")
+    btn2_status = data.get("btn2_status")
+    btn3_status = data.get("btn3_status")
+
+    with shelve.open("button_status") as db:
+        db["btn1_status"] = btn1_status
+        db["btn2_status"] = btn2_status
+        db["btn3_status"] = btn3_status
+
+    return jsonify({"message": "Status updated successfully"}), 200

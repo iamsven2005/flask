@@ -1,0 +1,75 @@
+<button id="btn1" {% if btn1_status: %} {% else: %}disabled{% endif %}>Button 1</button>
+<button id="btn2" {% if btn2_status: %} {% else: %}disabled{% endif %}>Button 2</button>
+<button id="btn3" {% if btn3_status: %} {% else: %}disabled{% endif %}>Button 3</button>
+<p id="result"></p>
+
+<script>
+  document.getElementById("btn1").addEventListener("click", function() {
+    btn1_status = false;
+    btn2_status = true;
+    btn3_status = true;
+    document.getElementById("btn1").disabled = true;
+    document.getElementById("btn2").disabled = false;
+    document.getElementById("btn3").disabled = true;
+    document.getElementById("result").innerHTML = "Button 1 clicked";
+
+    // Save the status of the buttons to the shelf file
+    fetch('/update_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        btn1_status: btn1_status,
+        btn2_status: btn2_status,
+        btn3_status: btn3_status
+      })
+    });
+  });
+
+  document.getElementById("btn2").addEventListener("click", function() {
+    btn1_status = true;
+    btn2_status = false;
+    btn3_status = true;
+    document.getElementById("btn1").disabled = true;
+    document.getElementById("btn2").disabled = true;
+    document.getElementById("btn3").disabled = false;
+    document.getElementById("result").innerHTML = "Button 2 clicked";
+
+    // Save the status of the buttons to the shelf file
+    fetch('/update_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        btn1_status: btn1_status,
+        btn2_status: btn2_status,
+        btn3_status: btn3_status
+      })
+    });
+  });
+
+  document.getElementById("btn3").addEventListener("click", function() {
+    btn1_status = true;
+    btn2_status = true;
+    btn3_status = false;
+    document.getElementById("btn1").disabled = true;
+    document.getElementById("btn2").disabled = true;
+    document.getElementById("btn3").disabled = true;
+    document.getElementById("result").innerHTML = "Button 3 clicked";
+
+    // Save the status of the buttons to the shelf file
+    fetch('/update_status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        btn1_status: btn1_status,
+        btn2_status: btn2_status,
+        btn3_status: btn3_status
+        })
+        });
+        });
+        </script>
