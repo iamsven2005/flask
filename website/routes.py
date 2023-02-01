@@ -2597,7 +2597,7 @@ def create_warranty():
                 currentday = warranty_recorded.day
                 date_recorded=f"{currentday}/{currentmonth}/{currentyear}"
                 warranty = warranty(id, create_warranty_form.company.data, create_warranty_form.remarks.data,
-                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, date_recorded, time_recorded, warranty_recorded)
+                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, create_warranty_form.Address.data,create_warranty_form.PostalCode.data, date_recorded, time_recorded, warranty_recorded)
 
                 id += 1
                 warranty.set_warranty_id(id)

@@ -205,6 +205,8 @@ class CreatewarrantyForm(FlaskForm):
     phone = IntegerField(label='Phone Number:', validators=[NumberRange(min=80000000, max=99999999),DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     UUID = StringField(label='UUID', validators=[Length(min=1, max=150), DataRequired()])
+    PostalCode = StringField(label='PostalCode', validators=[Length(min=6, max=6), DataRequired()])
+    Address = StringField(label='Address', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Create warranty')
 
 
@@ -213,6 +215,8 @@ class UpdatewarrantyForm(FlaskForm):
     remarks = StringField(label='Remarks:', validators=[Length(min=1, max=150), DataRequired()])
     phone = IntegerField(label='Phone Number:', validators=[NumberRange(min=80000000, max=99999999), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    PostalCode = StringField(label='PostalCode', validators=[Length(min=6, max=6), DataRequired()])
+    Address = StringField(label='Address', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Update warranty')
 
 
