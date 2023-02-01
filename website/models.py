@@ -22,7 +22,7 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer(), primary_key=True)
     retailer_id = db.Column(db.Integer(), unique=True)
-    staff_id = db.Column(db.Integer(), unique=True)
+    staff_id = db.Column(db.Integer())
     admin = db.Column(db.Integer())
     usertype = db.Column(db.String(120))
     # the id unique to each user so that flask can identify each individual user
@@ -274,12 +274,20 @@ class Staff:
     def __init__(self, name, location, email):
         self.__id = None
         self.__name = name
+        self.__staff_id = None
+        self.__staff_count = None
         self.__location = location
         self.__email = email
         self.__date = datetime.now().strftime("%d/%m/%Y")
 
     def get_id(self):
         return self.__id
+    
+    def get_staff_count(self):
+        return self.__staff_count
+    
+    def get_staff_id(self):
+        return self.__staff_id
 
     def get_name(self):
         return self.__name
@@ -295,6 +303,12 @@ class Staff:
 
     def set_id(self, id):
         self.__id = id
+
+    def set_staff_count(self, staff_count):
+        self.__staff_count = staff_count
+
+    def set_staff_id(self, staff_id):
+        self.__staff_id = staff_id
 
     def set_name(self, name):
         self.__name = name

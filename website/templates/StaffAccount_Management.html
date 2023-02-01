@@ -3,7 +3,7 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-{% block title %}Retail{% endblock %}
+{% block title %}Staff Management{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% block content %}
@@ -11,16 +11,15 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h1 mb-2 text-gray-800">Retail account Management</h1>
-    <p class="mb-4">Welcome Admin! Please search for a user in the table to start transferring funds </p>
+    <h1 class="h1 mb-2 text-gray-800">Staff account Management</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary text-right">Registered Retailer Accounts Database</h6>
-                <a href="{{ url_for('retrieve_retailers') }}" class="btn btn-primary"><span class="material-symbols-outlined">
+            <h6 class="m-0 font-weight-bold text-primary text-right">Registered Staff Accounts Database</h6>
+                <a href="{{ url_for('staff_page') }}" class="btn btn-primary"><span class="material-symbols-outlined">
                     arrow_back
-                    </span>&nbsp;Go to Retailer list</a>
+                    </span>&nbsp;Go to Staff list</a>
             
         </div>
         <div class="card-body neomorphic custom-cursor">
@@ -28,10 +27,10 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Retailer ID</th>
+                            <th>Staff ID</th>
                             <th>User ID</th>
                             <th>Username</th>
-                            <th>Email Address</th>
+                            <th>Company Email Address</th>
                             <th>Account Status</th>
                             <th>Update</th>
                             <th>Disabled</th>
@@ -42,17 +41,17 @@
                     
                     {% for user in users %}
                     {% if user.id != current_user.id%}
-                        {% if user.usertype == "retailers" %}
+                        {% if user.usertype == "staff" %}
                             {% if user.status == 'Enabled' %}
                                 <tbody>
                                 <tr>
-                                    <td>{{user.retailer_id}}</td>
+                                    <td>{{user.staff_id}}</td>
                                     <td>{{user.id}}</td>
                                     <td>{{user.username}}</td>
                                     <td>{{user.email_address}}</td>
                                     <td>{{user.status}}</td>
                                     <td>
-                                        <form action="{{url_for('retail_management_update', id=user.retailer_id, user=user)}}" method="GET">
+                                        <form action="{{url_for('staff_management_update', id=user.id)}}" method="GET">
                                             <input type="submit" value="Update User" class="btn btn-outline btn-info">
                                         </form>
                                     </td>
@@ -62,7 +61,7 @@
                                     near the more Info comment section it targets that to give
                                     each specific item its specific name in title and description -->
                                     
-                                        <form action="{{url_for('retail_management_disable', id=user.id)}}" method="POST">
+                                        <form action="{{url_for('staff_management_disable', id=user.id)}}" method="POST">
                                             <input type="submit" value="Disable Account" class="btn btn-outline btn-danger">
                                         </form>
                                     </td>
@@ -75,12 +74,12 @@
                                     <td>{{user.email_address}}</td>
                                     <td>{{user.status}}</td>
                                     <td>
-                                        <form action="{{url_for('retail_management_update', id=user.id, user=user)}}" method="GET">
+                                        <form action="{{url_for('staff_management_update', id=user.id)}}" method="GET">
                                             <input type="submit" value="Update User" class="btn btn-outline btn-info">
                                         </form>
                                     </td>
                                     <td>
-                                    <form action="{{url_for('retail_management_enable', id=user.id)}}" method="POST">
+                                    <form action="{{url_for('staff_management_enable', id=user.id)}}" method="POST">
                                         <input type="submit" value="Enable Account" class="btn btn-outline btn-success">
                                     </form>
                                     </td>

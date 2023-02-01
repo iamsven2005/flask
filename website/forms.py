@@ -67,11 +67,12 @@ class CreateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
-    submit = SubmitField(label='Add Staff')
+    submit = SubmitField(label='Submit')
 
 
 class UpdateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
+    staff_id = IntegerField(label='Staff Id', validators=[DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
     submit = SubmitField(label='Confirm Changes')
@@ -332,7 +333,7 @@ class UpdateRetailerForm(FlaskForm):
 
 class Update_Retailer_Account(FlaskForm):
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = StringField(label='Company email address:', validators=[Email(), DataRequired()])
     #password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     #password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
@@ -360,6 +361,8 @@ class Register_Staff_Account(FlaskForm):
     # .first() is used to access the first object
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    staff_id = StringField(label='staff ID', validators=[Length(min=1, max=150), DataRequired()])
+    work_email = EmailField("Company email address", validators=[DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')

@@ -1,18 +1,32 @@
-import re
+from flask import Flask, render_template, request, redirect
+import shelve
 
-def check_password_strength(password):
-    if len(password) < 8:
-        return "short password"
-    elif re.search("[a-z]", password) is None:
-        return "Missing lowercase letter"
-    elif re.search("[A-Z]", password) is None:
-        return "Missing uppercase letter"
-    elif re.search("[0-9]", password) is None:
-        return "Missing number"
-    elif re.search("[!@#\$%^&*()_\-+=\{\}\[\]:;\"'<>,.?/|\\~`]", password) is None:
-        return "Missing special character"
-    else:
-        return "Strong"
+app = Flask(__name__)
 
-password = input("Enter a password: ")
-print(check_password_strength(password))
+@app.route('/')
+def index():
+    # Open the shelve database and retrieve the list of stored images
+    db = shelve.open('images_db')
+    images = db.get('images', [])
+    db.close()
+    
+    # Render the HTML template with the list of images
+    return render_template('test.html', images=images)
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    # Retrieve the uploaded image from the request
+    image = request.files.get('image')
+    
+    # Save the image to the shelve database
+    db = shelve.open('images_db')
+    images = db.get('images', [])
+    images.append(image)
+    db['images'] = images
+    db.close()
+    
+    # Redirect the user back to the main page
+    return redirect('/')
+
+if __name__ == '__main__':
+    app.run(debug="True")

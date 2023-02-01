@@ -127,23 +127,7 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Customer Relations</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="{{ url_for('Booking_Page') }}">Booking</a>
-                        <a class="collapse-item" href="{{ url_for('ticket_page') }}">Ticket</a>
-                        <a class="collapse-item" href="{{ url_for('Feedback_Page') }}">Feedback</a>
-                        <a class="collapse-item" href="{{ url_for('create_warranty') }}">Add warranty</a>
-                        <a class="collapse-item" href="{{ url_for('warranty_view') }}">View warranty</a>
-                    </div>
-                </div>
-            </li>
+            
             <!-- Nav Item - Utilities Collapse Menu -->
             {% if current_user.admin == 1 %}
             <li class="nav-item">
@@ -170,6 +154,7 @@
                         <a class="collapse-item" href="{{ url_for('retrieve_retailers') }}">Retailer List</a>
                         <a class="collapse-item" href="{{ url_for('retail_management') }}">Retailer <br> management</a>
                         <a class="collapse-item" href="{{ url_for('staff_page') }}">Staff List</a>
+                        <a class="collapse-item" href="{{ url_for('staff_management') }}">Staff account management</a>
                         <a class="collapse-item" href="{{ url_for('add_staff_page') }}">Add staff</a>
                     </div>
                 </div>
@@ -180,7 +165,7 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Admin Panel</span>
+                    <span>Retailer menu</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
@@ -203,7 +188,43 @@
                     </div>
                 </div>
             </li>
-            
+            {% elif current_user.usertype == "staff" %}
+            <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Staff menu</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Custom Components:</h6>
+                        <a class="collapse-item" href="{{ url_for('Booking_Page') }}">Booking</a>
+                        <a class="collapse-item" href="{{ url_for('ticket_page') }}">Ticket</a>
+                        <a class="collapse-item" href="{{ url_for('Feedback_Page') }}">Feedback</a>
+                        <a class="collapse-item" href="{{ url_for('create_warranty') }}">Add warranty</a>
+                        <a class="collapse-item" href="{{ url_for('warranty_view') }}">View warranty</a>
+                    </div>
+                </div>
+              </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                  aria-expanded="true" aria-controls="collapseTwo">
+                  <i class="fas fa-fw fa-cog"></i>
+                  <span>Customer Relations</span>
+              </a>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <h6 class="collapse-header">Custom Components:</h6>
+                      <a class="collapse-item" href="{{ url_for('Booking_Page') }}">Booking</a>
+                      <a class="collapse-item" href="{{ url_for('ticket_page') }}">Ticket</a>
+                      <a class="collapse-item" href="{{ url_for('Feedback_Page') }}">Feedback</a>
+                      <a class="collapse-item" href="{{ url_for('create_warranty') }}">Add warranty</a>
+                      <a class="collapse-item" href="{{ url_for('warranty_view') }}">View warranty</a>
+                  </div>
+              </div>
+            </li>
+
             {% endif %}
             
 

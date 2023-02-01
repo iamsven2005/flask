@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title>Image Gallery</title>
+  </head>
+  <body>
+    <h1>Image Gallery</h1>
+    <ul>
+      {% for image in images %}
+        <li><img src="{{ image }}" /></li>
+      {% endfor %}
+    </ul>
+    <h2>Upload Image</h2>
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+      <input type="file" name="image" />
+      <input type="submit" value="Upload" />
+    </form>
+  </body>
+</html>

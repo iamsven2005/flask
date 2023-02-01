@@ -42,6 +42,36 @@ db_tempemail['email'] = None
 db_tempemail.close()
 
 
+@app.route('/test')
+def index():
+    # Open the shelve database and retrieve the list of stored images
+    db = shelve.open('images_db')
+    images = db.get('images', [])
+    db.close()
+    
+    # Render the HTML template with the list of images
+    return render_template('test.html', images=images)
+
+@app.route('/testupload', methods=['POST'])
+def upload():
+    # Retrieve the uploaded image from the request
+    image = request.files.get('image')
+    
+    # Save the image to the shelve database
+    db = shelve.open('images_db')
+    images = db.get('images', [])
+    images.append(image)
+    db['images'] = images
+    db.close()
+    
+    # Redirect the user back to the main page
+    return redirect('/test')
+
+if __name__ == '__main__':
+    app.run(debug="True")
+
+
+
 # For Error Handling when user enters invalid url address
 @app.errorhandler(404)
 def page_not_found(e):
@@ -1895,6 +1925,7 @@ def Add_To_Cart():
     return redirect(url_for('market_page'))
 
 
+#staff profile storage
 @app.route('/staff')
 @login_required
 def staff_page():
@@ -1915,11 +1946,16 @@ def staff_page():
         staff = staff_dict.get(key)
         staff_list.append(staff)
 
-    return render_template('staff.html', count=len(staff_list), staff_list=staff_list)
+    staffid_list = []
+    users = User.query.all()
+    for user in users:
+        staffid_list.append(user.staff_id)
+    print("staffid_list: ",staffid_list)
+
+    return render_template('staff.html', count=len(staff_list), staffid_list=staffid_list, staff_list=staff_list, users=users)
 
 
 @app.route('/add_staff', methods=['GET', 'POST'])
-@login_required
 def add_staff_page():
     form = CreateStaffForm()
     db_shelve = shelve.open('website/databases/staff/staff.db', 'c')
@@ -1945,25 +1981,27 @@ def add_staff_page():
                                email=form.email.data)
             ids += 1
             staff.set_id(ids)
+            staff.set_staff_count(ids)
             staff_dict[ids] = staff
             db_shelve['Staff'] = staff_dict
             db_shelve_uniqueID['ID'] = ids
-            flash("Staff Added Successfully", category='success')
+            flash("Record submitted Successfully", category='success')
             db_shelve.close()
             db_shelve_uniqueID.close()
-            return redirect(url_for('staff_page'))
+            return redirect(url_for('landing_page'))
         else:
+            if form.errors != {}:  # If there are not errors from the validations
+                errors = []
+                for err_msg in form.errors.values():
+                    errors.append(err_msg)
+                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                flash(f'{err_message}', category='danger')
             flash("An Error Occurred trying to submit Form", category='danger')
             return redirect(url_for('add_staff_page'))
-    if form.errors != {}:  # If there are not errors from the validations
-        errors = []
-        for err_msg in form.errors.values():
-            errors.append(err_msg)
-        err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-        flash(f'{err_message}', category='danger')
+   
 
-    if request.method == 'GET':
-        return render_template('RegisterStaff.html', form=form)
+
+    return render_template('RegisterStaff.html', form=form)
 
 
 @app.route('/deleteStaff/<int:id>', methods=['POST'])
@@ -1989,7 +2027,9 @@ def update_staff(id):
         staff.set_name(form.name.data)
         staff.set_location(form.location.data)
         staff.set_email(form.email.data)
+        staff.set_staff_id(form.staff_id.data)
         staff.set_date(datetime.now().strftime("%d/%m/%Y"))
+
         db_shelve['Staff'] = staff_dict
         db_shelve.close()
         return redirect(url_for('staff_page'))
@@ -2002,16 +2042,34 @@ def update_staff(id):
         form.name.data = staff.get_name()
         form.location.data = staff.get_location()
         form.email.data = staff.get_email()
+        form.staff_id.data = staff.get_staff_id()
 
         return render_template('updateStaff.html', form=form)
 
+
+#staff account management
 @app.route('/staff/staff_management')
 @login_required
 def staff_management():
+    staff_dict = {}
+    try:
+        #db_shelve = shelve.open('website/databases/partners/partner.db', 'r')
+        db_shelve = shelve.open('website/databases/staff/staff.db', 'r')
+        staff_dict = db_shelve['Staff']
+        db_shelve.close()
+    except IOError:
+        print("Error trying to read file")
+
+    except Exception as e:
+        print(f"An unknown error has occurred,{e}")
+
+    staff_list = []
+    for key in staff_dict:
+        staff = staff_dict.get(key)
+        staff_list.append(staff)
     users = User.query.all()
     print("Staff: ", users)
-    return render_template('StaffAccount_Management.html', users=users)
-
+    return render_template('StaffAccount_Management.html', count=len(staff_list), staff_list=staff_list, users=users)
 
 
 @app.route('/registerStaffAccount/<int:id>', methods=['GET', 'POST'])
@@ -2023,28 +2081,33 @@ def register_staff_account(id):
     staff_dict = {}
     staff_db = shelve.open('website/databases/staff/staff.db', 'w')
     staff_dict = staff_db["Staff"]
-   
+
+    id=id
     staff = staff_dict.get(id)
     current_id = staff.get_id()
     print(current_id)
-   
+
+    staff_id = form.staff_id.data
+    staff.set_staff_id(staff_id)
+
+    
     if request.method == 'POST':
-        password = request.form.get('password1')
+        password = form.password1.data
+        print("password is: ", password)
         if check_password_strength(password) == False:
-            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
-            return redirect(url_for('register_staff_account', id=current_id))
+            return redirect(url_for('register_staff_account', id=id))
         else:
             if form.validate_on_submit():
                 user_to_create = User(username=form.username.data,
-                                    retailer_id = staff.get_id(),
-                                    email_address=staff.get_email(),
+                                    staff_id = staff.get_staff_count(),
+                                    email_address=form.work_email.data,
                                     password=form.password1.data,
                                     usertype="staff")
                 db.session.add(user_to_create)
                 db.session.commit()
             
                 user_email = {}
-                user_email = staff.get_email_address()
+                user_email = staff.get_email()
                 print(user_email)
 
             if form.errors != {}:  # If there are not errors from the validations
@@ -2063,14 +2126,14 @@ def register_staff_account(id):
                 db_tempemail.close()
                 return redirect(url_for('register_staff_account', id=current_id))
 
-            msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
+            msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
                             recipients=[staff.get_email()])
-            msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
+            msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nYour work email: {form.work_email.data} \nPlease do not respond back to this message as this is just a bot account."
             mail.send(msg)
             
             flash(f"Success! Account {user_to_create.username} created!", category='success')
 
-            return redirect(url_for('landing_page'))
+        return redirect(url_for('landing_page'))
 
     return render_template('registerStaffAccount.html', form=form, staff=staff)
 
@@ -2078,7 +2141,7 @@ def register_staff_account(id):
 @login_required
 def staff_management_update(id):
     form = Update_Staff_Account()
-    userID = User.query.filter_by(retailer_id=id).first()
+    userID = User.query.filter_by(staff_id=id).first()
 
     if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
@@ -2096,7 +2159,7 @@ def staff_management_update(id):
     flash(form.errors, category="danger")
     return redirect(url_for("staff_management"))
 
-@app.route('/retail/retail_management/enable/<int:id>', methods=['POST'])
+@app.route('/staff/staff_management/enable/<int:id>', methods=['POST'])
 @login_required
 # Inheritance
 def staff_management_enable(id):
@@ -2107,7 +2170,7 @@ def staff_management_enable(id):
     return redirect(url_for('staff_management'))
 
 
-@app.route('/retail/retail_management/disable/<int:id>', methods=['POST'])
+@app.route('/staff/staff_management/disable/<int:id>', methods=['POST'])
 @login_required
 # Inheritance
 def staff_management_disable(id):
@@ -2118,7 +2181,7 @@ def staff_management_disable(id):
     return redirect(url_for('staff_management'))
 
 
-@app.route('/retail/staff_management/staff_info/<int:id>', methods=['GET'])
+@app.route('/staff/staff_management/staff_info/<int:id>', methods=['GET'])
 @login_required
 def staff_information(id):
     retailer_dict = {}
@@ -2355,6 +2418,7 @@ def register_page():
     form = RegisterForm()
     if request.method == 'POST':
         password = request.form.get('password1')
+        print(password)
         if check_password_strength(password) == False:
             #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
             return redirect(url_for('register_page'))
