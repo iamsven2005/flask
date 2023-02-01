@@ -454,12 +454,14 @@ class SalesLogs(Logs):
 
 # matthew
 class warranty:
-    def __init__(self, id, name, remarks, email, phone_number, UUID, date_recorded, time_recorded, warranty_recorded):
+    def __init__(self, id, name, remarks, email, phone_number, UUID, date_recorded, time_recorded, warranty_recorded, Address, PostalCode):
         self.__id = id
         self.__name = name
         self.__remarks = remarks
         self.__email = email
         self.__phone_number = phone_number
+        self.__PostalCode = PostalCode
+        self.__Address = Address
         self.__UUID = UUID
         self.__date_recorded = date_recorded
         self.__time_recorded = time_recorded
@@ -490,6 +492,12 @@ class warranty:
     
     def get_time_recorded(self):
         return self.__time_recorded
+    
+    def get_PostalCode(self):
+        return self.__PostalCode
+    
+    def get_Address(self):
+        return self.__Address
 
     def set_warranty_id(self, id):
         self.__id = id
@@ -514,6 +522,12 @@ class warranty:
         
     def set_warranty_recorded(self, warranty_recorded):
         self.__warranty_recorded = warranty_recorded
+        
+    def set_PostalCode(self, PostalCode):
+        self.__PostalCode = PostalCode
+    
+    def set_Address(self, Address):
+        self.__Address = Address
 
     def __str__(self):
         return f"ID: {self.get_warranty_id()} , warranty Name: {self.get_warranty_name()}, warranty Remarks: {self.get_warranty_remarks()}, Phone_number: {self.get_phone_number()}, Email: {self.get_email()}, UUID: {self.get_warranty_UUID()}"

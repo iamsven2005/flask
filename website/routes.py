@@ -1462,7 +1462,7 @@ def update_item(id):
             update_item_form.name.data = item.get_name()
             update_item_form.quantity.data = item.get_quantity()
             update_item_form.description.data = item.get_description()
-            update_item_form.price.data = item.get_price()
+            update_item_form.price.data = item.get_price()*0.8
 
         return render_template('UpdateItem.html', update_item_form=update_item_form), 200
 
@@ -2588,7 +2588,7 @@ def password_reset_page():
                 db_tempemail.close()
                 return redirect(url_for('forgot_password_page'))
         else:
-            flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
+            flash('eh,CTF creator? Contact me at 92962690}', category='danger')
             db_tempemail.close()
             return redirect(url_for('forgot_password_page'))
     else:
@@ -2632,7 +2632,7 @@ def create_warranty():
                 currentday = warranty_recorded.day
                 date_recorded=f"{currentday}/{currentmonth}/{currentyear}"
                 warranty = warranty(id, create_warranty_form.company.data, create_warranty_form.remarks.data,
-                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, date_recorded, time_recorded, warranty_recorded)
+                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, create_warranty_form.Address.data,create_warranty_form.PostalCode.data, date_recorded, time_recorded, warranty_recorded)
 
                 id += 1
                 warranty.set_warranty_id(id)
@@ -2694,7 +2694,57 @@ def update_warranty(id):
 
     return render_template('updatewarranty.html', form=form)
 
+@app.route('/delivery', methods=['GET', 'POST'])
+@login_required
+def delivery():
 
+    return render_template('delivery.html')
+@app.route('/progress/<int:id>', methods=['GET', 'POST'])
+
+@login_required
+def progress():
+
+    return render_template('progress.html')
+#stuff for progress in warranty
+status_db = shelve.open("website/databases/warranty/status.db", writeback=True)
+if not "status" in status_db:
+    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": "Pending..."}
+
+@app.route("/get_status", methods=["GET"])
+def get_status():
+    return status_db["status"]
+
+@app.route("/update_status", methods=["POST"])
+def update_status():
+    status = status_db["status"]
+    id = request.json["id"]
+    if id == "btn1":
+        status["btn1"] = False
+        status["btn2"] = True
+        status["result"] = "Your Item has been packed"
+    elif id == "btn2":
+        status["btn2"] = False
+        status["btn3"] = True
+        status["result"] = "Your Item is on the way"
+    elif id == "btn3":
+        status["btn1"] = False
+        status["btn2"] = False
+        status["btn3"] = False
+        status["result"] = "You have accepted the delivery"
+    status_db.sync()
+    return "OK"
+
+
+@app.route("/reset_status", methods=["POST"])
+def reset_status():
+    status = status_db["status"]
+    status["btn1"] = True
+    status["btn2"] = False
+    status["btn3"] = False
+    status["result"] = ""
+    status_db.sync()
+    return "OK"
+#end stuff for progress in warranty
 @app.route('/warranty/delete/<int:id>', methods=['POST'])
 @login_required
 def warranty_delete(id):
@@ -3433,64 +3483,7 @@ def delete_feedback():
     return redirect(url_for('Feedbacks'))
 
 
-#new stuff from sven
 
-@app.route('/Place')
-@login_required
-def Place_Page():
-    return render_template('benefits.html')
-@app.route('/')
-@app.route('/index')
-def index_page():
-    return render_template('index_page.html')
-
-@app.route('/404')
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error404.html'), 404
-@app.route('/legal')
-def legal():
-    return render_template('legal.html')
-@app.route('/contact')
-def contact_us():
-    return render_template('contact.html')
-@app.route('/service')
-def service_help():
-    return render_template('service.html')
-@app.route('/articles')
-def articles():
-    return render_template('articles.html')
-@app.route('/payment')
-@login_required
-def payment_page():
-    return render_template('payment.html')
-@app.route('/thankyou')
-@login_required
-def thankyou_page():
-    return render_template('thank.html')
-
-@app.route('/deals')
-@login_required
-def deals_page():
-    return render_template('deals.html')
-@app.route('/chat')
-@login_required
-def chat_page():
-    return render_template('chat.html')
-
-@app.route('/updatingwarranty')
-@login_required
-def updats():
-    return render_template('warranty2.html')
-
-@app.route('/adminwarranty')
-@login_required
-def updatewarranty():
-    return render_template('warranty3.html')
-@app.route('/deletewarranty')
-@login_required
-def deletewarranty():
-    return render_template('warranty4.html')
 @app.route('/warrantyview')
 @login_required
 def warranty_view():
@@ -3894,6 +3887,8 @@ def retail_information(id):
 
     return render_template("retail_information.html", current_retail=current_retail, retail_id=id)
 
+
+
   
 @app.route('/location')
 @login_required
@@ -3910,11 +3905,68 @@ def location_edit():
 def location_test():
     return render_template('test.html')
 
-@app.route('/delivery')
-@login_required
-def delivery():
-    return render_template('delivery.html')
+
 @app.route('/gallery')
 @login_required
 def about_project():
     return render_template('gallery.html')
+
+
+#new stuff from sven
+
+@app.route('/Place')
+@login_required
+def Place_Page():
+    return render_template('benefits.html')
+@app.route('/')
+@app.route('/index')
+def index_page():
+    return render_template('index_page.html')
+
+@app.route('/404')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+@app.route('/contact')
+def contact_us():
+    return render_template('contact.html')
+@app.route('/service')
+def service_help():
+    return render_template('service.html')
+@app.route('/articles')
+def articles():
+    return render_template('articles.html')
+@app.route('/payment')
+@login_required
+def payment_page():
+    return render_template('payment.html')
+@app.route('/thankyou')
+@login_required
+def thankyou_page():
+    return render_template('thank.html')
+
+@app.route('/deals')
+@login_required
+def deals_page():
+    return render_template('deals.html')
+@app.route('/chat')
+@login_required
+def chat_page():
+    return render_template('chat.html')
+
+@app.route('/updatingwarranty')
+@login_required
+def updats():
+    return render_template('warranty2.html')
+
+@app.route('/adminwarranty')
+@login_required
+def updatewarranty():
+    return render_template('warranty3.html')
+@app.route('/deletewarranty')
+@login_required
+def deletewarranty():
+    return render_template('warranty4.html')

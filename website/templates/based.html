@@ -1480,6 +1480,13 @@ aria-labelledby="alertsDropdown">
               </li>
             </ul>
             <ul class="list-inline mb-4">
+              <li class="nav-item">
+                <a class="nav-link" style="color:#514100">You have:
+                <i class="fas fa-coins"></i>
+                <!-- Gives the coin design for budget  -->
+                {{ current_user.prettier_budget}}
+                </a>
+                </li>
               <li class="list-inline-item me-2"><i class="fab fa-facebook-f"> </i></li>
               <li class="list-inline-item me-2"><i class="fab fa-twitter"> </i></li>
               <li class="list-inline-item me-2">
