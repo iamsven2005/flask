@@ -2553,7 +2553,7 @@ def password_reset_page():
                 db_tempemail.close()
                 return redirect(url_for('forgot_password_page'))
         else:
-            flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
+            flash('eh,CTF creator? Contact me at 92962690}', category='danger')
             db_tempemail.close()
             return redirect(url_for('forgot_password_page'))
     else:
@@ -2659,14 +2659,21 @@ def update_warranty(id):
 
     return render_template('updatewarranty.html', form=form)
 
-@app.route('/delivery')
+@app.route('/delivery', methods=['GET', 'POST'])
 @login_required
 def delivery():
+
     return render_template('delivery.html')
+@app.route('/progress/<int:id>', methods=['GET', 'POST'])
+
+@login_required
+def progress():
+
+    return render_template('progress.html')
 #stuff for progress in warranty
 status_db = shelve.open("website/databases/warranty/status.db", writeback=True)
 if not "status" in status_db:
-    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": ""}
+    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": "Pending..."}
 
 @app.route("/get_status", methods=["GET"])
 def get_status():

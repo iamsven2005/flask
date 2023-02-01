@@ -17,12 +17,10 @@
             document.getElementById("btn2").disabled = !status.btn2;
             document.getElementById("btn3").disabled = !status.btn3;
             document.getElementById("result").innerHTML = status.result;
-            document.getElementById("result").innerHTML = status.result;
           }
         };
         xhr.send();
-      }
-
+      
       function updateStatus(id) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/update_status", true);
@@ -46,47 +44,20 @@
         xhr.send();
       }
     </script>
-
-    <style>
-        .ghost{
-            visibility: hidden;
-
-        }
-    </style>
-{% if current_user.admin == 1 %}
-    <body onload="loadStatus()" class="mx-auto">
-        <div class="d-flex justify-content-center align-items-center my-5">
-          <div class="btn-group">
-            <button id="btn1" class=" btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
-            <button id="btn2" class=" btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
-            <button id="btn3" class="btn btn-outline-primary" disabled onclick="updateStatus('btn3')">Recieved</button>     
-          </div>
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-          <p id="result"></p>
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <p id="result"></p>
-          </div>
-        <div class="d-flex justify-content-center align-items-center my-5">
-          <button id="reset" class="btn btn-outline-danger" onclick="resetStatus()">Reset</button>
-        </div>
-      </body>
-{% else %}
   <body onload="loadStatus()" class="mx-auto">
     <div class="d-flex justify-content-center align-items-center my-5">
       <div class="btn-group">
-        <button id="btn1" class="ghost btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
-        <button id="btn2" class="ghost btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
+        <button id="btn1" class="btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
+        <button id="btn2" class="btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
         <button id="btn3" class="btn btn-outline-primary" disabled onclick="updateStatus('btn3')">Recieved</button>     
       </div>
     </div>
     <div class="d-flex justify-content-center align-items-center">
       <p id="result"></p>
     </div>
-    <div class="d-flex justify-content-center align-items-center">
-        <p id="result"></p>
-      </div>
+    <div class="d-flex justify-content-center align-items-center my-5">
+      <button id="reset" class="btn btn-outline-danger" onclick="resetStatus()">Reset</button>
+    </div>
   </body>
   {% endif %}
   {% endblock %}
