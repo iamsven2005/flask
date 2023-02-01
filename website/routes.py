@@ -1466,7 +1466,42 @@ def update_item(id):
 
         return render_template('UpdateItem.html', update_item_form=update_item_form), 200
 
+@app.route("/discounts", methods=["POST"])
+def discounted_item(id):
+    update_item_form = Add_Item_Form()
+    Items_Dict = {}
 
+    try:
+        Item_Database = shelve.open('website/databases/items/items.db', 'w')
+        #Your_Products_Database = shelve.open('website/databases/products/products.db', 'c')
+        if 'ItemInfo' in Item_Database:
+            Items_Dict = Item_Database['ItemInfo']
+        else:
+            Item_Database['ItemInfo'] = Items_Dict
+        
+    except IOError:
+        print("Unable to Read File")
+
+    except Exception as e:
+        print(f"An unknown error has occurred,{e}")
+
+    else:
+        if request.method == 'POST' and update_item_form.validate():
+            item = Items_Dict.get(id)
+            item.set_price(update_item_form.price.data)
+            Item_Database['ItemInfo'] = Items_Dict
+            Item_Database.close()
+     
+            return redirect(url_for('retrieve_items'))
+        else:
+            Item_Database = shelve.open('website/databases/items/items.db', 'r')
+            Items_dict = Item_Database['ItemInfo']
+            Item_Database.close()
+
+            item = Items_dict.get(id)
+            update_item_form.price.data = item.get_price()*0.2
+
+        return render_template('discounts.html', update_item_form=update_item_form), 200
 
 @app.route('/deleteItem/<id>', methods=['POST'])
 def delete_item(id):
@@ -2300,7 +2335,7 @@ def updateNotes():
         return redirect(url_for("notes"))
 
 
-# matthew
+# mervyn
 @app.route('/landing', methods=["GET", "POST"])
 def landing_page():
     admin_user()

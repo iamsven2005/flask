@@ -33,9 +33,25 @@
 
         <div class="form-group fadeIn third">
         <!--Password-->
+
             {{ form.password.label() }}
-            {{ form.password(class="form-control form-control-user", placeholder="Password") }}
-        </div>
+            {{ form.password(class="form-control form-control-user", placeholder="Password", id="myInput") }}
+            <br>
+            <input type="checkbox" onclick="myFunction()">Show Password
+
+            <script>
+              function myFunction() {
+                  var x = document.getElementById("myInput");
+                  if (x.type === "password") {
+                  x.type = "text";
+                  } else {
+                  x.type = "password";
+                  }
+              }
+          
+          </script>
+        
+      </div>
 
         <div class="fadeIn fourth">
         {{ form.submit(class="btn btn-primary btn-user btn-block") }}

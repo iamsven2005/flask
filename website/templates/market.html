@@ -212,10 +212,9 @@
                         <div class="text-center" style="margin-top: 15px;">
                         {% if items[i].get_owner() == current_user.username %}
                             <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
-
                                 <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
                             </form>
-                            <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="get" style="margin-top: 15px">
+                            <form action="{{ url_for('discounted_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px">
                                 <td><button class="btn btn-outline btn-warning">Discount</button></td>
                             </form>
                             <br>
