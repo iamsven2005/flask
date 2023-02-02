@@ -1466,7 +1466,7 @@ def update_item(id):
 
         return render_template('UpdateItem.html', update_item_form=update_item_form), 200
 
-@app.route("/discounts", methods=["POST"])
+@app.route("/discounts/<id>", methods=["POST", "GET"])
 def discounted_item(id):
     update_item_form = Add_Item_Form()
     Items_Dict = {}
@@ -1499,7 +1499,7 @@ def discounted_item(id):
             Item_Database.close()
 
             item = Items_dict.get(id)
-            update_item_form.price.data = item.get_price()*0.2
+            update_item_form.price.data = item.get_price()
 
         return render_template('discounts.html', update_item_form=update_item_form), 200
 
