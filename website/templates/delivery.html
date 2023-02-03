@@ -6,87 +6,209 @@
 
 {% block title %}Progress{% endblock %}
 {% block content %}
-    <script>
-      function loadStatus() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/get_status", true);
-        xhr.onreadystatechange = function() {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            var status = JSON.parse(this.responseText);
-            document.getElementById("btn1").disabled = !status.btn1;
-            document.getElementById("btn2").disabled = !status.btn2;
-            document.getElementById("btn3").disabled = !status.btn3;
-            document.getElementById("result").innerHTML = status.result;
-            document.getElementById("result").innerHTML = status.result;
-          }
-        };
-        xhr.send();
-      }
+    
+<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
-      function updateStatus(id) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/update_status", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.onreadystatechange = function() {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            loadStatus();
-          }
-        };
-        xhr.send(JSON.stringify({ id: id }));
-      }
-
-      function resetStatus() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/reset_status", true);
-        xhr.onreadystatechange = function() {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            loadStatus();
-          }
-        };
-        xhr.send();
-      }
-    </script>
-
-    <style>
-        .ghost{
-            visibility: hidden;
-
-        }
-    </style>
 {% if current_user.admin == 1 %}
-    <body onload="loadStatus()" class="mx-auto">
-        <div class="d-flex justify-content-center align-items-center my-5">
-          <div class="btn-group">
-            <button id="btn1" class=" btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
-            <button id="btn2" class=" btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
-            <button id="btn3" class="btn btn-outline-primary" disabled onclick="updateStatus('btn3')">Recieved</button>     
-          </div>
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-          <p id="result"></p>
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            <p id="result"></p>
-          </div>
-        <div class="d-flex justify-content-center align-items-center my-5">
-          <button id="reset" class="btn btn-outline-danger" onclick="resetStatus()">Reset</button>
-        </div>
-      </body>
+  <body>
+    <div class="main">
+        <ul class="steps">
+            <li>
+                <i class="icon uil uil-capture"></i>
+                <div class="progress one active">
+                    <p>1</p>
+                    <i class="uil uil-check"></i>
+                </div>
+                <p class="text">Packing</p>
+                <div class="container">
+                  <p>Packing</p>
+                </div>
+                
+            </li>
+            <li>
+                <i class="icon uil uil-clipboard-notes"></i>
+                <div class="progress two">
+                    <p>2</p>
+                    <i class="uil uil-check"></i>
+                </div>
+                <p class="text">Delivering</p>
+            </li>
+            <li>
+                <i class="icon uil uil-credit-card"></i>
+                <div class="progress three">
+                    <p>3</p>
+                    <i class="uil uil-check"></i>
+                </div>
+                <p class="text">Received</p>
+            </li>
+            
+        </ul>
+
+    </div>
+
+</body>
 {% else %}
-  <body onload="loadStatus()" class="mx-auto">
-    <div class="d-flex justify-content-center align-items-center my-5">
-      <div class="btn-group">
-        <button id="btn1" class="ghost btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
-        <button id="btn2" class="ghost btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
-        <button id="btn3" class="btn btn-outline-primary" disabled onclick="updateStatus('btn3')">Recieved</button>     
-      </div>
-    </div>
-    <div class="d-flex justify-content-center align-items-center">
-      <p id="result"></p>
-    </div>
-    <div class="d-flex justify-content-center align-items-center">
-        <p id="result"></p>
-      </div>
-  </body>
-  {% endif %}
+<body>
+  <div class="main">
+    <ul class="steps">
+        <li>
+            <i class="icon uil uil-credit-card"></i>
+            <div class="progress three">
+                <p>3</p>
+                <i class="uil uil-check"></i>
+            </div>
+            <p class="text">Received</p>
+        </li>
+        
+    </ul>
+  
+  </div>
+</body>
+{% endif %}
+<style>
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@font-face {
+    font-family: pop;
+    src: url(./Fonts/Poppins-Medium.ttf);
+}
+
+.main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    font-family: pop;
+    flex-direction: column;
+}
+.head{
+    text-align: center;
+}
+.head_1{
+    font-size: 30px;
+    font-weight: 600;
+    color: #333;
+}
+.head_1 span{
+    color: #ff4732;
+}
+.head_2{
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 3px;
+}
+ul{
+    display: flex;
+    margin-top: 80px;
+}
+ul li{
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+ul li .icon{
+    font-size: 35px;
+    color: #ff4732;
+    margin: 0 60px;
+}
+ul li .text{
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff4732;
+}
+
+/* Progress Div Css  */
+
+ul li .progress{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(68, 68, 68, 0.781);
+    margin: 14px 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    position: relative;
+    cursor: pointer;
+}
+.progress::after{
+    content: " ";
+    position: absolute;
+    width: 125px;
+    height: 5px;
+    background-color: rgba(68, 68, 68, 0.781);
+    right: 30px;
+}
+.one::after{
+    width: 0;
+    height: 0;
+}
+ul li .progress .uil{
+    display: none;
+}
+ul li .progress p{
+    font-size: 13px;
+}
+
+/* Active Css  */
+
+ul li .active{
+    background-color: #ff4732;
+    display: grid;
+    place-items: center;
+}
+li .active::after{
+    background-color: #ff4732;
+}
+ul li .active p{
+    display: none;
+}
+ul li .active .uil{
+    font-size: 20px;
+    display: flex;
+}
+
+  
+  
+  </style>
+    
+  <script>
+  const one = document.querySelector(".one");
+  const two = document.querySelector(".two");
+  const three = document.querySelector(".three");
+  const four = document.querySelector(".four");
+  const five = document.querySelector(".five");
+  
+  one.onclick = function() {
+      one.classList.add("active");
+      two.classList.remove("active");
+      three.classList.remove("active");
+      four.classList.remove("active");
+      five.classList.remove("active");
+  }
+  
+  two.onclick = function() {
+      one.classList.add("active");
+      two.classList.add("active");
+      three.classList.remove("active");
+      four.classList.remove("active");
+      five.classList.remove("active");
+  }
+  three.onclick = function() {
+      one.classList.add("active");
+      two.classList.add("active");
+      three.classList.add("active");
+      four.classList.remove("active");
+      five.classList.remove("active");
+  }
+  
+  </script>
+  
   {% endblock %}

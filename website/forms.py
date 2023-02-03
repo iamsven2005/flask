@@ -37,7 +37,7 @@ class RegisterForm(FlaskForm):
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6, max=10), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
-    location = StringField(label='Postal Code', validators=[DataRequired()])
+    #location = StringField(label='Postal Code', validators=[DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
