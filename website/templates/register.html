@@ -1,4 +1,9 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Register Page{% endblock %}
 {% block content %}
  <div class="container">
@@ -34,12 +39,25 @@
                                     <!--Password1-->
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         {{ form.password1.label() }}
-                                        {{ form.password1(class='form-control form-control-user', placeholder='Password') }}
+                                        {{ form.password1(class='form-control form-control-user', placeholder='Password', id="myInput") }}
+                                        <input type="checkbox" onclick="myFunction()">Show Password
+                                        
+                                <script>
+                                    function myFunction() {
+                                        var x = document.getElementById("myInput");
+                                        if (x.type === "password") {
+                                        x.type = "text";
+                                        } else {
+                                        x.type = "password";
+                                        }
+                                    }
+                                </script>
                                     </div>
                                     <div class="col-sm-6">
                                         <!--Password2-->
                                         {{ form.password2.label() }}
                                         {{ form.password2(class='form-control form-control-user', placeholder='Repeat Password') }}
+                               
                                     </div>
                                 </div>
                                 {{ form.submit(class='btn btn-primary btn-user btn-block') }}
@@ -58,5 +76,4 @@
         </div>
 
     </div>
-
 {% endblock %}

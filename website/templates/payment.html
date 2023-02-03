@@ -1,4 +1,9 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Payment{% endblock %}
 
 {% block content %}
@@ -52,7 +57,7 @@
       <p class="neomorphism-text">You Are About To Receive Something Exciting That Will Keep You Moving</p>
       <div class="mt-5">
         <!--stripe api here-->
-        <form action="{{url_for('thankyou_page')}}">
+        <form action="{{url_for('create_warranty')}}">
             <script src="https://checkout.stripe.com/checkout.js"
             class="stripe-button neomorphism-btn"
             data-key="pk_test_51KKojDK7ip8kgLQbuRm5DRr5GghiNuicnq8Dgs1UzHDhkDrWp4MlGPmPRU8zSgGj3VdPhkNLzQi6zQvEnwriVP3e00pdHwABJh"

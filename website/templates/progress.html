@@ -1,0 +1,63 @@
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
+{% block title %}Progress{% endblock %}
+{% block content %}
+    <script>
+      function loadStatus() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/get_status", true);
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var status = JSON.parse(this.responseText);
+            document.getElementById("btn1").disabled = !status.btn1;
+            document.getElementById("btn2").disabled = !status.btn2;
+            document.getElementById("btn3").disabled = !status.btn3;
+            document.getElementById("result").innerHTML = status.result;
+          }
+        };
+        xhr.send();
+      
+      function updateStatus(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/update_status", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            loadStatus();
+          }
+        };
+        xhr.send(JSON.stringify({ id: id }));
+      }
+
+      function resetStatus() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/reset_status", true);
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            loadStatus();
+          }
+        };
+        xhr.send();
+      }
+    </script>
+  <body onload="loadStatus()" class="mx-auto">
+    <div class="d-flex justify-content-center align-items-center my-5">
+      <div class="btn-group">
+        <button id="btn1" class="btn btn-outline-primary" disabled onclick="updateStatus('btn1')">Packing</button>
+        <button id="btn2" class="btn btn-outline-primary" disabled onclick="updateStatus('btn2')">Delivering</button>
+        <button id="btn3" class="btn btn-outline-primary" disabled onclick="updateStatus('btn3')">Recieved</button>     
+      </div>
+    </div>
+    <div class="d-flex justify-content-center align-items-center">
+      <p id="result"></p>
+    </div>
+    <div class="d-flex justify-content-center align-items-center my-5">
+      <button id="reset" class="btn btn-outline-danger" onclick="resetStatus()">Reset</button>
+    </div>
+  </body>
+  {% endif %}
+  {% endblock %}

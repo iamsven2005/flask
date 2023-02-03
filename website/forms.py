@@ -7,7 +7,7 @@ from flask_wtf.file import FileField
 
 # from datetime import datetime
 
-# Sven
+# Mervyn
 class RegisterForm(FlaskForm):
     # The Validator library allows you to create certain functions
     # with specific usernames which lets the flaskform class
@@ -30,21 +30,20 @@ class RegisterForm(FlaskForm):
         if email_address:
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
-
     # User.query.filter_by(username = username_to_check) will return an object
     # .first() is used to access the first object
 
-    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    username = StringField(label='User Name:', validators=[Length(min=2, max=10), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6, max=10), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    location = StringField(label='Postal Code', validators=[DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
 
 class LoginForm(FlaskForm):
     username = StringField(label='User Name:', validators=[DataRequired()])
-    # email_address = StringField(label='Email:', validators=[Email(), DataRequired()])
     password = PasswordField(label='Password: ', validators=[DataRequired()])
     submit = SubmitField(label="Sign in")
 
@@ -64,14 +63,14 @@ class TransferFunds(FlaskForm):
 class CreatePartnerForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
-    email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Add Partner')
 
 
 class UpdatePartnerForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
-    email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Confirm Changes')
 
 
@@ -87,28 +86,16 @@ class Update_Notes(FlaskForm):
     submit = SubmitField(label='Update Notes')
 
 
-class Update_User(FlaskForm):
-    def validate_username(self, username_to_check):
-        user = User.query.filter_by(username=username_to_check.data).first()
-        # if this returns an object
-        if user:
-            # checks if user is not 'None'
-            # so ya if it returns an object it means this is
-            # an existing user created before which raises this error
-            raise ValidationError('Username already exist! Please try a different username.')
-
-    def validate_email_address(self, email_address_to_check):
-        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
-        if email_address:
-            # check if email_address is not 'None'.
-            raise ValidationError("Email Address already exist. Please try a different email address.")
+class Update_User(FlaskForm):#customer
+   
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    #password1 = PasswordField(label='Old Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='New Password:', validators=[EqualTo('password1'), DataRequired()])
     gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
    # profile_pic = FileField("Profile Pic")
+    #location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
@@ -134,7 +121,7 @@ class Update_Email(FlaskForm):
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
 
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Done')
 
 
@@ -147,7 +134,6 @@ class Update_Password(FlaskForm):
     current_password = PasswordField(label='Current Password:', validators=[Length(min=6), DataRequired()])
     new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
     confirm_password = PasswordField(label='Confirm New Password:',  validators=[EqualTo('new_password'), DataRequired()])
-    
     submit = SubmitField(label='Done')
 
 
@@ -219,6 +205,8 @@ class CreatewarrantyForm(FlaskForm):
     phone = IntegerField(label='Phone Number:', validators=[NumberRange(min=80000000, max=99999999),DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     UUID = StringField(label='UUID', validators=[Length(min=1, max=150), DataRequired()])
+    PostalCode = StringField(label='PostalCode', validators=[Length(min=6, max=6), DataRequired()])
+    Address = StringField(label='Address', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Create warranty')
 
 
@@ -227,11 +215,13 @@ class UpdatewarrantyForm(FlaskForm):
     remarks = StringField(label='Remarks:', validators=[Length(min=1, max=150), DataRequired()])
     phone = IntegerField(label='Phone Number:', validators=[NumberRange(min=80000000, max=99999999), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    PostalCode = StringField(label='PostalCode', validators=[Length(min=6, max=6), DataRequired()])
+    Address = StringField(label='Address', validators=[Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Update warranty')
 
 
 # Polymorphism + inheritance
-class Update_User_Admin(Update_User):
+class Update_User_Admin(FlaskForm):
     def username_update_admin(self, username_to_check):
         user = User.query.filter_by(username=username_to_check.data).first()
         # if this returns an object
@@ -246,10 +236,11 @@ class Update_User_Admin(Update_User):
         if email_address:
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
-
-
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    submit = SubmitField(label='Add Event')
 class password_reset(FlaskForm):
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     otp = StringField(label='One time password:', validators=[Length(min=8, max=8), DataRequired()])
     submit = SubmitField(label='Submit password reset')
     new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
@@ -297,7 +288,7 @@ class RegisterRetailAccountForm(FlaskForm):
     # .first() is used to access the first object
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
@@ -309,7 +300,7 @@ class RegisterRetailerForm(FlaskForm):
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):
@@ -318,7 +309,7 @@ class UpdateRetailerForm(FlaskForm):
     postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(min=100000, max=999999), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=100000, max=999999),DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=10000000, max=99999999),DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label="Update")
 

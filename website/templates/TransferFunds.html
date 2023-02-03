@@ -1,4 +1,9 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Transfer Funds{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">

@@ -1,15 +1,14 @@
+from flask import Flask 
+from flask_socketio import SocketIO, send
 
-import shelve
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'mysecret'
+socketio = SocketIO(app, cors_allowed_origins='*')
 
-def track_visitors():
-    # Open the shelve database
-    with shelve.open('visitor_count') as db:
-        # Increment the visitor count
-        if 'visitor_count' in db:
-            visitor_count = db['visitor_count'] + 1
-        else:
-            visitor_count = 1
-        # Store the updated visitor count
-        db['visitor_count'] = visitor_count
-    # Return the visitor count in HTML
-    return "<html><body><h1>Welcome!</h1><p>You are visitor number {}</p></body></html>".format(visitor_count)
+@socketio.on('message')
+def handleMessage(msg):
+	print('Message: ' + msg)
+	send(msg, broadcast=True)
+
+if __name__ == '__main__':
+	socketio.run(app, allow_unsafe_werkzeug=True)

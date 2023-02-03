@@ -231,18 +231,16 @@ def update_user():
     update_user_form = Update_User()
     if request.method == 'POST' and update_user_form.validate_on_submit():
         attempted_user = User.query.filter_by(username=current_user.username).first()
-        if attempted_user and attempted_user.check_password_correction(
-                attempted_password=update_user_form.password1.data):
-            userID = User.query.filter_by(id=current_user.id).first()
-            # userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
-            userID.username = update_user_form.username.data
-            userID.email_address = update_user_form.email_address.data
-            userID.gender = update_user_form.gender.data
-            db.session.commit()
-            flash("User Particulars changed successfully", category="success")
-            return redirect(url_for("profile_page"))
-        else:  # If there are not errors from the validations
-            flash("Password is Incorrect Try again.", category='danger')
+       
+        userID = User.query.filter_by(id=current_user.id).first()
+        # userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
+        userID.username = update_user_form.username.data
+        userID.email_address = update_user_form.email_address.data
+        userID.gender = update_user_form.gender.data
+        db.session.commit()
+        flash("User Particulars changed successfully", category="success")
+        return redirect(url_for("profile_page"))
+       
     if update_user_form.errors != {}:  # If there are not errors from the validations
         errors = []
         for err_msg in update_user_form.errors.values():
@@ -1464,11 +1462,46 @@ def update_item(id):
             update_item_form.name.data = item.get_name()
             update_item_form.quantity.data = item.get_quantity()
             update_item_form.description.data = item.get_description()
-            update_item_form.price.data = item.get_price()
+            update_item_form.price.data = item.get_price()*0.8
 
         return render_template('UpdateItem.html', update_item_form=update_item_form), 200
 
+@app.route("/discounts/<id>", methods=["POST", "GET"])
+def discounted_item(id):
+    update_item_form = Add_Item_Form()
+    Items_Dict = {}
 
+    try:
+        Item_Database = shelve.open('website/databases/items/items.db', 'w')
+        #Your_Products_Database = shelve.open('website/databases/products/products.db', 'c')
+        if 'ItemInfo' in Item_Database:
+            Items_Dict = Item_Database['ItemInfo']
+        else:
+            Item_Database['ItemInfo'] = Items_Dict
+        
+    except IOError:
+        print("Unable to Read File")
+
+    except Exception as e:
+        print(f"An unknown error has occurred,{e}")
+
+    else:
+        if request.method == 'POST' and update_item_form.validate():
+            item = Items_Dict.get(id)
+            item.set_price(update_item_form.price.data)
+            Item_Database['ItemInfo'] = Items_Dict
+            Item_Database.close()
+     
+            return redirect(url_for('retrieve_items'))
+        else:
+            Item_Database = shelve.open('website/databases/items/items.db', 'r')
+            Items_dict = Item_Database['ItemInfo']
+            Item_Database.close()
+
+            item = Items_dict.get(id)
+            update_item_form.price.data = item.get_price()
+
+        return render_template('discounts.html', update_item_form=update_item_form), 200
 
 @app.route('/deleteItem/<id>', methods=['POST'])
 def delete_item(id):
@@ -2302,7 +2335,7 @@ def updateNotes():
         return redirect(url_for("notes"))
 
 
-# matthew
+# mervyn
 @app.route('/landing', methods=["GET", "POST"])
 def landing_page():
     admin_user()
@@ -2330,7 +2363,7 @@ def landing_page():
                 flash(f"{attempted_user.username} account has been disabled!"
                       f" Please contact Customer Support for more information.", category='danger')
         else:
-            flash("Username and Password are not matched! Please try again.", category='danger')
+            flash("Username or Password are not matched! Please try again.", category='danger')
 
     return render_template('Landingbase.html', form=form)
 
@@ -2555,7 +2588,7 @@ def password_reset_page():
                 db_tempemail.close()
                 return redirect(url_for('forgot_password_page'))
         else:
-            flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
+            flash('eh,CTF creator? Contact me at 92962690}', category='danger')
             db_tempemail.close()
             return redirect(url_for('forgot_password_page'))
     else:
@@ -2599,7 +2632,7 @@ def create_warranty():
                 currentday = warranty_recorded.day
                 date_recorded=f"{currentday}/{currentmonth}/{currentyear}"
                 warranty = warranty(id, create_warranty_form.company.data, create_warranty_form.remarks.data,
-                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, date_recorded, time_recorded, warranty_recorded)
+                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, create_warranty_form.Address.data,create_warranty_form.PostalCode.data, date_recorded, time_recorded, warranty_recorded)
 
                 id += 1
                 warranty.set_warranty_id(id)
@@ -2651,16 +2684,73 @@ def update_warranty(id):
         form.remarks.data = warranty.get_warranty_remarks()
         form.email.data = warranty.get_email()
         form.phone.data = warranty.get_phone_number()
+        
+    if form.errors != {}:  # If there are not errors from the validations
+        errors = []
+        for err_msg in form.errors.values():
+            errors.append(err_msg)
+        err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+
 
     return render_template('updatewarranty.html', form=form)
 
+@app.route('/delivery', methods=['GET', 'POST'])
+@login_required
+def delivery():
 
+    return render_template('delivery.html')
+@app.route('/progress/<int:id>', methods=['GET', 'POST'])
+
+@login_required
+def progress():
+
+    return render_template('progress.html')
+#stuff for progress in warranty
+status_db = shelve.open("website/databases/warranty/status.db", writeback=True)
+if not "status" in status_db:
+    status_db["status"] = {"btn1": True, "btn2": False, "btn3": False, "result": "Pending..."}
+
+@app.route("/get_status", methods=["GET"])
+def get_status():
+    return status_db["status"]
+
+@app.route("/update_status", methods=["POST"])
+def update_status():
+    status = status_db["status"]
+    id = request.json["id"]
+    if id == "btn1":
+        status["btn1"] = False
+        status["btn2"] = True
+        status["result"] = "Your Item has been packed"
+    elif id == "btn2":
+        status["btn2"] = False
+        status["btn3"] = True
+        status["result"] = "Your Item is on the way"
+    elif id == "btn3":
+        status["btn1"] = False
+        status["btn2"] = False
+        status["btn3"] = False
+        status["result"] = "You have accepted the delivery"
+    status_db.sync()
+    return "OK"
+
+
+@app.route("/reset_status", methods=["POST"])
+def reset_status():
+    status = status_db["status"]
+    status["btn1"] = True
+    status["btn2"] = False
+    status["btn3"] = False
+    status["result"] = ""
+    status_db.sync()
+    return "OK"
+#end stuff for progress in warranty
 @app.route('/warranty/delete/<int:id>', methods=['POST'])
 @login_required
 def warranty_delete(id):
     try:
         warranty_dict = {}
-        warranty_db = shelve.open('website/databases/warranty/warranty.db', 'c')
+        warranty_db = shelve.open('website/databases/warranty/warranty.db', 'w')
         warranty_dict = warranty_db['warranty']
 
         current_id = warranty_dict.get(id)
@@ -3393,64 +3483,7 @@ def delete_feedback():
     return redirect(url_for('Feedbacks'))
 
 
-#new stuff from sven
 
-@app.route('/Place')
-@login_required
-def Place_Page():
-    return render_template('benefits.html')
-@app.route('/')
-@app.route('/index')
-def index_page():
-    return render_template('index_page.html')
-
-@app.route('/404')
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error404.html'), 404
-@app.route('/legal')
-def legal():
-    return render_template('legal.html')
-@app.route('/contact')
-def contact_us():
-    return render_template('contact.html')
-@app.route('/service')
-def service_help():
-    return render_template('service.html')
-@app.route('/articles')
-def articles():
-    return render_template('articles.html')
-@app.route('/payment')
-@login_required
-def payment_page():
-    return render_template('payment.html')
-@app.route('/thankyou')
-@login_required
-def thankyou_page():
-    return render_template('thank.html')
-
-@app.route('/deals')
-@login_required
-def deals_page():
-    return render_template('deals.html')
-@app.route('/chat')
-@login_required
-def chat_page():
-    return render_template('chat.html')
-
-@app.route('/updatingwarranty')
-@login_required
-def updats():
-    return render_template('warranty2.html')
-
-@app.route('/adminwarranty')
-@login_required
-def updatewarranty():
-    return render_template('warranty3.html')
-@app.route('/deletewarranty')
-@login_required
-def deletewarranty():
-    return render_template('warranty4.html')
 @app.route('/warrantyview')
 @login_required
 def warranty_view():
@@ -3665,7 +3698,7 @@ def update_retailer(id):
     if request.method == "POST" and form.validate_on_submit():
 
         retailer_dict = {}
-        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'w')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db["Retailers"]
 
         for key in retailer_dict:
@@ -3686,7 +3719,7 @@ def update_retailer(id):
         return redirect(url_for('retrieve_retailers'))
     else:
         retailer_dict = {}
-        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+        retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
         retailer_dict = retailer_db['Retailers']
         retailer_db.close()
         retailer = retailer_dict.get(id)
@@ -3697,8 +3730,16 @@ def update_retailer(id):
         form.address.data = retailer.get_address()
         form.email_address.data = retailer.get_email_address()
         form.office_no.data = retailer.get_office_no()
+        
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
-        return render_template('updateRetailer.html', form=form, retailer=retailer)
+
+        return render_template('updateRetailer.html', form=form)
 
 
 @app.route('/retailers/delete/<int:id>', methods=['POST'])
@@ -3846,6 +3887,8 @@ def retail_information(id):
 
     return render_template("retail_information.html", current_retail=current_retail, retail_id=id)
 
+
+
   
 @app.route('/location')
 @login_required
@@ -3856,3 +3899,74 @@ def location():
 @login_required
 def location_edit():
     return render_template('retailereditor.html')
+
+@app.route('/test')
+@login_required
+def location_test():
+    return render_template('test.html')
+
+
+@app.route('/gallery')
+@login_required
+def about_project():
+    return render_template('gallery.html')
+
+
+#new stuff from sven
+
+@app.route('/Place')
+@login_required
+def Place_Page():
+    return render_template('benefits.html')
+@app.route('/')
+@app.route('/index')
+def index_page():
+    return render_template('index_page.html')
+
+@app.route('/404')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+@app.route('/contact')
+def contact_us():
+    return render_template('contact.html')
+@app.route('/service')
+def service_help():
+    return render_template('service.html')
+@app.route('/articles')
+def articles():
+    return render_template('articles.html')
+@app.route('/payment')
+@login_required
+def payment_page():
+    return render_template('payment.html')
+@app.route('/thankyou')
+@login_required
+def thankyou_page():
+    return render_template('thank.html')
+
+@app.route('/deals')
+@login_required
+def deals_page():
+    return render_template('deals.html')
+@app.route('/chat')
+@login_required
+def chat_page():
+    return render_template('chat.html')
+
+@app.route('/updatingwarranty')
+@login_required
+def updats():
+    return render_template('warranty2.html')
+
+@app.route('/adminwarranty')
+@login_required
+def updatewarranty():
+    return render_template('warranty3.html')
+@app.route('/deletewarranty')
+@login_required
+def deletewarranty():
+    return render_template('warranty4.html')

@@ -1,6 +1,11 @@
 
  
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Warranty{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -44,8 +49,38 @@
                     <tbody>
                       <tbody>
                         {% for warranty in warranty_list %}
-                        <tr>
-                          {% if warranty.get_email() ==  current_user.email_address %}
+                        
+                          {% if current_user.id == 1 %}
+                          <tr>
+                            <td>{{ warranty.get_warranty_id() }}</td>
+                            <td>{{ warranty.get_warranty_name() }}</td>
+                            <td>{{ warranty.get_warranty_remarks() }}</td>
+                            <td>{{ warranty.get_phone_number() }}</td>
+                            <td>{{ warranty.get_email() }}</td>
+                            <td>{{ warranty.get_warranty_UUID() }}</td>
+                            <td>{{ warranty.get_date_recorded() }}</td>
+                            <td>{{ warranty.get_warranty_recorded() }}</td>
+                            <td>{{ warranty.get_time_recorded() }}</td>
+                            <td>
+                              <form action="{{url_for('update_warranty', id=warranty.get_warranty_id() )}}" method="POST">
+                              <input type="submit" value="Update" class="btn btn-warning">
+                              </form>
+                            </td>
+                            <td>
+                              <form action="{{url_for('delivery' )}}" method="POST">
+                              <input type="submit" value="Delivery" class="btn btn-warning">
+                              </form>
+                            </td>
+                            <td>
+                              <form action="{{url_for('warranty_delete', id=warranty.get_warranty_id() )}}" method="POST">
+                              <input type="submit" value="Delete" class="btn btn-danger">
+                              </form>
+                            </td>
+                
+                
+                          </tr>
+                          {% elif warranty.get_email() ==  current_user.email_address %}
+                          <tr>
                           <td>{{ warranty.get_warranty_id() }}</td>
                           <td>{{ warranty.get_warranty_name() }}</td>
                           <td>{{ warranty.get_warranty_remarks() }}</td>
@@ -55,13 +90,14 @@
                           <td>{{ warranty.get_date_recorded() }}</td>
                           <td>{{ warranty.get_warranty_recorded() }}</td>
                           <td>{{ warranty.get_time_recorded() }}</td>
+                          <td>{{ warranty.get_Address() }}</td>
+                          <td>{{ warranty.get_PostalCode() }}</td>
                           <td>
                             <form action="{{url_for('update_warranty', id=warranty.get_warranty_id() )}}" method="POST">
                             <input type="submit" value="Update" class="btn btn-warning">
                             </form>
                           </td>
-              
-                          <td>
+                          
                             <form action="{{url_for('warranty_delete', id=warranty.get_warranty_id() )}}" method="POST">
                             <input type="submit" value="Delete" class="btn btn-danger">
                             </form>
@@ -80,6 +116,5 @@
     </div>
 {%endif%}
 </div>
-
 
 {% endblock %}

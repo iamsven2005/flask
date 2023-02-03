@@ -1,4 +1,9 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Create warranty{% endblock %}
 
 {% block content %}
@@ -37,6 +42,16 @@
                 <!--Password2-->
                 {{ form.UUID.label() }}
                 {{ form.UUID(class='form-control form-control-user', placeholder='UUID') }}
+            </div>
+            <div class="col-sm-6">
+                <!--Password2-->
+                {{ form.PostalCode.label() }}
+                {{ form.PostalCode(class='form-control form-control-user', placeholder='PostalCode') }}
+            </div>
+            <div class="col-sm-6">
+                <!--Password2-->
+                {{ form.Address.label() }}
+                {{ form.Address(class='form-control form-control-user', placeholder='Address') }}
             </div>
         </div>
         {{ form.submit(class='btn btn-primary btn-user btn-block') }}

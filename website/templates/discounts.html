@@ -1,0 +1,10 @@
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
+{% block title %}Discounts{% endblock %}
+{% block content %}
+
+{% endblock %}

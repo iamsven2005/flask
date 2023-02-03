@@ -1,4 +1,9 @@
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Update Retailer {% endblock %}
 
 {% block content %}
@@ -6,7 +11,7 @@
   .smalling{width:50%}
 </style>
 <div class="container-fluid smalling">
-  <h1>Update {{ retailer.get_location() }}</h1>
+  <h1>Update Retailer</h1>
   <form class="user" method="POST">
       {{ form.hidden_tag() }}
       <!--This flask built in tag protects our site

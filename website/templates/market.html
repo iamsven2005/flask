@@ -1,5 +1,10 @@
 
+{% if current_user.admin == 1 %}
 {% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+
 {% block title %}Market Page{% endblock %}
 
 {% block content %}
@@ -52,7 +57,7 @@
 <div class="container">
     
 <article class="card card-body">
-
+    
 
 <div class="row">
 	<div class="col-md-4">
@@ -109,13 +114,13 @@
         </form>
 <br>
         <div class="filter">
-            <a href="http://127.0.0.1:5000/markets?search=Umbrella" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Umbrella</a>
-            <a href="http://127.0.0.1:5000/markets?search=Chair" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Chair</a>
-            <a href="http://127.0.0.1:5000/markets?search=Quad" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Quad</a>
-            <a href="http://127.0.0.1:5000/markets?search=Standard" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Standard Sticks</a>
-            <a href="http://127.0.0.1:5000/markets?search=MP3" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Handle with MP3</a>
-            <a href="http://127.0.0.1:5000/markets?search=Ergo" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Sticks with ergonomic handle</a>
-            <a href="http://127.0.0.1:5000/markets?search=Essential" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Essential the basics</a>
+            <a href="/markets?search=Umbrella" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Umbrella</a>
+            <a href="/markets?search=Chair" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Chair</a>
+            <a href="/markets?search=Quad" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Quad</a>
+            <a href="/markets?search=Standard" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Standard Sticks</a>
+            <a href="/markets?search=MP3" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Handle with MP3</a>
+            <a href="/markets?search=Ergo" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Sticks with ergonomic handle</a>
+            <a href="/markets?search=Essential" type="button" class="btn btn-outline-secondary btn-md glassmorphism-btn">Essential the basics</a>
             
         </div>
     {% if items|length != 0 %}
@@ -209,7 +214,14 @@
                             <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
                                 <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
                             </form>
+
+                            <form action="{{ url_for('discounted_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px">
+                                <td><button class="btn btn-outline btn-warning">Discount</button></td>
+                            </form>
+
+                            
                             <br>
+
                             <td><button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} <p style="background-color:red;">Out of stock🚫 </p>{% elif items[i].get_quantity() <= 10 %} <p style="background-color:#b26a00; border-radius:5px; padding:2px">Low on stock⚠️</p> {% else %} Add to cart {% endif %}</button></td>
                             {% elif items[i].get_id() in DisabledProducts%}
                             <td><button class="btn btn-outline btn-danger" disabled>Item Disabled</button></td>
@@ -274,7 +286,7 @@
                 <div class="modal-footer">
                     <a href="{{ url_for('Place_Page') }}" class="btn">More Info</a>
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-
+                    
                     </div>
                 
             </div>
@@ -352,7 +364,27 @@
           <h2>Umbrella</h2>
           <img src="https://cdn.shopify.com/s/files/1/1861/4635/products/WebWS13_Tag2_300x300.jpg?v=1626935683" alt="Adjustable Walking Stick" class="neumorphic-img">
           <p>Our adjustable walking stick is perfect for individuals who need a stick that can be easily customized to their height and comfort level. It features a sturdy aluminum construction and a non-slip rubber tip, as well as an adjustable handle and shaft that can be easily locked into place. </p>
-          <a href="http://127.0.0.1:5000/markets?search=b" class="btn btn-primary">Learn more</a>
+          <a href="http:///markets?search=b" class="btn btn-primary">Learn more</a>
         </div>
-    </div></div></div>      
+    </div></div></div>    
+    
+    
+    <div class="modal fade" style="margin-top:100px;" id="discount" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="{{ url_for('logout_page') }}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
