@@ -2091,13 +2091,15 @@ def register_staff_account(id):
     staff.set_staff_id(staff_id)
 
     
-    if request.method == 'POST':
+    if request.method == 'POST' and form.validate_on_submit():
         password = form.password1.data
         print("password is: ", password)
         if check_password_strength(password) == False:
             return redirect(url_for('register_staff_account', id=id))
         else:
-            if form.validate_on_submit():
+            if check_password_strength(password) == False:
+                return redirect(url_for('register_page'))
+            else:
                 user_to_create = User(username=form.username.data,
                                     staff_id = staff.get_staff_count(),
                                     email_address=form.work_email.data,
@@ -2133,7 +2135,7 @@ def register_staff_account(id):
             
             flash(f"Success! Account {user_to_create.username} created!", category='success')
 
-        return redirect(url_for('landing_page'))
+            return redirect(url_for('landing_page'))
 
     return render_template('registerStaffAccount.html', form=form, staff=staff)
 
@@ -2418,7 +2420,7 @@ def register_page():
     form = RegisterForm()
     if request.method == 'POST':
         password = request.form.get('password1')
-        print(password)
+        print('password: ', password)
         if check_password_strength(password) == False:
             #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
             return redirect(url_for('register_page'))
@@ -3991,7 +3993,6 @@ def retail_management():
 @app.route('/registerRetailAccount/<int:id>', methods=['GET', 'POST'])
 @login_required
 def register_retail_account(id):
-    db.create_all()
     form = RegisterRetailAccountForm()
     retailer = ''
     retailer_dict = {}
@@ -4002,49 +4003,48 @@ def register_retail_account(id):
     current_id = retailer.get_retailer_id()
     print(current_id)
    
-    if request.method == 'POST':
+    if request.method == 'POST' and form.validate_on_submit():
         password = request.form.get('password1')
+        print('password: ', password)
         if check_password_strength(password) == False:
-            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
-            return redirect(url_for('register_retail_account', id=current_id))
+            return redirect(url_for('register_page'))
         else:
-            if form.validate_on_submit():
-                user_to_create = User(username=form.username.data,
-                                    retailer_id = retailer.get_retailer_id(),
-                                    email_address=retailer.get_email_address(),
-                                    password=form.password1.data,
-                                    usertype="retailers")
-                db.session.add(user_to_create)
-                db.session.commit()
-            
-                user_email = {}
-                user_email = retailer.get_email_address()
-                print(user_email)
+            user_to_create = User(username=form.username.data,
+                                retailer_id = retailer.get_retailer_id(),
+                                email_address=retailer.get_email_address(),
+                                password=form.password1.data,
+                                usertype="retailers")
+            db.session.add(user_to_create)
+            db.session.commit()
+        
+        user_email = {}
+        user_email = retailer.get_email_address()
+        print(user_email)
 
-            if form.errors != {}:  # If there are not errors from the validations
-                errors = []
-                for err_msg in form.errors.values():
-                    errors.append(err_msg)
-                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-                flash(f'{err_message}', category='danger')
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
-            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-            try:
-                db_tempemail['email'] = user_email
-                db_tempemail.close()
-            except Exception as e:
-                print(f'{e} error has occurred! Database will close!')
-                db_tempemail.close()
-                return redirect(url_for('register_retail_account', id=current_id))
+        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+        try:
+            db_tempemail['email'] = user_email
+            db_tempemail.close()
+        except Exception as e:
+            print(f'{e} error has occurred! Database will close!')
+            db_tempemail.close()
+            return redirect(url_for('register_retail_account', id=current_id))
 
-            msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
-                            recipients=[retailer.get_email_address()])
-            msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
-            mail.send(msg)
-            
-            flash(f"Success! Account {user_to_create.username} created!", category='success')
+        msg = Message('Login credentials for retail account creation', sender='agegracefullybothelper@gmail.com',
+                        recipients=[retailer.get_email_address()])
+        msg.body = f"Dear valued retailer, \n\n We have received a request to create a retail account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nPlease do not respond back to this message as this is just a bot account."
+        mail.send(msg)
+        
+        flash(f"Success! Account {user_to_create.username} created!", category='success')
 
-            return redirect(url_for('landing_page'))
+        return redirect(url_for('landing_page'))
 
     return render_template('registerRetailAccount.html', form=form, retailer=retailer)
 

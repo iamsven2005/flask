@@ -306,8 +306,7 @@ class RegisterRetailAccountForm(FlaskForm):
     # .first() is used to access the first object
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired(), Regexp(r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')
-    ])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
