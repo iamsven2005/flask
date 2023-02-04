@@ -23,12 +23,16 @@
 <div class="card mx-auto shadow" style="margin-top: 5px;" >
     <div class="card-body neomorphic custom-cursor">
     <h4 class="card-title custom-cursor mb-4">Update Profile</h4>
-   <form method="POST">
+   <form action="/profile" method="POST" enctype="multipart/form-data">
        {{ form.hidden_tag() }}
-       <div class="form-group">
-           <img src='' class="img-sm rounded-circle border">
+
+		
        </div>
       <div class="form-col">
+        <div class="col form-group">
+          {{ form.profile_pic.label(class="form-label") }}
+          {{ form.profile_pic(class="form-control", value=current_user.profile_pic) }}
+        </div>
           <div class="col form-group">
               <!--Username-->
               {{ form.username.label() }}
@@ -41,11 +45,6 @@
 
           </div> <!-- form-group end.// -->
 
-          <div class="col form-group">
-                <!--Gender-->
-                {{ form.gender.label() }}
-                {{ form.gender(class='form-control form-control-user') }}
-          </div> <!-- form-group end.// -->
       </div> <!-- form-row.// -->
       <div class="form-row">
         <div class= "form-group col-md-6">
@@ -59,7 +58,6 @@
             {{ form.password2.label() }}
             {{ form.password2(class='form-control form-control-user', placeholder='Repeat Password') }}
 
-          </div> <!-- form-group end.// -->
           </div>
         
           

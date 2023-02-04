@@ -37,7 +37,16 @@
 
                 <figure class="icontext">
                         <div class="icon">
-                            <img class="rounded-circle img-sm border" src="../static/img/undraw_profile.svg" height="60px">
+                        {% if current_user.profile_pic %}
+                
+                        <img src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}" height="100px" width="100px" style="border-radius: 50%;">
+                        
+                        {% else %}
+                
+                        <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}" height="100px" width="100px" style="border-radius: 50%;">
+                
+                        {% endif %}
+                    
                         </div>
                         <div class="text">
                             <br>
@@ -147,6 +156,10 @@
         <!-- Password and Authentication Card Start-->
         <article class="card mb-3">
             <div class="card-body neomorphic custom-cursor">
+                <h5 class="card-title custom-cursor mb-4">Profile Picture </h5>
+                <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#changeprofilepicModal"> Change Profile Pic  </a>
+                <br>
+                <br>
                 <h5 class="card-title custom-cursor mb-4">Password and Authentication </h5>
                 <a href="#" class="btn btn-outline-primary" data-toggle="modal" data-target="#changepasswordModal"> Change Password  </a>
                 <br>
@@ -205,6 +218,33 @@
             </div>
         </div>
 </div>
+<!-- Edit Profile Picture -->
+<div class="modal fade" style="margin-top:100px;" id="changeprofilepicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Profile picture</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form action="{{ url_for('update_profile_pic') }}" method="POST" enctype="multipart/form-data">
+                    {{ profilepic_form.hidden_tag() }}
+                   <div class="form-col">
+                     <div class="col form-group">
+                       {{ profilepic_form.profile_pic.label(class="form-label") }}
+                       {{ profilepic_form.profile_pic(class="form-control", value=user.profile_pic) }}
+                     </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        {{profilepic_form.submit(class='btn btn-primary btn-user ')}}
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
 <!-- Edit Email -->
 <div class="modal fade" style="margin-top:100px;" id="editEmailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -217,7 +257,7 @@
                     </button>
                 </div>
                  <form method="POST" action="{{url_for('update_email', id=current_user.id)}}">
-                    {{ username_form.hidden_tag() }}
+                    {{ email_form.hidden_tag() }}
                 <div class="modal-body">
                     {{email_form.email_address.label()}}
                     {{email_form.email_address(class='form-control form-control-user', placeholder='Enter New Email',value=current_user.email_address)}}
@@ -283,7 +323,5 @@
                 </form>
             </div>
         </div>
-</div>
-{% endblock %}
-</html>
 
+{% endblock %}

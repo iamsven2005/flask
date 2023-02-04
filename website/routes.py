@@ -21,6 +21,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func
 from sqlalchemy.ext.declarative import declarative_base
 from password_strength import PasswordPolicy, PasswordStats
+from uuid import uuid1
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
@@ -185,6 +186,7 @@ def home_page():
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile_page():
+    userID = User.query.filter_by(id=current_user.id).first()
     Owned_Items_Dict = {}
     Wish_Dict = {}
     Items_Dict = {}
@@ -255,6 +257,7 @@ def profile_page():
     update_email_form = Update_Email()
     update_gender_form = Update_Gender()
     update_password_form = Update_Password()
+    update_profile_pic_form = Update_Profile_Pic()
     if update_username_form.validate_on_submit:
         pass
     if update_username_form.errors != {}:  # If there are not errors from the validations
@@ -264,9 +267,9 @@ def profile_page():
         err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
         flash(f'{err_message}', category='danger')
 
-    return render_template('profile.html', username_form=update_username_form, email_form=update_email_form,
+    return render_template('profile.html', username_form=update_username_form, email_form=update_email_form, profilepic_form = update_profile_pic_form,
                            gender_form=update_gender_form, password_form=update_password_form,
-                           owned_items=Owned_Items_Dict, wished_items=Wish_Dict, selling_items=len(Selling_Items), products=Products)
+                           owned_items=Owned_Items_Dict, wished_items=Wish_Dict, selling_items=len(Selling_Items), products=Products, user=userID)
 
 
 @app.route('/deleteProfile')
@@ -296,18 +299,22 @@ def sudo_delete_profile(id):
 @app.route("/updateUser", methods=['GET', 'POST'])
 def update_user():
     update_user_form = Update_User()
+    userID = User.query.filter_by(id=current_user.username).first()
     if request.method == 'POST' and update_user_form.validate_on_submit():
         attempted_user = User.query.filter_by(username=current_user.username).first()
         if attempted_user and attempted_user.check_password_correction(
                 attempted_password=update_user_form.password1.data):
-            userID = User.query.filter_by(id=current_user.id).first()
-            # userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
+            userID.password = bcrypt.generate_password_hash('update_user_form.password1').decode('utf-8')
             userID.username = update_user_form.username.data
             userID.email_address = update_user_form.email_address.data
-            userID.gender = update_user_form.gender.data
+            #userID.gender = update_user_form.gender.data
+            #userID.profile_pic = request.files['profile_pic']
+            # Change it to a string to save to db
+            #userID.profile_pic = pic_name
             db.session.commit()
             flash("User Particulars changed successfully", category="success")
             return redirect(url_for("profile_page"))
+
         else:  # If there are not errors from the validations
             flash("Password is Incorrect Try again.", category='danger')
     if update_user_form.errors != {}:  # If there are not errors from the validations
@@ -316,7 +323,42 @@ def update_user():
             errors.append(err_msg)
         err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
         flash(f'{err_message}', category='danger')
-    return render_template("UpdateUser.html", form=update_user_form)
+    return render_template("UpdateUser.html", form=update_user_form, user=userID)
+
+@app.route("/updateProfilePic", methods=['GET', 'POST'])
+def update_profile_pic():
+    update_profile_pic_form = Update_Profile_Pic()
+    if request.method == 'POST':
+        userID = User.query.filter_by(id=current_user.id).first()
+        # Check for profile pic
+        if request.files['profile_pic']:
+            userID.profile_pic = request.files['profile_pic']
+
+            # Grab Image Name
+            pic_filename = secure_filename(userID.profile_pic.filename)
+            # Set UUID
+            pic_name = str(uuid1()) + "_" + pic_filename
+            # Save That Image
+            saver = request.files['profile_pic']
+
+
+            # Change it to a string to save to db
+            userID.profile_pic = pic_name
+            try:
+                db.session.commit()
+                saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                flash("Profile pic Updated Successfully!", category='success')
+                return redirect(url_for("profile_page"))
+                
+            except:
+               if update_profile_pic_form.errors != {}:  # If there are not errors from the validations
+                    errors = []
+                    for err_msg in update_profile_pic_form.errors.values():
+                        errors.append(err_msg)
+                    err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+                    flash(f'{err_message}', category='danger')
+            return redirect(url_for('profile_page'))
+				
 
 
 @app.route("/updateUsername", methods=['GET', 'POST'])
@@ -2143,7 +2185,7 @@ def register_staff_account(id):
 @login_required
 def staff_management_update(id):
     form = Update_Staff_Account()
-    userID = User.query.filter_by(staff_id=id).first()
+    userID = User.query.filter_by(id=id).first()
 
     if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!
@@ -2972,14 +3014,14 @@ def user_management_update(id):
         userID.username = form.username.data
         userID.email_address = form.email_address.data
         db.session.commit()
-        print("User's Particulars updated to database successfully!")
+        flash("User's Particulars updated to database successfully!", category="success")
     else:
-        print("Some error occurred!")
+        flash("Some error occurred!", category="danger")
 
     if request.method == 'GET':
         return render_template('Update_User_Management.html', form=form, user=userID)
 
-    print(form.errors)
+    flash(form.errors, category="danger")
     return redirect(url_for('user_management'))
 
 
@@ -4053,7 +4095,7 @@ def register_retail_account(id):
 @login_required
 def retail_management_update(id):
     form = Update_Retailer_Account()
-    userID = User.query.filter_by(retailer_id=id).first()
+    userID = User.query.filter_by(id=id).first()
 
     if request.method == 'POST' and form.validate_on_submit():
         # NOTE THAT FORM DOES NOT VALIDATE ON SUBMIT!

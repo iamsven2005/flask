@@ -91,27 +91,12 @@ class Update_Notes(FlaskForm):
 
 
 class Update_User(FlaskForm):
-    def validate_username(self, username_to_check):
-        user = User.query.filter_by(username=username_to_check.data).first()
-        # if this returns an object
-        if user:
-            # checks if user is not 'None'
-            # so ya if it returns an object it means this is
-            # an existing user created before which raises this error
-            raise ValidationError('Username already exist! Please try a different username.')
-
-    def validate_email_address(self, email_address_to_check):
-        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
-        if email_address:
-            # check if email_address is not 'None'.
-            raise ValidationError("Email Address already exist. Please try a different email address.")
-
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
-    #profile_pic = FileField("Profile Pic")
+    profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Update Account')
 
 
@@ -151,6 +136,10 @@ class Update_Password(FlaskForm):
     new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
     confirm_password = PasswordField(label='Confirm New Password:',  validators=[EqualTo('new_password'), DataRequired()])
     
+    submit = SubmitField(label='Done')
+
+class Update_Profile_Pic(FlaskForm):
+    profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Done')
 
 

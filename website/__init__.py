@@ -20,6 +20,8 @@ DB_NAME = 'database.db'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 # create location/path for database
 app.config['SECRET_KEY']= os.getenv("SECRET_KEY")
+UPLOAD_FOLDER = 'website/static/images/profile_pic/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 
 # enables the database
