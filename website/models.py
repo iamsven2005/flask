@@ -30,6 +30,7 @@ class User(db.Model, UserMixin):
     email_address = db.Column(db.String(length=50), nullable=False, unique=True)
     password_hash = db.Column(db.String(length=60), nullable=False, unique=True)
     profile_pic = db.Column(db.String(), nullable=True)
+    description = db.Column(db.Text(), nullable=True)
     # the mostly used hashing algorithm that flask allow us to use
     # will always convert the passwords to being 60 characters
     # thats why length is set to 60

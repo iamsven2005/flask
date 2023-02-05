@@ -365,50 +365,7 @@ $('.image-upload-wrap').bind('dragover', function () {
 <!-- End Of Transaction Logs DataTable -->
     <!--  Sales Logs DataTable  -->
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Sales Logs</h6>
-        </div>
-        <div class="card-body neomorphic custom-cursor">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover" id="dataTable3" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Description</th>
-                            <th>Sales Amount</th>
-                            <th>Date Recorded</th>
-                            <th>Time Recorded</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th>ID</th>
-                            <th>Description</th>
-                            <th>Sales Amount</th>
-                            <th>Date Recorded</th>
-                            <th>Time Recorded</th>
-                        </tr>
-                    </tfoot>
-
-                    <tbody>
-                    {% for i in sales_logs %}
-                        <tr>
-                            <td>{{ sales_logs[i].get_id() }}</td>
-                            <td>${{ "{:.2f}".format(sales_logs[i].get_transaction()) }}</td>
-                            <td>{{ sales_logs[i].get_log_description() }}</td>
-                            <td>{{ sales_logs[i].get_date_recorded() }}</td>
-                            <td>{{ sales_logs[i].get_time_recorded() }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-
-                </table>
-
-            </div>
-        </div>
-    </div>
-    <h1>Number of Visitors: {{ visitor_count }}</h1>
+    
 <!--  End Of Logs DataTable  -->
 
 

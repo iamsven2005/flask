@@ -99,7 +99,9 @@ class Update_User(FlaskForm):
     profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Update Account')
 
-
+class Update_User_Description(FlaskForm):
+    description = TextAreaField("About User")
+    submit = SubmitField(label='Update Description')
 
 class Update_Username(FlaskForm):
     def validate_username(self, username_to_check):

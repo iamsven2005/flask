@@ -325,6 +325,18 @@ def update_user():
         flash(f'{err_message}', category='danger')
     return render_template("UpdateUser.html", form=update_user_form, user=userID)
 
+@app.route("/updateDescription", methods=["GET", "POST"])
+def update_description():
+    form = Update_User_Description()
+    userID = User.query.filter_by(id=current_user.id).first()
+    if request.method == "POST" and form.validate_on_submit():
+        print("form: ", form.description.data)
+        userID.description = form.description.data
+        db.session.commit()
+        flash("Description updated", category='success')
+        return redirect(url_for('profile_page'))
+    return render_template("UpdateDescription.html", form=form, user=current_user.id)
+
 @app.route("/updateProfilePic", methods=['GET', 'POST'])
 def update_profile_pic():
     update_profile_pic_form = Update_Profile_Pic()
@@ -421,14 +433,15 @@ def update_password():
     userID = User.query.filter_by(id=current_user.id).first()
     if request.method == 'POST' and update_password_form.validate_on_submit():
         password = request.form.get('new_password')
+
         attempted_user = User.query.filter_by(username=current_user.username).first()
         if attempted_user and attempted_user.check_password_correction(
                 attempted_password=update_password_form.current_password.data):
-            userID.password_hash = bcrypt.generate_password_hash(update_password_form.new_password.data).decode('utf-8')
-            db.session.commit()
             if check_password_strength(password) == False:
                 return redirect(url_for('update_password'))
             else:
+                userID.password_hash = bcrypt.generate_password_hash(update_password_form.new_password.data).decode('utf-8')
+                db.session.commit()
                 flash("Password Changed Successfully", category="success")
         else:
             flash("Current Password is Incorrect.", category='danger')

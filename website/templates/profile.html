@@ -49,11 +49,17 @@
                         </div>
                         <div class="text">
                             <br>
-                            <a href="{{ url_for('update_user') }}" class="btn-link" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Edit User Profile</a>&nbsp;
+                            <a href="{{ url_for('update_description') }}" class="btn-link" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Edit User Profile</a>&nbsp;
                         </div>
                 </figure>
                 <hr>
                 <div class="row">
+
+                <div class="col-md-6">
+                    <strong>About User:</strong>
+	                <br>{{ current_user.description }}<br/>
+
+                </div>
                 <div class="col-md-6">
                 <p>
                     <i class="fa fa-solid fa-user-astronaut"></i> &nbsp; Name:
@@ -269,30 +275,7 @@
             </div>
         </div>
 </div>
-<!-- Edit Gender -->
-<div class="modal fade" style="margin-top:100px;" id="editGenderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Gender</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form method="POST" action="{{url_for('update_gender', id=current_user.id)}}">
-                    {{ username_form.hidden_tag() }}
-                <div class="modal-body">
-                    {{gender_form.gender.label()}}
-                    {{gender_form.gender(class='form-control form-control-user')}}
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    {{gender_form.submit(class='btn btn-primary btn-user ')}}
-                </div>
-                </form>
-        </div>
-</div>
+
 </div>
 <!--  Change Password  -->
     <div class="modal fade" style="margin-top:100px;" id="changepasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
