@@ -164,7 +164,7 @@
                                 <button class="btn btn-outline mt-auto btn-success" data-toggle="modal" data-target="#Modal-Purchase--{{items[i].get_id()}}" {% if items[i].get_quantity() == 0 %} disabled {% endif %}>{% if items[i].get_quantity() == 0 %} Out of stock {% else %} Add to cart {% endif %}</button>
                                 <!-- Wishlist -->
                                 {% if items[i].get_owner() == current_user.username %}
-                                <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="POST" style="margin-top: 15px;">
+                                <form action="{{ url_for('update_item', id=items[i].get_id()) }}" method="GET" style="margin-top: 15px;">
                                     <td><button class="btn btn-outline btn-warning">Edit Product</button></td>
                                 </form>
                                 {% if items[i].get_id() not in wish_items %}

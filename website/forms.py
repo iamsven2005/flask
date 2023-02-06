@@ -267,6 +267,7 @@ class Add_Item_Form(FlaskForm):
     quantity = IntegerField(label='Quantity', validators=[DataRequired(), NumberRange(min=1)])
     description = TextAreaField(label='Description', validators=[DataRequired(), Length(min=1, max=1000)])
     price = FloatField(label='Price', validators=[DataRequired(), NumberRange(min=1)])
+    item_pic = FileField("Profile Pic")
     submit = SubmitField(label='Add Item')
 
 #dexter retail part
@@ -309,6 +310,7 @@ class RegisterRetailerForm(FlaskForm):
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):
@@ -319,6 +321,7 @@ class UpdateRetailerForm(FlaskForm):
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Update")
 
 class Update_Retailer_Account(FlaskForm):
@@ -368,3 +371,5 @@ class Update_Staff_Account(FlaskForm):
     submit = SubmitField(label='Update Account')
 
 
+class Add_Location(FlaskForm):
+    location = StringField(label="Google Maps URL: ", validators=[DataRequired()])

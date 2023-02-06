@@ -72,6 +72,7 @@
                 </form>
               {% endif %}
             </td>
+           
             <td>              
                   {% if retailer.get_retailer_id() in retailersid_list %}
                   <form action="{{url_for('retailer_delete', id=retailer.get_retailer_id() )}}" method="POST">

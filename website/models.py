@@ -96,7 +96,7 @@ class User(db.Model, UserMixin):
 
 class Retail:
     count_id = 0
-    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):
+    def __init__(self, id, company_id, location, postal_code, unit_number, address, office_no, email_address, date_registered):#, map_url):
         Retail.count_id += 1
         self.__id = id
         self.__count_id = Retail.count_id
@@ -108,6 +108,7 @@ class Retail:
         self.__office_no = office_no
         self.__email_address = email_address
         self.__date_registered = date_registered
+        #self.__map_url = map_url
 
     def get_retailer_id(self):
         return self.__id
@@ -138,6 +139,11 @@ class Retail:
 
     def get_date_registered(self):
         return self.__date_registered
+    
+    '''
+    def get_map_url(self):
+        return self.__map_url
+    '''
 
     def set_retailer_id(self, id):
         self.__id = id
@@ -165,13 +171,26 @@ class Retail:
 
     def set_date_registered(self, date):
         self.__date_registered = date
-
+    '''
+    def set_map_url(self, map_url):
+        self.__map_url = map_url
+    '''
 
 class Img(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.Text, nullable=False)
     name = db.Column(db.Text, nullable=False)
     mimetype = db.Column(db.Text, nullable=False)
+
+class Item_Img(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.String(), nullable=False)
+
+class Photo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.Text)
+    file_path = db.Column(db.String(255), nullable=False)
 
 
 class Item:
@@ -725,3 +744,17 @@ class Feedback(Message):
 
     def set_title(self, title):
         self.__title = title
+
+class Location:
+    def __init__(self, location_id, location):
+        self.__location_id = location_id
+        self.__location = location
+
+    def get_location_id(self):
+        return self.__location_id
+
+    def get_location(self):
+        return self.__location
+    
+    def set_location(self, location):
+        self.__location = location

@@ -18,15 +18,11 @@ import io, base64, PIL
 from werkzeug.utils import secure_filename
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from sqlalchemy import func
-from sqlalchemy.ext.declarative import declarative_base
-from password_strength import PasswordPolicy, PasswordStats
 from uuid import uuid1
+from sqlalchemy import func
 # To ensure file name is parsed
 
 # Note that for otp expiry, need to fiddle with js
-
-Base = declarative_base()
 
 load_dotenv()
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -41,6 +37,29 @@ mail = Mail(app)
 db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
 db_tempemail['email'] = None
 db_tempemail.close()
+
+from flask_uploads import UploadSet, configure_uploads, IMAGES
+
+photos = UploadSet('photos', IMAGES)
+
+def configure_app(app):
+    configure_uploads(app, photos)
+
+
+@app.route('/photos')
+def photo_gallery():
+    all_photos = Photo.query.all()
+    return render_template('photos.html', photos=all_photos)
+
+@app.route('/photo/<int:photo_id>')
+def photo1(photo_id):
+    photo = Photo.query.get(photo_id)
+    return render_template('photo.html', photo=photo)
+
+
+
+
+
 
 
 @app.route('/test')
@@ -164,6 +183,19 @@ def inbox_database():
         tickets_response_dict = list(tickets_response_dict.values())
 
     return dict(current_user_inbox=tickets_response_dict)
+
+from flask import render_template, request
+
+@app.route('/photos')
+def photos():
+    all_photos = Photo.query.all()
+    return render_template('photos.html', photos=all_photos)
+
+@app.route('/photo/<int:photo_id>')
+def photo(photo_id):
+    photo = Photo.query.get(photo_id)
+    return render_template('photo.html', photo=photo)
+
 
 
 # Sven
@@ -736,12 +768,17 @@ def market_page():
 
 @app.route('/image/<int:id>')
 def get_img(id):
+    
     img = Img.query.filter_by(id=id).first()
     if not img:
         return 'Img Not Found!', 404
 
     return Response(img.img, mimetype=img.mimetype)
-
+    '''
+    img = Item_Img.query.filter_by(id=id).first()
+    if not img:
+        return 'Img Not Found!', 404
+    '''
 
 @app.route('/shopping_cart', methods=['GET', 'POST'])
 @login_required
@@ -1498,19 +1535,36 @@ def Add_Item():
     else:
         if add_item_form.validate_on_submit() and request.method == 'POST':
             pic = request.files['pic']
-
+            
             if not pic:
                 flash("Please Insert an Image before adding a product.", category='danger')
                 return redirect(url_for('Add_Item'))
 
             filename = secure_filename(pic.filename)
             mimetype = pic.mimetype
+            '''
+            if request.files['item_pic']:
+                item.item_pic = request.files['item_pic']
+
+                # Grab Image Name
+                pic_filename = secure_filename(item.item_pic.filename)
+                # Set UUID
+                pic_name = str(uuid1()) + "_" + pic_filename
+                # Save That Image
+                saver = request.files['item_pic']
+
+                item.item_pic = pic_name
+            '''
             while True:
                 unique_id = uuid4()
                 if str(unique_id) not in Items_Dict:
                     img = Img(img=pic.read(), mimetype=mimetype, name=filename)
                     db.session.add(img)
                     db.session.commit()
+                    #img = Item_Img(img=pic_name)
+                    #db.session.add(img)
+                    #saver.save(os.path.join(app.config['UPLOAD_FOLDER'], pic_name))
+                    #db.session.commit()
                     item = Item(id=str(unique_id),
                                 name=add_item_form.name.data,
                                 quantity=add_item_form.quantity.data,
@@ -3900,6 +3954,7 @@ def retrieve_retailers():
     retailer_db.close()
 
     retailers_list = []
+    #location_list = []
     retailersid_list = []
     users = User.query.all()
     
@@ -3911,6 +3966,8 @@ def retrieve_retailers():
 
     for key in retailer_dict:
         retail = retailer_dict.get(key)
+        #retail_location = retail.get_map_url()
+        #location_list.append(retail_location)
         retailers_list.append(retail)
 
     return render_template('retail_database.html', count=len(retailers_list), retailers_list=retailers_list, retailersid_list=retailersid_list, users=users)
@@ -3930,6 +3987,7 @@ def create_retailer():
             retailer_dict = {}
             retailer_db = shelve.open('website/databases/retailer/retailer.db', 'c')
             retailer_id_db = shelve.open('website/databases/retailer/retailer_id_db', 'c')
+            location_db = shelve.open('website/databases/retailer/location.db', 'c')
             id = 0
             try:
                 try:
@@ -3948,7 +4006,7 @@ def create_retailer():
                 retailer = Retail(id, register_retailer_form.company_id.data, register_retailer_form.shop.data, register_retailer_form.postal_code.data,
                                       register_retailer_form.unit_number.data, register_retailer_form.address.data,
                                       register_retailer_form.office_no.data, register_retailer_form.email_address.data, 
-                                      current_time.year)   
+                                      current_time.year)#, register_retailer_form.location.data)   
 
                 id += 1
                 retailer.set_retailer_id(id)
@@ -4164,14 +4222,48 @@ def retail_information(id):
 @app.route('/location')
 @login_required
 def location():
-    return render_template('retailerlocation.html')
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+    location_db = shelve.open('website/databases/retailer/location.db', 'c')
+    retailer_dict = retailer_db['Retailers']
+    location_dict = location_db['Location']
+    location_list=[]
+    for key in retailer_dict:
+        retail = retailer_dict.get(key)
+        retail_location = retail.get_map_url()
+        location_list.append(retail_location)
 
+    return render_template('retailerlocation.html', location_list=location_list)
+
+@app.route("/locationadd")
+@login_required
+def location_add(id):
+    retailer_dict = {}
+    retailer_db = shelve.open('website/databases/retailer/retailer.db', 'r')
+    location_db = shelve.open('website/databases/retailer/location.db', 'w')
+    location_dict = {}
+    location_list = []
+    try:
+        location_dict = location_db['Location']
+    except Exception as e:
+        flash(f"An unknown error, \"{e}\" has occured!", category="danger")
+
+    retailer = retailer_dict.get(id)
+    current_id = retailer.get_retailer_id()
+
+    print(current_id)
+    location = retailer.get_map_url() 
+    current_location = Location(current_id, location)
+    #current_id += 1
+    location_dict[current_id] = current_location
+    location_db['Location'] = location_dict
+    location_db.close()    
+    flash("Location URL added to database!", category="success")
+    return redirect(url_for('location'))
+
+
+    
 @app.route('/locationedit')
 @login_required
 def location_edit():
-    return render_template('retailereditor.html')
-
-@app.route('/test')
-@login_required
-def testing():
-    return render_template('thank2.html')
+    return render_template('locationeditor.html')
