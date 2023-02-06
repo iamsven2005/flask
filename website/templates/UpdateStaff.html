@@ -1,0 +1,37 @@
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Update Staff{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<h1 class="display-4">Update Staff</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+  <div class="form-group">
+    {{ form.name.label() }}
+    {{ form.name(class='form-control form-control-user', placeholder='Staff Name') }}
+  </div>
+  <div class="form-group">
+    {{ form.staff_id.label() }}
+    {{ form.staff_id(class='form-control form-control-user', placeholder='Staff ID') }}
+  </div>
+  <div class="form-group">
+    {{ form.location.label() }}
+    {{ form.location(class='form-control form-control-user', placeholder='Staff Location') }}
+  </div>
+  <div class="form-group">
+    {{ form.email.label() }}
+    {{ form.email(class='form-control form-control-user', placeholder='Staff Email') }}
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  {{ form.submit(class='btn btn-primary btn-user btn-block') }}
+</form>
+</div>
+{% endblock %}
+

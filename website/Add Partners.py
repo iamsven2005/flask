@@ -7,7 +7,7 @@ try:
     if "partnerinfo" in db_shelve:
         partners = db_shelve['partnerinfo']
     else:
-        db_shelve['partnerinfo'] = partners
+        db_shelve[''] = partners
 except IOError:
     print("Error trying to read file")
 

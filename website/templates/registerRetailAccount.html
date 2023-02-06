@@ -1,70 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <link rel = "icon" type = "image/png" href = "../static/images/letter-s.png">
-    <meta name="author" content="">
-
-    <title>Register Account</title>
-
-    <!-- Own Css -->
-    <link rel="stylesheet" href="../static/css/home.css">
-    <link rel="stylesheet" href="../static/css/main.css">
-
-    <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}">
-    <script src="https://kit.fontawesome.com/57c1bc4a0b.js" crossorigin="anonymous"></script>
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template-->
-    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/sb-admin-2.min.css') }}">
-
-
-    <!-- Custom styles for tables page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='../static/vendor/datatables/dataTables.bootstrap4.min.css') }}">
-
-<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
-<df-messenger
-  chat-icon="image here"
-  intent="WELCOME"
-  chat-title="Chatty"
-  agent-id="221170f4-72db-467a-a988-8de654e227fe"
-  language-code="en"
-></df-messenger>
-
-
-
-</head>
-<div id="loading-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #fff; z-index: 999;">
-    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-      <div class="spinner-border text-primary" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-  </div>
-  <script>
-    window.addEventListener('load', () => {
-      const loadingScreen = document.getElementById('loading-screen');
-      loadingScreen.style.display = 'none';
-    });</script>
-<!-- Custom fonts for this template-->
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
-<!-- Custom styles for this template-->
-<link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-<body class="neomorphic">
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Register retail account{% endblock %}
+{% block content %}
 
     <div class="container">
 
@@ -91,11 +31,6 @@
                                     <!-- Flask Forms Feature -->
                                 </div>
                                 <div class="form-group row">
-                                    <!--Email-->
-                                        {{ form.email_address.label() }}
-                                        {{ form.email_address(class='form-control form-control-user', placeholder="Email address") }}
-                                </div>
-                                <div class="form-group row">
                                     <!--Password1-->
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         {{ form.password1.label() }}
@@ -110,9 +45,6 @@
                                 {{ form.submit(class='btn btn-primary btn-user btn-block') }}
                             </form>
                             <hr>
-                            <div class="text-center">
-                                <a class="small" href="{{ url_for('forgot_password_page') }}">Forgot Password?</a>
-                            </div>
                             <div class="text-center">
                                 <a class="small" href="{{ url_for('landing_page') }}">Already have an account? Login!</a>
                             </div>
@@ -134,7 +66,6 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-</body>
 
 <div class="modal fade" style="margin-top:100px;" id="botModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
@@ -167,39 +98,7 @@ aria-hidden="true">
 </div>
 
 
-<!-- Bootstrap core JavaScript-->
-<script src="../static/vendor/jquery/jquery.slim.min.js"></script>
-<script src="../static/vendor/jquery/jquery.min.js"></script>
-<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-
-<!-- Custom scripts for all pages-->
-<script src="../static/js/sb-admin-2.js"></script>
-
-<!-- Page level plugins -->
-<script src="../static/vendor/chart.js/Chart.min.js"></script>
-
-
-<!-- Charts Page level custom scripts -->
-<script src="../static/js/demo/chart-area-demo.js"></script>
-<script src="../static/js/demo/chart-pie-demo.js"></script>
-<script src="../static/js/demo/chart-bar-demo.js"></script>
-
-<!--Tables Page level plugins -->
-<script src="../static/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="../static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Tables Page level custom scripts -->
-<script src="../static/js/demo/datatables-demo.js"></script>
-
-<!-- Loader Script -->
-<!--    <script src="{{ url_for('static', filename='../static/js/loader.js') }}"></script>-->
-
-<!-- Add Item Script -->
-<script src="../static/js/Additem.js"></script>
 </body>
 <style>
 
@@ -283,4 +182,4 @@ cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' wid
 }
 
 </style>
-
+{% endblock %}

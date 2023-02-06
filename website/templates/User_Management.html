@@ -3,8 +3,7 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
-{% block title %}Transfer Funds{% endblock %}
+{% block title %}Customer management{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 {% block content %}
@@ -12,8 +11,7 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h1 mb-2 text-gray-800">User Management</h1>
-    <p class="mb-4">Welcome Admin! Please search for a user in the table to start transferring funds </p>
+    <h1 class="h1 mb-2 text-gray-800">Customer Management</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -38,6 +36,7 @@
                     
                     {% for user in users %}
                     {% if user.id != current_user.id%}
+                        {% if user.usertype == "customers" %}
                         
                             {% if user.status == 'Enabled' %}
                             <tbody>
@@ -67,14 +66,20 @@
                                 <form action="{{url_for('user_management_enable', id=user.id)}}" method="POST">
                                     <input type="submit" value="Enable Account" class="btn btn-outline btn-success">
                                 </form>
-                            </td>
-                        </tbody>
+                                </td>
+                            </tbody>
                             {% endif %}
+                        </td>
+                        {% endif %}
+                            
+                                
+                    </tr>
                     {% endif %}
                     {% endfor %}
                     
 
                 </table>
+
 
             </div>
         </div>

@@ -4,7 +4,6 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
 {% block title %}Warranty{% endblock %}
     <!-- Custom styles for this page -->
     <link href="../static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
@@ -32,6 +31,9 @@
                       <th>Phone Number</th>
                       <th> Email </th>
                       <th> UUID </th>
+                      <th>Warranty End</th>
+                      <th>Start Date </th>
+                      <th>Start Time</th>
                       <!-- If not lazy, can use supplied products instead of remarks -->
                       <th></th>
                     </tr>

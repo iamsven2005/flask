@@ -3,7 +3,6 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
 {% block title %}Retrieve Users{% endblock %}
 
 {% block content %}
@@ -32,7 +31,10 @@
           <th>Price</th>
           <th>Owner</th>
           <th><a href="/AddItemForm" class="btn btn-primary">Add Item</a></th>
-          <th></th>
+          <th><a href="{{ url_for('market_page') }}" class="btn btn-primary"><span class="material-symbols-outlined">
+            arrow_back
+            </span>
+            &nbsp;Market</a></th>
         </tr>
       </thead>
       <tbody>

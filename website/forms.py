@@ -1,9 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, DateField, EmailField, TextAreaField, \
     SelectField, FloatField
-from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange
+from wtforms.validators import Length, EqualTo, Email, DataRequired, ValidationError, NumberRange, Regexp
+from wtforms_components import DateRange
 from website.models import User
 from flask_wtf.file import FileField
+from datetime import datetime, timedelta
 
 # from datetime import datetime
 
@@ -33,11 +35,10 @@ class RegisterForm(FlaskForm):
     # User.query.filter_by(username = username_to_check) will return an object
     # .first() is used to access the first object
 
-    username = StringField(label='User Name:', validators=[Length(min=2, max=10), DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=6, max=10), DataRequired()])
-    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
-    #location = StringField(label='Postal Code', validators=[DataRequired()])
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired(), Regexp(r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')])
+    password2 = PasswordField(label='Confirm Password:', validators=[Length(min=8), EqualTo('password1', message='Password must be at least 8 characters long'), DataRequired()])
     submit = SubmitField(label='Create Account')
 
 
@@ -60,15 +61,16 @@ class TransferFunds(FlaskForm):
     submit = SubmitField(label="Confirm Transaction")
 
 
-class CreatePartnerForm(FlaskForm):
+class CreateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
-    email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
-    submit = SubmitField(label='Add Partner')
+    email = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    submit = SubmitField(label='Submit')
 
 
-class UpdatePartnerForm(FlaskForm):
+class UpdateStaffForm(FlaskForm):
     name = StringField(label='Name', validators=[Length(min=1, max=150), DataRequired()])
+    staff_id = IntegerField(label='Staff Id', validators=[DataRequired()])
     location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
     email = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     submit = SubmitField(label='Confirm Changes')
@@ -86,19 +88,18 @@ class Update_Notes(FlaskForm):
     submit = SubmitField(label='Update Notes')
 
 
-class Update_User(FlaskForm):#customer
-   
-
+class Update_User(FlaskForm):
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
-    #password1 = PasswordField(label='Old Password:', validators=[Length(min=6), DataRequired()])
-    #password2 = PasswordField(label='New Password:', validators=[EqualTo('password1'), DataRequired()])
-    gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
-   # profile_pic = FileField("Profile Pic")
-    #location = StringField(label='Location', validators=[Length(min=1, max=150), DataRequired()])
-    submit = SubmitField(label='Create Account')
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')
 
-
+class Update_User_Description(FlaskForm):
+    description = TextAreaField("About User")
+    submit = SubmitField(label='Update Description')
 
 class Update_Username(FlaskForm):
     def validate_username(self, username_to_check):
@@ -134,6 +135,11 @@ class Update_Password(FlaskForm):
     current_password = PasswordField(label='Current Password:', validators=[Length(min=6), DataRequired()])
     new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
     confirm_password = PasswordField(label='Confirm New Password:',  validators=[EqualTo('new_password'), DataRequired()])
+    
+    submit = SubmitField(label='Done')
+
+class Update_Profile_Pic(FlaskForm):
+    profile_pic = FileField("Profile Pic")
     submit = SubmitField(label='Done')
 
 
@@ -174,6 +180,12 @@ class Ticket_Form(FlaskForm):
 
 class Booking_form(FlaskForm):
     date = DateField(label='Choose a Date*', validators=[DataRequired()])
+
+    def validate_date_field(form, field):
+        if field.data < datetime.now():
+            raise ValidationError("Date cannot be in the past.")
+    
+        
     time = SelectField(label='Choose a Timeslot*',
                        choices=['9am Morning', '10am Morning', '11am Morning', '12pm Afternoon', '1pm Afternoon',
                                 '2pm Afternoon',
@@ -243,7 +255,8 @@ class password_reset(FlaskForm):
     email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     otp = StringField(label='One time password:', validators=[Length(min=8, max=8), DataRequired()])
     submit = SubmitField(label='Submit password reset')
-    new_password = PasswordField(label='New Password:', validators=[Length(min=6), DataRequired()])
+    new_password = PasswordField(label='New Password:', validators=[Length(min=8), DataRequired()])
+    confirm_new_password = PasswordField(label='New Password:', validators=[Length(min=8), EqualTo('new_password', message='Password must be at least 8 characters long'), DataRequired()])
 
 
 # Sven
@@ -258,6 +271,7 @@ class Add_Item_Form(FlaskForm):
     quantity = IntegerField(label='Quantity', validators=[DataRequired(), NumberRange(min=1)])
     description = TextAreaField(label='Description', validators=[DataRequired(), Length(min=1, max=1000)])
     price = FloatField(label='Price', validators=[DataRequired(), NumberRange(min=1)])
+    item_pic = FileField("Profile Pic")
     submit = SubmitField(label='Add Item')
 
 #dexter retail part
@@ -277,18 +291,17 @@ class RegisterRetailAccountForm(FlaskForm):
             # so ya if it returns an object it means this is
             # an existing user created before which raises this error
             raise ValidationError('Username already exist! Please try a different username.')
-
     def validate_email_address(self, email_address_to_check):
         email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
         if email_address:
             # check if email_address is not 'None'.
             raise ValidationError("Email Address already exist. Please try a different email address.")
 
+
     # User.query.filter_by(username = username_to_check) will return an object
     # .first() is used to access the first object
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
     password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
     submit = SubmitField(label='Create Account')
@@ -296,20 +309,71 @@ class RegisterRetailAccountForm(FlaskForm):
 class RegisterRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = StringField(label='Postal code: ', validators=[Length(max=6), DataRequired()])
-    unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(0,999999), DataRequired()])
+    unit_number = StringField(label='Unit-number: ', validators=[DataRequired(), Length(max=7)])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = StringField(label="Office number: ", validators=[DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):
     company_id = StringField(label="Company ID: ", validators=[DataRequired()])
     shop = StringField(label='Name of retail shop: ', validators=[DataRequired()])
-    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(min=100000, max=999999), DataRequired()])
+    postal_code = IntegerField(label='Postal code: ', validators=[NumberRange(0,999999), DataRequired()])
     unit_number = StringField(label='Unit-number: ', validators=[DataRequired()])
     address = StringField(label="Address: ", validators=[DataRequired()])
-    office_no = IntegerField(label="Office number: ", validators=[NumberRange(min=10000000, max=99999999),DataRequired()])
-    email_address = EmailField(label='Email Address:', validators=[Email(), Length(min=1, max=150), DataRequired()])
+    office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
+    email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
+    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Update")
 
+class Update_Retailer_Account(FlaskForm):
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='Company email address:', validators=[Email(), DataRequired()])
+    #password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    #profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')
+
+
+class Register_Staff_Account(FlaskForm):
+    def validate_username(self, username_to_check):
+        user = User.query.filter_by(username=username_to_check.data).first()
+        # if this returns an object
+        if user:
+            # checks if user is not 'None'
+            # so ya if it returns an object it means this is
+            # an existing user created before which raises this error
+            raise ValidationError('Username already exist! Please try a different username.')
+    def validate_email_address(self, email_address_to_check):
+        email_address = User.query.filter_by(email_address=email_address_to_check.data).first()
+        if email_address:
+            # check if email_address is not 'None'.
+            raise ValidationError("Email Address already exist. Please try a different email address.")
+
+
+    # User.query.filter_by(username = username_to_check) will return an object
+    # .first() is used to access the first object
+
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    staff_id = StringField(label='staff ID', validators=[Length(min=1, max=150), DataRequired()])
+    work_email = EmailField("Company email address", validators=[DataRequired()])
+    password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    submit = SubmitField(label='Create Account')
+
+
+class Update_Staff_Account(FlaskForm):
+    username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
+    email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
+    #password1 = PasswordField(label='Password:', validators=[Length(min=6), DataRequired()])
+    #password2 = PasswordField(label='Confirm Password:', validators=[EqualTo('password1'), DataRequired()])
+    #gender = SelectField(label='Gender', choices=['Male', 'Female', "Rather not say"], validators=[DataRequired()])
+    #profile_pic = FileField("Profile Pic")
+    submit = SubmitField(label='Update Account')
+
+
+class Add_Location(FlaskForm):
+    location = StringField(label="Google Maps URL: ", validators=[DataRequired()])

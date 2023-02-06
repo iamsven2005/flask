@@ -1,0 +1,471 @@
+{% extends "base2.html" %}
+{% block title %}HelpPage{% endblock %}
+<!-- Custom fonts for this template-->
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+
+{% block content %}
+
+&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+<body translate="no" data-new-gr-c-s-check-loaded="14.1091.0" data-gr-ext-installed="">
+    <div class="flex-container">
+      <div class="spinner" style="display: none;"><p>
+          </p><div class="cube1"></div>
+          <div class="cube2"></div>
+          Loading...
+          <p></p>
+      </div>
+      <div class="flex-slide home">
+          <div class="flex-title flex-title-home" style="transform: rotate(90deg); top: 15%; ">Carbon<br>Fiber</div>
+          <a href="#carbon"><div class="flex-about flex-about-home" style="opacity: 0;"><p>Study living</p></div></a>
+      </div>
+      <div class="flex-slide about">
+          <div class="flex-title" style="transform: rotate(90deg); top: 15%;">LEDS</div>
+          <a href="#light"><div class="flex-about" style="opacity: 0;"><p>Lighting the way</p></div></a>
+      </div>
+      <div class="flex-slide work">
+          <div class="flex-title" style="transform: rotate(90deg); top: 15%;">Alarm</div>
+          <a href="#alarm"><div class="flex-about" style="opacity: 0;"><p>Safety First</p></div></a>
+      </div>
+      <div class="flex-slide contact">
+          <div class="flex-title" style="transform: rotate(90deg); top: 15%; ">Music</div>
+          <a href="#music"><div class="flex-about" style="opacity: 0;"><p>Fighting dementia</p></div></a>
+      </div>
+  </div>
+  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <style>
+      @import url("https://fonts.googleapis.com/css?family=Raleway");
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: "Raleway", sans-serif;
+  }
+  
+  .flex-container {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    display: -webkit-flex;
+    /* Safari */
+    display: flex;
+    overflow: hidden;
+  }
+  @media screen and (max-width: 1000px) {
+    .flex-container {
+      flex-direction: column;
+      height: 200vh;
+    }
+  }
+  
+  .flex-title {
+    color: #f1f1f1;
+    position: relative;
+    font-size: 6vw;
+    margin: auto;
+    text-align: center;
+    transform: rotate(90deg);
+    top: 15%;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  @media screen and (max-width: 1000px) {
+    .flex-title {
+      transform: rotate(0deg) !important;
+    }
+  }
+  
+  .flex-about {
+    opacity: 0;
+    color: #f1f1f1;
+    position: relative;
+    width: 70%;
+    font-size: 2vw;
+    padding: 5%;
+    top: 20%;
+    border: 2px solid #f1f1f1;
+    border-radius: 10px;
+    line-height: 1.3;
+    margin: auto;
+    text-align: left;
+    transform: rotate(0deg);
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  @media screen and (max-width: 768px) {
+    .flex-about {
+      padding: 0%;
+      border: 0px solid #f1f1f1;
+    }
+  }
+  
+  .flex-slide {
+    -webkit-flex: 1;
+    /* Safari 6.1+ */
+    -ms-flex: 1;
+    /* IE 10 */
+    flex: 1;
+    cursor: pointer;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+  }
+  @media screen and (max-width: 768px) {
+    .flex-slide {
+      overflow: auto;
+      overflow-x: hidden;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .flex-slide p {
+      font-size: 2em;
+      
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .flex-slide ul li {
+      font-size: 2em;
+    }
+  }
+  
+  .flex-slide:hover {
+    -webkit-flex-grow: 3;
+    flex-grow: 3;
+  }
+  
+  .home {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/769286/lake-macquarie-71208_1920.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  @media screen and (min-width: 768px) {
+    .home {
+      animation: aboutFlexSlide 3s 1;
+      animation-delay: 0s;
+    }
+  }
+  
+  @keyframes aboutFlexSlide {
+    0% {
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+    }
+    50% {
+      -webkit-flex-grow: 3;
+      flex-grow: 3;
+    }
+    100% {
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+    }
+  }
+  @media screen and (min-width: 768px) {
+    .flex-title-home {
+      transform: rotate(90deg);
+      top: 15%;
+      animation: aboutFlexSlide 3s 1;
+      animation-delay: 0s;
+    }
+  }
+  
+  @keyframes homeFlextitle {
+    0% {
+      transform: rotate(90deg);
+      top: 15%;
+    }
+    50% {
+      transform: rotate(0deg);
+      top: 15%;
+    }
+    100% {
+      transform: rotate(90deg);
+      top: 15%;
+    }
+  }
+  .flex-about-home {
+    opacity: 0;
+  }
+  @media screen and (min-width: 768px) {
+    .flex-about-home {
+      animation: aboutFlexSlide 3s 1;
+      animation-delay: 0s;
+    }
+  }
+  
+  @keyframes flexAboutHome {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .about {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/769286/beach-2089959_1280.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  
+  .contact {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/769286/lake-696098_1920.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+  
+  .work {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/769286/forest-208517_1280.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    color: #f1f1f1;
+  }
+  
+  .spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #222;
+    height: 100%;
+    width: 100%;
+    z-index: 11;
+    margin-top: 0;
+    color: #fff;
+    font-size: 1em;
+  }
+  
+  .cube1, .cube2 {
+    background-color: #fff;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-cubemove 1.8s infinite ease-in-out;
+    animation: sk-cubemove 1.8s infinite ease-in-out;
+  }
+  
+  .cube2 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+  }
+  
+  @-webkit-keyframes sk-cubemove {
+    25% {
+      -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+    }
+    50% {
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+    }
+    75% {
+      -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    }
+    100% {
+      -webkit-transform: rotate(-360deg);
+    }
+  }
+  @keyframes sk-cubemove {
+    25% {
+      transform: translateX(42px) rotate(-90deg) scale(0.5);
+      -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+    }
+    50% {
+      transform: translateX(42px) translateY(42px) rotate(-179deg);
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+    }
+    50.1% {
+      transform: translateX(42px) translateY(42px) rotate(-180deg);
+      -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+    }
+    75% {
+      transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+      -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    }
+    100% {
+      transform: rotate(-360deg);
+      -webkit-transform: rotate(-360deg);
+    }
+  }
+  section {
+    padding:25px;
+    background-color: #eee;
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1),
+                -10px -10px 20px rgba(255, 255, 255, 0.5);
+  }
+  </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/769286/jquery.waitforimages.min.js"></script>
+        <script id="rendered-js">
+  (function () {
+    $('.flex-container').waitForImages(function () {
+      $('.spinner').fadeOut();
+    }, $.noop, true);
+  
+    $(".flex-slide").each(function () {
+      $(this).hover(function () {
+        $(this).find('.flex-title').css({
+          transform: 'rotate(0deg)',
+          top: '10%' });
+  
+        $(this).find('.flex-about').css({
+          opacity: '1' });
+  
+      }, function () {
+        $(this).find('.flex-title').css({
+          transform: 'rotate(90deg)',
+          top: '15%' });
+  
+        $(this).find('.flex-about').css({
+          opacity: '0' });
+  
+      });
+    });
+  })();
+  //# sourceURL=pen.js
+      </script>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <section id="overall">
+        <div class="container mt-5">
+          <h1>Benefits of Using a Walking Stick</h1>
+          <p>Walking sticks, also known as canes, are portable supports that can help individuals who have difficulty walking or who need additional stability when standing or walking. Here are some of the key benefits of using a walking stick:</p>
+          <h2>Improved balance and stability</h2>
+          <p>A walking stick can provide additional support and stability when walking, helping to reduce the risk of falls and other accidents. This can be particularly helpful for elderly individuals, who may have balance or mobility issues.</p>
+          <h2>Pain relief</h2>
+          <p>A walking stick can help alleviate pain and discomfort in the legs, back, or other areas of the body by redistributing weight and providing support. This can help individuals to walk more comfortably and with greater ease.</p>
+          <h2>Increased mobility</h2>
+          <p>A walking stick can help individuals who have mobility issues to walk more easily and confidently, allowing them to maintain their independence and participate in activities they enjoy.</p>
+          <h2>Stylish and functional</h2>
+          <p>Our walking sticks are not only functional, but they are also stylish and come in a variety of colors and designs. This means that you can choose a stick that not only meets your needs, but also reflects your personal style.</p>
+        </div>
+      </section>
+      <br><br><br><br><br><br>
+          <section id="carbon">
+            <div class="container mt-5">
+              <img src="https://cdn.shopify.com/s/files/1/1861/4635/files/sq_carbon_design_sg_240x240.jpg?v=1596542817" style="border-radius:20px">
+            <h1>Benefits of making walking stick out of carbon fiber</h1><br><br>
+            <h4>Carbon fiber is a strong and lightweight material that is often used in the construction of walking sticks and other assistive devices. It is made from thin, strong fibers of carbon that are woven together to form a composite material. Carbon fiber is known for its high strength-to-weight ratio, which means that it can withstand a lot of stress while still being relatively lightweight. This makes it an ideal material for use in walking sticks, as it allows the stick to support the weight of the user without being too heavy to carry around.
+
+            There are several other reasons why carbon fiber is a good choice for walking sticks:</h4><br>
+            
+            <h2>Durability:</h2><br> <p>Carbon fiber is a very durable material and is resistant to wear and tear, making it a long-lasting choice for a walking stick.</p><br>
+            
+            <h2>Ease of use:</h2><br> <p>Carbon fiber walking sticks are generally easier to use than those made from other materials, as they are lightweight and easy to maneuver.</p><br>
+            
+            <h2>Adjustability:</h2><br> <p>Many carbon fiber walking sticks are adjustable, which allows the user to customize the length of the stick to their needs.</p><br>
+            
+            <h2>Comfortable grip:</h2><br> <p>Carbon fiber sticks often have comfortable grips that make them easy to hold onto, even for extended periods of time.</p><br>
+            
+            <p>Overall, carbon fiber is an excellent material for walking sticks due to its strength, durability, and lightweight properties, making it a popular choice among those who rely on assistive devices for mobility.</p><br>
+            
+            </div>
+
+          </section>
+          <br><br><br><br><br><br>
+
+          <section id="light">
+            <div class="container mt-5">
+              <img src="https://cdn.shopify.com/s/files/1/1861/4635/files/WhatsApp_Image_2020-12-07_at_13.54.55_480x480.jpg?v=1607320634" style="border-radius:20px">
+            <h1>Benefits of using leds for the elderly</h1><br><br>
+            <h4>Light-emitting diodes LEDs can be used in a variety of ways to help the elderly, 
+              particularly in home lighting applications. Some benefits of using LEDs for elderly individuals include:
+            </h4><br>
+            
+            <h2>Energy efficiency:</h2><br> <p>LED lights are more energy efficient than traditional incandescent or fluorescent bulbs, which can help reduce energy costs for elderly individuals on fixed incomes.
+            </p><br>
+            
+            <h2>Long lifespan:</h2><br> <p>LEDs have a much longer lifespan than traditional light bulbs, which means they will need to be replaced less frequently. This can be particularly beneficial for elderly individuals who may have difficulty changing light bulbs due to mobility issues or other health concerns.
+            </p><br>
+            
+            <h2>Improved visibility:</h2><br> <p>LED lights can provide brighter and more focused illumination, which can help elderly individuals see more clearly and reduce the risk of falls or other accidents.</p><br>
+            
+            <h2>Adjustable lighting:</h2><br> <p>Many LED lighting products, such as smart bulbs, can be controlled and customized using a smartphone or other device. This can allow elderly individuals to easily adjust the brightness and color temperature of the lights to suit their preferences and needs.
+            </p><br>
+
+            <h2>Health benefits:</h2><br> <p>Some studies have suggested that LED lights can have positive effects on sleep, mood, and other aspects of health. For example, using LED lights with a warmer color temperature in the evening can help promote better sleep quality.
+
+            </p><br>
+            
+            <p>Overall, using LEDs for home lighting can provide a number of benefits for elderly individuals, helping to improve their quality of life and safety.
+            </p><br>
+            
+            </div>
+
+
+          </section><br><br><br><br><br><br>
+          
+          <section id="alarm">
+            <div class="container mt-5">
+              <iframe width="843" height="474" src="https://www.youtube.com/embed/rjrq_-KIg2I" title="AUTO ALARM PART" frameborder="0" style="border-radius:20px" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <h1>Benefits of using on body alarm</h1><br><br>
+            <h4>An on-body falling alarm is a device that is worn by an individual and is designed to detect falls and alert caregivers or emergency services if a fall occurs. Having an on-body falling alarm can provide a number of benefits for the elderly, including:
+            </h4><br>
+            
+            <h2>Improved safety:</h2><br> <p>Falls are a leading cause of injury and death among elderly individuals, and an on-body falling alarm can help to reduce the risk of falls and the resulting injuries.
+            </p><br>
+            
+            <h2>Increased independence:</h2><br> <p>An on-body falling alarm can give elderly individuals more freedom and independence, as they can continue to live at home and engage in activities without the need for constant supervision.
+            </p><br>
+            
+            <h2>Peace of mind for caregivers:</h2><br> <p>Caregivers of elderly individuals often worry about their loved ones falling and suffering injuries, and an on-body falling alarm can provide reassurance and peace of mind that help is available if a fall occurs.</p><br>
+            
+            <h2>Quick response in case of a fall:</h2><br> <p>An on-body falling alarm can alert caregivers or emergency services quickly in the event of a fall, allowing for a rapid response and minimizing the potential consequences of a fall.
+            </p><br>
+            
+            <p>Overall, an on-body falling alarm can provide a range of benefits for the elderly, helping to improve their safety and well-being and allowing them to maintain their independence. It is important to choose a reliable and high-quality on-body falling alarm, and to follow the manufacturer's instructions for use.
+            </p><br>
+
+          </section><br><br><br><br><br><br>
+
+          <section id="music">
+            <div class="container mt-5">
+              <iframe width="843" height="474" src="https://www.youtube.com/embed/4Zo_JQZo3Y0" title="Alive Inside: How the Magic of Music Proves Therapeutic for Patients With Alzheimer's and Dementia" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" style="border-radius:20px" allowfullscreen></iframe>
+            <h1>Its grooving time</h1><br><br>
+            <h4>Music therapy is a form of therapy that uses music and musical activities to address physical, emotional, cognitive, and social needs of individuals. For elderly individuals and those with dementia, music therapy can provide a range of benefits, including:
+
+            </h4><br>
+            
+            <h2>Improved communication:</h2><br> <p>Music therapy can help stimulate language and communication skills, particularly for individuals with severe communication impairments. Music can also provide a nonverbal means of expression for those who may have difficulty communicating in other ways.
+
+            </p><br>
+            
+            <h2>Increased socialization:</h2><br> <p>Music therapy can provide an opportunity for elderly individuals and those with dementia to interact with others, fostering social connections and a sense of community.
+
+            </p><br>
+            
+            <h2>Improved mood and emotional well-being:</h2><br> <p>Music has been shown to have a positive impact on mood and emotional well-being, and music therapy can help reduce anxiety, depression, and other emotional challenges commonly experienced by elderly individuals and those with dementia.
+            </p><br>
+            
+            <h2>Increased cognitive function:</h2><br> <p>Music therapy can help stimulate cognitive function, including memory and attention, in elderly individuals and those with dementia. It can also help with orientation and awareness of the present moment.
+
+            </p><br>
+            <h2>Improved physical function:</h2><br> <p>Music therapy can have a positive impact on physical function, such as coordination and balance, and can help with pain management.
+
+            </p><br>
+            
+            <p>Overall, music therapy can provide a range of benefits for elderly individuals and those with dementia, helping to improve their quality of life and well-being. It is important to work with a qualified music therapist to ensure that the therapy is tailored to the needs and abilities of the individual.
+            </p><br>
+
+          </section>
+{% endblock %}

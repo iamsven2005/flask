@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Photo Gallery</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1>Photo Gallery</h1>
+      <hr>
+      <div class="row">
+        {% for photo in photos %}
+          <div class="col-md-4 mb-3">
+            <a href="{{ url_for('photo1', photo_id=photo.id) }}">
+              <img src="{{ photo.file_path }}" class="img-fluid">
+            </a>
+            <h4 class="mt-3">{{ photo.name }}</h4>
+            <p>{{ photo.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

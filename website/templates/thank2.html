@@ -1,0 +1,62 @@
+{% extends "test.html" %}
+{% block title %}Thank you{% endblock %}
+
+{% block content %}
+<style>
+    .material-icon {
+        color: #64dd17;
+        font-size: 5rem;
+      }
+      
+      
+      
+      .neomorphism-btn {
+        background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1), 
+                    0px 15px 20px rgba(255, 255, 255, 0.5);
+        border-radius: 10px;
+        color: black;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      
+      .neomorphism-btn:hover {
+        background: linear-gradient(to top, rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+        box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1), 
+                    0px 15px 20px rgba(255, 255, 255, 0.5);
+        color:grey
+      }
+      
+</style>
+<div class="container mt-5">
+    <center class="text-center">
+      <i class="fa fa-check-circle material-icon text-center"></i>
+      <h1 class="font-weight-bold material-text">Thank You!</h1><br>
+      <p class="neomorphism-text">Your payment was successful. Your walking stick will be shipped to you soon. Thank you for choosing our company!</p>
+      <div class="mt-5">
+        <a href="{{url_for('market_page')}}" type="button" class="btn btn-primary btn-lg neomorphism-btn">Continue Shopping</a>
+      </div>
+      <div class="mt-5">
+        <h5>Here is your warranty:</h5>
+        <a href="/warranty/create" type="button" class="btn btn-primary btn-sm neomorphism-btn">Create warranty</a>
+        <p>Your unique ID is: <span id="uid"></span><br>Please Remember to keep this and signup warranty using uuid</p>
+
+      </div>
+      <br>
+      <br>
+      <br>
+    </center>
+  </div>
+  <script>
+    function generateUID() {
+      return Math.random().toString(36).substr(2, 9);
+    }
+    
+    // Generate a new UID on page reload
+    window.onload = function() {
+      var uid = generateUID();
+      document.getElementById("uid").innerHTML = uid;
+    }
+  </script>    
+{% endblock %}
+

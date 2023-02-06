@@ -3,7 +3,6 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
 {% block title %}Add Products {% endblock %}
 {% block content %}
 
@@ -168,9 +167,9 @@ $('.image-upload-wrap').bind('dragleave', function () {
         <h4 class="card-title custom-cursor mb-4" style="margin-bottom: 30px;">Update Product</h4>
        <form method="POST" style="margin-top: 60px;">
        {{ update_item_form.hidden_tag() }}
-       <!--  <label>Update Product Image:</label>
+       <label>Update Product Image:</label>
 
-       <div class="file-upload">
+       <!--<div class="file-upload">
             <div class="image-upload-wrap">
               <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
               <div class="drag-text">
@@ -184,7 +183,7 @@ $('.image-upload-wrap').bind('dragleave', function () {
               </div>
             </div>
           </div>-->
-        
+
            <div class="form-group">
                <img src='' class="img-sm rounded-circle border">
            </div>

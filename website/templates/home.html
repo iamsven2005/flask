@@ -1,9 +1,8 @@
-{% if current_user.admin == 1 %}
+{% if current_user.usertype != 'customers'%}
 {% extends "base.html" %}
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
 {% block title %}Home Page{% endblock %}
 
 {% block content %}

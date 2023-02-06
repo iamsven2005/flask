@@ -3,13 +3,33 @@
 {% else %}
 {% extends "based.html" %}
 {% endif %}
-
 {% block title %}Retailer Location{% endblock %}
 
 {% block content %}
-<style>
-    
-    </style>
+
+
+
+<div class="container mt-4 col-md-5">
+  <h1>All locations of retailers</h1>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for location in location_list %}
+        <tr>
+          <th>{{ location.get_location_id() }}</th>
+          <th>{{ location.get_location() }}</th>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!--
     <div class="container mt-4 col-md-5">
         <h1>Visit us!</h1>
         <p> Comne an visit us! Everyone of the locations is an experience center for you to get to try out before buying</p>
@@ -108,6 +128,8 @@ HongKong<br>
           </div>
       </div>
   </div>
+
+-->
 <style>
 
 .containerss {
