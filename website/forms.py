@@ -314,7 +314,7 @@ class RegisterRetailerForm(FlaskForm):
     address = StringField(label="Address: ", validators=[DataRequired()])
     office_no = StringField(label="Office number: ", validators=[Length(min=8, max=8), DataRequired()])
     email_address = EmailField(label='Email Address:', validators=[Email(), DataRequired()])
-    location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
+    #location = StringField(label="Google Maps location URL: ", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
 class UpdateRetailerForm(FlaskForm):

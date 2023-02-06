@@ -4312,3 +4312,62 @@ def location_add(id):
 @login_required
 def location_edit():
     return render_template('locationeditor.html')
+
+@app.route('/404')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error404.html'), 404
+@app.route('/legal')
+def legal():
+    return render_template('legal.html')
+@app.route('/contact')
+def contact_us():
+    return render_template('contact.html')
+@app.route('/service')
+def service_help():
+    return render_template('service.html')
+@app.route('/articles')
+def articles():
+    return render_template('articles.html')
+@app.route('/payment')
+@login_required
+def payment_page():
+    return render_template('payment.html')
+@app.route('/thankyou')
+@login_required
+def thankyou_page():
+    return render_template('thank.html')
+
+@app.route('/deals')
+@login_required
+def deals_page():
+    return render_template('deals.html')
+
+@app.route('/chat')
+@login_required
+def chat_page():
+    return render_template('chat.html')
+
+
+@app.route('/updatingwarranty')
+@login_required
+def updats():
+    return render_template('warranty2.html')
+
+@app.route('/adminwarranty')
+@login_required
+def updatewarranty():
+    return render_template('warranty3.html')
+
+@app.route('/deletewarranty')
+def deletewarranty():
+    return render_template('warranty4.html')
+
+@app.route('/Place')
+def Place_Page():
+    return render_template('benefits.html')
+
+@app.route('/')
+@app.route('/index')
+def index_page():
+    return render_template('index_page.html')
