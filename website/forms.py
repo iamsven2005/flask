@@ -37,7 +37,7 @@ class RegisterForm(FlaskForm):
 
     username = StringField(label='User Name:', validators=[Length(min=2, max=30), DataRequired()])
     email_address = StringField(label='Email Address:', validators=[Email(), DataRequired()])
-    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired(), Regexp(r'[A-Za-z0-9@#$%^&+=]', message='Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 1 special character')])
+    password1 = PasswordField(label='Password:', validators=[Length(min=8), DataRequired()])
     password2 = PasswordField(label='Confirm Password:', validators=[Length(min=8), EqualTo('password1', message='Password must be at least 8 characters long'), DataRequired()])
     submit = SubmitField(label='Create Account')
 

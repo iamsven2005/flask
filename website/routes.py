@@ -98,24 +98,7 @@ def page_not_found(e):
     return render_template('error404.html'), 404
 
 #password strength checker
-def check_password_strength(password):
-    if len(password) < 8:
-        flash("Password is too short, try again", category='danger')
-        return False
-    elif re.search("[a-z]", password) is None:
-        flash("Password is missing a lowercase letter, try again", category='danger')
-        return False
-    elif re.search("[A-Z]", password) is None:
-        flash("Password is missing a uppercase letter, try again", category='danger')
-        return False
-    elif re.search("[0-9]", password) is None:
-        flash("Password is missing a digit, try again", category='danger')
-        return False
-    elif re.search("[!@#\$%^&*()_\-+=\{\}\[\]:;\"'<>,.?/|\\~`]", password) is None:
-        flash("Password is missing a special character, try again.", category='danger')
-        return False
-    else:
-        return "True"
+
 
 
 @app.context_processor
@@ -469,12 +452,11 @@ def update_password():
         attempted_user = User.query.filter_by(username=current_user.username).first()
         if attempted_user and attempted_user.check_password_correction(
                 attempted_password=update_password_form.current_password.data):
-            if check_password_strength(password) == False:
-                return redirect(url_for('update_password'))
-            else:
-                userID.password_hash = bcrypt.generate_password_hash(update_password_form.new_password.data).decode('utf-8')
-                db.session.commit()
-                flash("Password Changed Successfully", category="success")
+            
+            
+            userID.password_hash = bcrypt.generate_password_hash(update_password_form.new_password.data).decode('utf-8')
+            db.session.commit()
+            flash("Password Changed Successfully", category="success")
         else:
             flash("Current Password is Incorrect.", category='danger')
 
@@ -2238,48 +2220,42 @@ def register_staff_account(id):
     if request.method == 'POST' and form.validate_on_submit():
         password = form.password1.data
         print("password is: ", password)
-        if check_password_strength(password) == False:
-            return redirect(url_for('register_staff_account', id=id))
-        else:
-            if check_password_strength(password) == False:
-                return redirect(url_for('register_page'))
-            else:
-                user_to_create = User(username=form.username.data,
-                                    staff_id = staff.get_staff_count(),
-                                    email_address=form.work_email.data,
-                                    password=form.password1.data,
-                                    usertype="staff")
-                db.session.add(user_to_create)
-                db.session.commit()
-            
-                user_email = {}
-                user_email = staff.get_email()
-                print(user_email)
+        user_to_create = User(username=form.username.data,
+                            staff_id = staff.get_staff_count(),
+                            email_address=form.work_email.data,
+                            password=form.password1.data,
+                            usertype="staff")
+        db.session.add(user_to_create)
+        db.session.commit()
+    
+        user_email = {}
+        user_email = staff.get_email()
+        print(user_email)
 
-            if form.errors != {}:  # If there are not errors from the validations
-                errors = []
-                for err_msg in form.errors.values():
-                    errors.append(err_msg)
-                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-                flash(f'{err_message}', category='danger')
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
-            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-            try:
-                db_tempemail['email'] = user_email
-                db_tempemail.close()
-            except Exception as e:
-                print(f'{e} error has occurred! Database will close!')
-                db_tempemail.close()
-                return redirect(url_for('register_staff_account', id=current_id))
+        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+        try:
+            db_tempemail['email'] = user_email
+            db_tempemail.close()
+        except Exception as e:
+            print(f'{e} error has occurred! Database will close!')
+            db_tempemail.close()
+            return redirect(url_for('register_staff_account', id=current_id))
 
-            msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
-                            recipients=[staff.get_email()])
-            msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nYour work email: {form.work_email.data} \nPlease do not respond back to this message as this is just a bot account."
-            mail.send(msg)
-            
-            flash(f"Success! Account {user_to_create.username} created!", category='success')
+        msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
+                        recipients=[staff.get_email()])
+        msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nYour work email: {form.work_email.data} \nPlease do not respond back to this message as this is just a bot account."
+        mail.send(msg)
+        
+        flash(f"Success! Account {user_to_create.username} created!", category='success')
 
-            return redirect(url_for('landing_page'))
+        return redirect(url_for('landing_page'))
 
     return render_template('registerStaffAccount.html', form=form, staff=staff)
 
@@ -2565,30 +2541,26 @@ def register_page():
     if request.method == 'POST':
         password = request.form.get('password1')
         print('password: ', password)
-        if check_password_strength(password) == False:
-            #flash("Password not strong enough. Avoid consecutive characters and easily guessed words.", category='danger')
-            return redirect(url_for('register_page'))
-        else:
-            if form.validate_on_submit():    
-                    user_to_create = User(username=form.username.data,
-                                            email_address=form.email_address.data,
-                                            password=form.password1.data,
-                                            usertype="customers")
-                    # 'password' = form.password1.data this is entering the hashed
-                    # version of the password. Check models.py,
-                    # @password.setter hashes the passwords
-                    db.session.add(user_to_create)
-                    db.session.commit()
-                    login_user(user_to_create)
-                    flash(f"Success! You are logged in as: {user_to_create.username}", category='success')
+        if form.validate_on_submit():    
+                user_to_create = User(username=form.username.data,
+                                        email_address=form.email_address.data,
+                                        password=form.password1.data,
+                                        usertype="customers")
+                # 'password' = form.password1.data this is entering the hashed
+                # version of the password. Check models.py,
+                # @password.setter hashes the passwords
+                db.session.add(user_to_create)
+                db.session.commit()
+                login_user(user_to_create)
+                flash(f"Success! You are logged in as: {user_to_create.username}", category='success')
 
-                    return redirect(url_for('home_page'))
-            if form.errors != {}:  # If there are not errors from the validations
-                errors = []
-                for err_msg in form.errors.values():
-                    errors.append(err_msg)
-                err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
-                flash(f'{err_message}', category='danger')
+                return redirect(url_for('home_page'))
+        if form.errors != {}:  # If there are not errors from the validations
+            errors = []
+            for err_msg in form.errors.values():
+                errors.append(err_msg)
+            err_message = '<br/>'.join([f'({number}){error[0]}' for number, error in enumerate(errors, start=1)])
+            flash(f'{err_message}', category='danger')
 
     return render_template('register.html', form=form)
 
@@ -2923,29 +2895,25 @@ def password_reset_page():
 
     if request.method == "POST":
         password = request.form.get('new_password')
-        if check_password_strength(password) == False:
-            return redirect(url_for('password_reset_page'))
+        db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
+        if db_tempemail['email'] is not None:
+            try:
+                email_variable = db_tempemail['email']
 
-        else:
-            db_tempemail = shelve.open('website/databases/tempemail/tempemail.db', 'c')
-            if db_tempemail['email'] is not None:
-                try:
-                    email_variable = db_tempemail['email']
+                user_to_reset = User.query.filter_by(email_address=email_variable).first()
+                user_to_reset.password_hash = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
+                db.session.commit()
+                flash("Password Changed Successfully!", category="success")
 
-                    user_to_reset = User.query.filter_by(email_address=email_variable).first()
-                    user_to_reset.password_hash = bcrypt.generate_password_hash(form.new_password.data).decode('utf-8')
-                    db.session.commit()
-                    flash("Password Changed Successfully!", category="success")
+                db_tempemail['email'] = None
+                db_tempemail.close()
 
-                    db_tempemail['email'] = None
-                    db_tempemail.close()
+                return redirect(url_for('landing_page'))
 
-                    return redirect(url_for('landing_page'))
-
-                except Exception as e:
-                    print(f'{e} error has occurred! Database will now close.')
-                    db_tempemail.close()
-                    return redirect(url_for('forgot_password_page'))
+            except Exception as e:
+                print(f'{e} error has occurred! Database will now close.')
+                db_tempemail.close()
+                return redirect(url_for('forgot_password_page'))
             else:
                 flash('NYP{cr4zy_nyp_H4xx0r!1}', category='danger')
                 db_tempemail.close()
@@ -4162,16 +4130,14 @@ def register_retail_account(id):
     if request.method == 'POST' and form.validate_on_submit():
         password = request.form.get('password1')
         print('password: ', password)
-        if check_password_strength(password) == False:
-            return redirect(url_for('register_page'))
-        else:
-            user_to_create = User(username=form.username.data,
-                                retailer_id = retailer.get_retailer_id(),
-                                email_address=retailer.get_email_address(),
-                                password=form.password1.data,
-                                usertype="retailers")
-            db.session.add(user_to_create)
-            db.session.commit()
+    
+        user_to_create = User(username=form.username.data,
+                            retailer_id = retailer.get_retailer_id(),
+                            email_address=retailer.get_email_address(),
+                            password=form.password1.data,
+                            usertype="retailers")
+        db.session.add(user_to_create)
+        db.session.commit()
         
         user_email = {}
         user_email = retailer.get_email_address()
