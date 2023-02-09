@@ -65,7 +65,6 @@
                     <i class="fa fa-solid fa-user-astronaut"></i> &nbsp; Name:
                      <br>
                     <strong>{{ current_user.username }}</strong> &nbsp;
-                    <a class="btn-link" href="#" data-toggle="modal" data-target="#editUsernameModal">Edit Username</a>
                 </p>
                 <p>
                     <i class="fa fa-regular fa-envelope"></i> &nbsp; Email:
@@ -103,12 +102,14 @@
                             <span>Wishlists</span>
                         </div>
                     </figure>
+                    {% if current_user.usertype != "customers" %}
                     <figure class="card bg">
                         <div class="p-3">
                              <h5 class="card-title custom-cursor">{{products|length}}</h5>
                             <span>Products For Sale</span>
                         </div>
                     </figure>
+                    {% endif %}
                 </article>
 
 

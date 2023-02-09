@@ -142,7 +142,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="{{ url_for('warranty_page') }}">Warranty</a>
+                        <a class="dropdown-item" href="{{ url_for('warranty_page') }}">Warranty</a>
                         <a class="dropdown-item" href="{{ url_for('wish_list') }}">
                           <i class="fas fa-solid fa-star fa-sm fa-fw mr-2 text-gray-400"></i>
                           My wishlist
@@ -153,13 +153,36 @@
                         <a class="collapse-item" href="{{ url_for('retrieve_items') }}">Items Dashboard</a>
                         <a class="collapse-item" href="{{ url_for('Events_Page') }}">Events</a>
                         <a class="collapse-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a>
-                        <a class="collapse-item" href="{{ url_for('retrieve_retailers') }}">Retailer List</a>
-                        <a class="collapse-item" href="{{ url_for('retail_management') }}">Retailer <br> management</a>
-                        <a class="collapse-item" href="{{ url_for('staff_page') }}">Staff List</a>
-                        <a class="collapse-item" href="{{ url_for('staff_management') }}">Staff account management</a>
-                        <a class="collapse-item" href="{{ url_for('add_staff_page') }}">Add staff</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2"
+              aria-expanded="true" aria-controls="collapseUtilities">
+              <i class="fas fa-fw fa-wrench"></i>
+              <span>Retail management <br> Panel</span></a>
+              <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities"
+                  data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <h6 class="collapse-header">Custom Utilities:</h6>
+                      <a class="collapse-item" href="{{ url_for('retrieve_retailers') }}">Retailer List</a>
+                      <a class="collapse-item" href="{{ url_for('retail_management') }}">Retailer <br> management</a>
+                  </div>
+            </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities3"
+              aria-expanded="true" aria-controls="collapseUtilities">
+              <i class="fas fa-fw fa-wrench"></i>
+              <span>Staff management <br> Panel</span></a>
+              <div id="collapseUtilities3" class="collapse" aria-labelledby="headingUtilities"
+                  data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <h6 class="collapse-header">Custom Utilities:</h6>
+                      <a class="collapse-item" href="{{ url_for('staff_management') }}">Staff account management</a>
+                      <a class="collapse-item" href="{{ url_for('register_staff_account') }}">Create staff account</a>
+                  </div>
+            </div>
             </li>
             <!--dexter this is for the retailer dashboard-->
             {% elif current_user.usertype == "retailers" %}
@@ -424,8 +447,12 @@
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.username }}</span>
+                                {% if current_user.profile_pic %}
                                 <img class="img-profile rounded-circle"
-                                    src="../static/img/undraw_profile.svg">
+                                    src="{{ url_for('static', filename='images/profile_pic/'+current_user.profile_pic)}}">
+                                {% else %}
+                                <img src="{{ url_for('static', filename='images/avatars/avatar1.jpg')}}" height="50px" width="50px" style="border-radius: 50%;">
+                                {% endif %}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                   aria-labelledby="userDropdown">

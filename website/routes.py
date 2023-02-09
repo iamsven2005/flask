@@ -2216,23 +2216,23 @@ def staff_management():
     return render_template('StaffAccount_Management.html', count=len(staff_list), staff_list=staff_list, users=users)
 
 
-@app.route('/registerStaffAccount/<int:id>', methods=['GET', 'POST'])
+@app.route('/registerStaffAccount', methods=['GET', 'POST'])
 @login_required
-def register_staff_account(id):
+def register_staff_account():
     db.create_all()
     form = Register_Staff_Account()
     staff = ''
-    staff_dict = {}
-    staff_db = shelve.open('website/databases/staff/staff.db', 'w')
-    staff_dict = staff_db["Staff"]
+    #staff_dict = {}
+    #staff_db = shelve.open('website/databases/staff/staff.db', 'w')
+    #staff_dict = staff_db["Staff"]
 
-    id=id
-    staff = staff_dict.get(id)
-    current_id = staff.get_id()
-    print(current_id)
+    #id=id
+    #staff = staff_dict.get(id)
+    #current_id = staff.get_id()
+    #print(current_id)
 
-    staff_id = form.staff_id.data
-    staff.set_staff_id(staff_id)
+    #staff_id = form.staff_id.data
+    #staff.set_staff_id(staff_id)
 
     
     if request.method == 'POST' and form.validate_on_submit():
@@ -2245,15 +2245,15 @@ def register_staff_account(id):
                 return redirect(url_for('register_page'))
             else:
                 user_to_create = User(username=form.username.data,
-                                    staff_id = staff.get_staff_count(),
+                                    staff_id = form.staff_id.data,
                                     email_address=form.work_email.data,
                                     password=form.password1.data,
                                     usertype="staff")
                 db.session.add(user_to_create)
                 db.session.commit()
             
-                user_email = {}
-                user_email = staff.get_email()
+                #user_email = {}
+                user_email = form.work_email.data
                 print(user_email)
 
             if form.errors != {}:  # If there are not errors from the validations
@@ -2270,10 +2270,10 @@ def register_staff_account(id):
             except Exception as e:
                 print(f'{e} error has occurred! Database will close!')
                 db_tempemail.close()
-                return redirect(url_for('register_staff_account', id=current_id))
+                return redirect(url_for('register_staff_account'))
 
             msg = Message('Login credentials for staff account creation', sender='agegracefullybothelper@gmail.com',
-                            recipients=[staff.get_email()])
+                            recipients=[form.work_email.data])
             msg.body = f"Dear valued staff, \n\n We have received a request to create a staff account for you. Your login credentials are: \nUsername: {form.username.data} \nPassword: {form.password1.data} \nYour work email: {form.work_email.data} \nPlease do not respond back to this message as this is just a bot account."
             mail.send(msg)
             
