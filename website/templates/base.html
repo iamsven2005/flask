@@ -136,25 +136,33 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Admin Panel</span>
+                    <span>Item & Event <br> management Panel</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
                         <a class="dropdown-item" href="{{ url_for('warranty_page') }}">Warranty</a>
-                        <a class="dropdown-item" href="{{ url_for('wish_list') }}">
-                          <i class="fas fa-solid fa-star fa-sm fa-fw mr-2 text-gray-400"></i>
-                          My wishlist
-                        </a> 
-                        <a class="collapse-item" href="{{ url_for('user_management') }}">Customer Management</a>
-                        <a class="collapse-item" href="{{ url_for('ticket_requests_page') }}">Ticket Requests</a>
                         <a class="collapse-item" href="{{ url_for('Add_Item') }}">Add Item</a>
                         <a class="collapse-item" href="{{ url_for('retrieve_items') }}">Items Dashboard</a>
                         <a class="collapse-item" href="{{ url_for('Events_Page') }}">Events</a>
-                        <a class="collapse-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a>
                     </div>
                 </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2"
+              aria-expanded="true" aria-controls="collapseUtilities">
+              <i class="fas fa-fw fa-wrench"></i>
+              <span>Customer management <br> Panel</span></a>
+              <div id="collapseUtilities2" class="collapse" aria-labelledby="headingUtilities"
+                  data-parent="#accordionSidebar">
+                  <div class="bg-white py-2 collapse-inner rounded">
+                      <h6 class="collapse-header">Custom Utilities:</h6>
+                      <a class="collapse-item" href="{{ url_for('user_management') }}">Customer Management</a>
+                      <a class="collapse-item" href="{{ url_for('ticket_requests_page') }}">Ticket Requests</a>
+                      <a class="collapse-item" href="{{ url_for('Feedbacks') }}">User Feedbacks</a>
+                  </div>
+            </div>
             </li>
             <li class="nav-item">
               <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities2"

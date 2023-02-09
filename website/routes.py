@@ -2989,9 +2989,12 @@ def create_warranty():
                 currentyear= warranty_recorded.year + 1
                 currentmonth = warranty_recorded.month
                 currentday = warranty_recorded.day
+                delivery_status = "Packing"
                 date_recorded=f"{currentday}/{currentmonth}/{currentyear}"
                 warranty = warranty(id, create_warranty_form.company.data, create_warranty_form.remarks.data,
-                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, create_warranty_form.Address.data,create_warranty_form.PostalCode.data, date_recorded, time_recorded, warranty_recorded)
+                                      create_warranty_form.email.data, create_warranty_form.phone.data, create_warranty_form.UUID.data, 
+                                      create_warranty_form.Address.data,create_warranty_form.PostalCode.data, date_recorded, time_recorded, 
+                                      warranty_recorded, delivery_status)
 
                 id += 1
                 warranty.set_warranty_id(id)
@@ -3053,11 +3056,39 @@ def update_warranty(id):
 
     return render_template('updatewarranty.html', form=form)
 
+@app.route('/update_product_status/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_status(id):
+    form = Update_Delivery_Status()
+    if request.method == "POST" and form.validate_on_submit():
+        try:
+            try:
+                warranty_dict = {}
+                warranty_db = shelve.open('website/databases/warranty/warranty.db', 'c')
+                warranty_dict = warranty_db["warranty"]
+                warranty = warranty_dict.get(id)
+                warranty.set_delivery_status(form.delivery_status.data)
+                warranty_db['warranty'] = warranty_dict
+                flash('Status updated successfully!', category='success')
+                warranty_db.close()
+
+                return redirect(url_for('warranty_page'))
+            except Exception as e:
+                print(f"An unknown error, \"{e}\" has occured!")
+                return redirect(url_for('warranty_page'))
+
+        except Exception as e:
+            flash(f"{e} error occurred!", category='danger')
+            warranty_db.close()
+            return redirect(url_for('warranty_page'))
+
+        
+
 @app.route('/delivery', methods=['GET', 'POST'])
 @login_required
 def delivery():
-
     return render_template('delivery.html')
+
 @app.route('/progress/<int:id>', methods=['GET', 'POST'])
 
 @login_required
@@ -3073,6 +3104,7 @@ if not "status" in status_db:
 def get_status():
     return status_db["status"]
 
+'''
 @app.route("/update_status", methods=["POST"])
 def update_status():
     status = status_db["status"]
@@ -3092,7 +3124,7 @@ def update_status():
         status["result"] = "You have accepted the delivery"
     status_db.sync()
     return "OK"
-
+'''
 
 @app.route("/reset_status", methods=["POST"])
 def reset_status():
@@ -3132,6 +3164,7 @@ def warranty_delete(id):
 @app.route('/warranty')
 @login_required
 def warranty_page():
+    delivery_form = Update_Delivery_Status()
     warranty_dict = {}
     try:
         warranty_db = shelve.open('website/databases/warranty/warranty.db', 'r')
@@ -3151,7 +3184,7 @@ def warranty_page():
         
         print("Warranty: ", users)
 
-    return render_template('warranty.html', count=len(warranty_list), warranty_list=warranty_list, users=users)
+    return render_template('warranty.html', count=len(warranty_list), warranty_list=warranty_list, users=users, delivery_form=delivery_form)
 
 
 @app.route('/user_management')

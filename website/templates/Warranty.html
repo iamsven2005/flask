@@ -1,6 +1,4 @@
-
- 
-{% if current_user.admin == 1 %}
+ {% if current_user.admin == 1 %}
 {% extends "base.html" %}
 {% else %}
 {% extends "based.html" %}
@@ -60,15 +58,14 @@
                             <td>{{ warranty.get_date_recorded() }}</td>
                             <td>{{ warranty.get_warranty_recorded() }}</td>
                             <td>{{ warranty.get_time_recorded() }}</td>
+                            <td>{{ warranty.get_delivery_status() }}</td>
                             <td>
                               <form action="{{url_for('update_warranty', id=warranty.get_warranty_id() )}}" method="POST">
                               <input type="submit" value="Update" class="btn btn-warning">
                               </form>
                             </td>
                             <td>
-                              <form action="{{url_for('delivery' )}}" method="POST">
-                              <input type="submit" value="Delivery" class="btn btn-warning">
-                              </form>
+                              <a class="btn-link" href="#" data-toggle="modal" data-target="#editStatusModal">Edit delivery status</a>
                             </td>
                             <td>
                               <form action="{{url_for('warranty_delete', id=warranty.get_warranty_id() )}}" method="POST">
@@ -92,17 +89,15 @@
                           <td>{{ warranty.get_Address() }}</td>
                           <td>{{ warranty.get_PostalCode() }}</td>
                           <td>
-                            <form action="{{url_for('update_warranty', id=warranty.get_warranty_id() )}}" method="POST">
-                            <input type="submit" value="Update" class="btn btn-warning">
-                            </form>
+                            <a class="btn-link" href="#" data-toggle="modal" data-target="#editStatusModal">Edit delivery status</a>
                           </td>
-                          
+                          <td>
                             <form action="{{url_for('warranty_delete', id=warranty.get_warranty_id() )}}" method="POST">
                             <input type="submit" value="Delete" class="btn btn-danger">
                             </form>
                           </td>
               
-              
+                          {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -114,5 +109,30 @@
     </div>
 {%endif%}
 </div>
+
+<!-- Edit Username -->
+<div class="modal fade" style="margin-top:100px;" id="editStatusModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Username</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form method="POST" action="{{url_for('update_status', id=current_user.id)}}">
+                    {{ delivery_form.hidden_tag() }}
+                <div class="modal-body">
+                    {{ delivery_form.delivery_status.label()}}
+                    {{ delivery_form.delivery_status(class='form-control form-control-user', placeholder='Delivery status',value=warranty_list[current_user.id])}}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    {{delivery_form.submit(class='btn btn-primary btn-user ')}}
+                </div>
+                </form>
+            </div>
+        </div>
 
 {% endblock %}

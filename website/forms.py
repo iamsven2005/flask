@@ -377,3 +377,8 @@ class Update_Staff_Account(FlaskForm):
 
 class Add_Location(FlaskForm):
     location = StringField(label="Google Maps URL: ", validators=[DataRequired()])
+    submit = SubmitField(label="Add Location")
+
+class Update_Delivery_Status(FlaskForm):
+    delivery_status = SelectField('Delivery Status', choices=[('Packing', 'Packing'), ('Delivering', 'Delivering'), ('Received', 'Received')])
+    submit = SubmitField(label="Update status")
