@@ -1,0 +1,16 @@
+{% if current_user.admin == 1 %}
+{% extends "base.html" %}
+{% else %}
+{% extends "based.html" %}
+{% endif %}
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<iframe src="http://127.0.0.1:3000/"></iframe>
+<style>
+  iframe{
+    width:100vw;
+    height:100vh;
+  }
+</style>
+{% endblock %}

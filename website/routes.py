@@ -4371,3 +4371,7 @@ def Place_Page():
 @app.route('/index')
 def index_page():
     return render_template('index_page.html')
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
