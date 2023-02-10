@@ -4341,3 +4341,6 @@ def index_page():
 @app.route('/calendar')
 def calendar():
     return render_template('calendar.html')
+@app.route('/test2')
+def testing():
+    return render_template('tewst2.html')
