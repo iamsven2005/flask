@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blog System</title>
+    <!-- Link Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Link Font Awesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <style>
+      form {
+        margin-top: 20px;
+      }
+      .blog {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+      .like-section {
+        display: flex;
+        align-items: center;
+      }
+      .like-count {
+        margin-left: 10px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center">Blog System</h1>
+      <form action="/blog" method="post">
+        <div class="form-group">
+          <textarea name="blog" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+      </form>
+      {% if blogs %}
+{% for blog in blogs %}
+<h2>{{ blog.text }}</h2>
+{% if blog.comments %}
+<h3>Comments</h3>
+<ul>
+{% for comment in blog.comments %}
+<li>{{ comment }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<form action="/blog" method="post">
+<input type="hidden" name="blog_id" value="{{ loop.index }}">
+<textarea name="comment"></textarea><br><br>
+<input type="submit" value="Comment">
+</form>
+<form action="/like" method="post">
+<input type="hidden" name="blog_id" value="{{ loop.index }}">
+<input type="submit" value="Like">
+<span>{{ likes }} likes</span>
+</form>
+{% endfor %}
+{% else %}
+
+  <h2>No blogs to display</h2>
+{% endif %}
+  </body>
+  <script>
+    $(document).ready(function() {
+      $(".like-button").click(function() {
+        var blogId = $(this).attr("id");
+        var counterId = "#like-counter-" + blogId;
+        var currentCount = parseInt($(counterId).text());
+        $(counterId).text(currentCount + 1);
+    
+        $.post("/like", {blog_id: blogId});
+      });
+    });
+  </script>
+</html>
